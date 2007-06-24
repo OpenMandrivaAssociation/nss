@@ -1,4 +1,4 @@
-%bcond_without lib
+%bcond_without  lib
 
 %define major   3
 %define libname %mklibname %{name} %{major}
@@ -6,7 +6,7 @@
 
 Name:           nss
 Version:        3.11.5
-Release:        %mkrel 4
+Release:        %mkrel 5
 Epoch:          2
 Summary:        Netscape Security Services
 Group:          System/Libraries
@@ -23,14 +23,17 @@ Source6:        nss-clobber.sh
 # converted from PEM to DER format with openssl command:
 # openssl x509 -in cert.pem -inform PEM -outform DER -out cert.der
 # this way we can avoid a buildrequires for openssl
-Source7:		verisign-class-3-secure-server-ca.der
+Source7:        verisign-class-3-secure-server-ca.der
 # Brasilian government certificate
 # verified in person with a government official
-Source8:		http://www.icpbrasil.gov.br/certificadoACRaiz.crt
+Source8:        http://www.icpbrasil.gov.br/certificadoACRaiz.crt
 Patch0:         nss-no-rpath.patch
 Patch1:         nss-smartcard-auth.patch
 Patch2:         nss-bug180726.patch
 Patch3:         nss-fixrandom.patch
+%if %mdkversion >= 200700
+BuildRequires:  rootcerts >= 20060621
+%endif
 BuildRequires:  libnspr-devel
 BuildRequires:  libz-devel
 BuildRequires:  zip
@@ -114,8 +117,8 @@ export USE_SYSTEM_ZLIB=1
 export ZLIB_LIBS="-lz"
 export PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
 export PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
-export NSPR_INCLUDE_DIR=`/usr/bin/pkg-config --cflags-only-I nspr | sed 's/-I//'`
-export NSPR_LIB_DIR=`/usr/bin/pkg-config --libs-only-L nspr | sed 's/-L//'`
+export NSPR_INCLUDE_DIR=`%{_bindir}/pkg-config --cflags-only-I nspr | %{__sed} 's/-I//'`
+export NSPR_LIB_DIR=`%{_bindir}/pkg-config --libs-only-L nspr | %{__sed} 's/-L//'`
 
 %ifarch x86_64 ppc64 ia64 s390x
 export USE_64=1
@@ -130,25 +133,28 @@ export USE_64=1
 # http://qa.mandriva.com/show_bug.cgi?id=29612
 # use built addbuildin command to avoid having
 # a buildrequires for nss
-ADDBUILTIN=`find . -type f -name addbuiltin`
+ADDBUILTIN=`%{_bindir}/find . -type f -name addbuiltin`
 if [ -z "$ADDBUILTIN" ]; then
-	echo "Error, addbuiltin utility not built or not found"
-	exit 1
+    exit 1
 fi
 ADDBUILTIN="$PWD/$ADDBUILTIN"
 OLD="$LD_LIBRARY_PATH"
-libpath=`find mozilla/dist/ -name "Linux2.*" -type d`
+libpath=`%{_bindir}/find mozilla/dist/ -name "Linux2.*" -type d`
 # to use the built libraries instead of requiring nss
 # again as buildrequires
 export LD_LIBRARY_PATH="$PWD/$libpath/lib"
 pushd mozilla/security/nss/lib/ckfw/builtins
+%if %mdkversion > 200600
+%{__perl} ./certdata.perl < /etc/pki/tls/mozilla/certdata.txt
+%else
 $ADDBUILTIN -n "VeriSign Class 3 Secure Server CA" \
-	-t CT,C,C < %{SOURCE7} >> certdata.txt
+        -t CT,C,C < %{SOURCE7} >> certdata.txt
 $ADDBUILTIN -n "Autoridade Certificadora Raiz Brasileira" \
-	-t CT,C,C < %{SOURCE8} >> certdata.txt
-make clean
-gmake generate
-make
+        -t CT,C,C < %{SOURCE8} >> certdata.txt
+%{__perl} ./certdata.perl < certdata.txt
+%endif
+%{__make} clean
+%{__make}
 popd
 export LD_LIBRARY_PATH="$OLD"
 
@@ -192,14 +198,14 @@ export NSS_VMINOR=`%{__cat} mozilla/security/nss/lib/nss/nss.h | %{__grep} "#def
 export NSS_VPATCH=`%{__cat} mozilla/security/nss/lib/nss/nss.h | %{__grep} "#define.*NSS_VPATCH" | %{__awk} '{print $3}'`
 
 %{__mkdir_p} %{buildroot}%{_bindir}
-%{__cat} %{SOURCE2} | sed -e "s,@libdir@,%{_libdir},g" \
-                          -e "s,@prefix@,%{_prefix},g" \
-                          -e "s,@exec_prefix@,%{_prefix},g" \
-                          -e "s,@includedir@,%{_includedir}/nss%{major},g" \
-                          -e "s,@MOD_MAJOR_VERSION@,$NSS_VMAJOR,g" \
-                          -e "s,@MOD_MINOR_VERSION@,$NSS_VMINOR,g" \
-                          -e "s,@MOD_PATCH_VERSION@,$NSS_VPATCH,g" \
-                          > %{buildroot}/%{_bindir}/nss-config
+%{__cat} %{SOURCE2} | %{__sed} -e "s,@libdir@,%{_libdir},g" \
+                               -e "s,@prefix@,%{_prefix},g" \
+                               -e "s,@exec_prefix@,%{_prefix},g" \
+                               -e "s,@includedir@,%{_includedir}/nss%{major},g" \
+                               -e "s,@MOD_MAJOR_VERSION@,$NSS_VMAJOR,g" \
+                               -e "s,@MOD_MINOR_VERSION@,$NSS_VMINOR,g" \
+                               -e "s,@MOD_PATCH_VERSION@,$NSS_VPATCH,g" \
+                               > %{buildroot}/%{_bindir}/nss-config
 %endif
 
 cd mozilla/security/nss/cmd/smimetools
@@ -429,5 +435,3 @@ cd ../../../../..
 %{_libdir}/libsmime.a
 %{_libdir}/libssl.a
 %endif
-
-
