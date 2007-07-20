@@ -8,7 +8,7 @@
 
 Name:           nss
 Version:        3.11.7
-Release:        %mkrel 1
+Release:        %mkrel 2
 Epoch:          2
 Summary:        Netscape Security Services
 Group:          System/Libraries
@@ -89,7 +89,7 @@ Header files to doing development with Network Security Services.
 Summary:        Network Security Services (NSS) - static libraries
 Group:          Development/C++
 Requires:       %{libname} = %{epoch}:%{version}-%{release}
-Requires:       %{libname}-devel = %{epoch}:%{version}-%{release}
+Requires:       %{develname} = %{epoch}:%{version}-%{release}
 Requires:       nspr-devel
 Provides:       libnss-static-devel = %{epoch}:%{version}-%{release}
 Provides:       nss-static-devel = %{epoch}:%{version}-%{release}
