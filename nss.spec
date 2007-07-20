@@ -2,11 +2,13 @@
 
 %define major   3
 %define libname %mklibname %{name} %{major}
-%define cvsver  3_11_5
+%define develname %mklibname -d %{name}
+%define sdevelname %mklibname -d -s %{name}
+%define cvsver  3_11_7
 
 Name:           nss
-Version:        3.11.5
-Release:        %mkrel 5
+Version:        3.11.7
+Release:        %mkrel 1
 Epoch:          2
 Summary:        Netscape Security Services
 Group:          System/Libraries
@@ -71,18 +73,19 @@ TLS, PKCS #5, PKCS #7, PKCS #11, PKCS
 detailed information on standards supported, see
 http://www.mozilla.org/projects/security/pki/nss/overview.html.
 
-%package -n %{libname}-devel
+%package -n %{develname}
 Summary:        Network Security Services (NSS) - development files
 Group:          Development/C++
 Requires:       %{libname} = %{epoch}:%{version}-%{release}
 Requires:       libnspr-devel
 Provides:       libnss-devel = %{epoch}:%{version}-%{release}
 Provides:       nss-devel = %{epoch}:%{version}-%{release}
+Obsoletes:	%{libname}-devel
 
-%description -n %{libname}-devel
+%description -n %{develname}
 Header files to doing development with Network Security Services.
 
-%package -n %{libname}-static-devel
+%package -n %{sdevelname}
 Summary:        Network Security Services (NSS) - static libraries
 Group:          Development/C++
 Requires:       %{libname} = %{epoch}:%{version}-%{release}
@@ -91,8 +94,9 @@ Requires:       nspr-devel
 Provides:       libnss-static-devel = %{epoch}:%{version}-%{release}
 Provides:       nss-static-devel = %{epoch}:%{version}-%{release}
 Conflicts:      libopenssl-static-devel
+Obsoletes:	%{libname}-static-devel
 
-%description -n %{libname}-static-devel
+%description -n %{sdevelname}
 Static libraries for doing development with Network Security Services.
 %endif
 
@@ -103,10 +107,6 @@ sh %{SOURCE6} > /dev/null
 %patch1 -p0 -b .smartcard-auth.patch
 %patch2 -p0
 %patch3 -p0
-
-# clean up CVS stuff
-%{_bindir}/find . -type d -name CVS | %{_bindir}/xargs -t %{__rm} -r
-%{_bindir}/find . -type f -name '.cvs*' | %{_bindir}/xargs -t %{__rm}
 
 %build
 export BUILD_OPT=1
@@ -329,7 +329,7 @@ cd ../../../../..
 %ghost %{_libdir}/libsoftokn%{major}.chk
 %ghost %{_libdir}/libfreebl%{major}.chk
 
-%files -n %{libname}-devel
+%files -n %{develname}
 %defattr(0644,root,root,0755)
 %attr(0755,root,root) %{_bindir}/nss-config
 %attr(0755,root,root) %{multiarch_bindir}/nss-config
@@ -426,7 +426,7 @@ cd ../../../../..
 %{_includedir}/nss/watcomfx.h
 %{_libdir}/pkgconfig/nss.pc
 
-%files -n %{libname}-static-devel
+%files -n %{sdevelname}
 %defattr(0644,root,root,0755)
 %{_libdir}/libcrmf.a
 %{_libdir}/libnss.a
