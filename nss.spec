@@ -40,7 +40,6 @@ BuildRequires:  libnspr-devel
 BuildRequires:  libz-devel
 BuildRequires:  zip
 Conflicts:      perl-PAR
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
 Network Security Services (NSS) is a set of libraries designed to
