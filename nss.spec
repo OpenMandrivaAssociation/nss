@@ -34,7 +34,7 @@ Patch1:         nss-smartcard-auth.patch
 Patch2:         nss-bug180726.patch
 Patch3:         nss-fixrandom.patch
 %if %mdkversion >= 200700
-BuildRequires:  rootcerts >= 20070713
+BuildRequires:  rootcerts >= 1:20070713.00
 %endif
 BuildRequires:  libnspr-devel
 BuildRequires:  libz-devel
