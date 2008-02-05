@@ -5,10 +5,11 @@
 %define develname %mklibname -d %{name}
 %define sdevelname %mklibname -d -s %{name}
 %define cvsver  3_11_7
+%define	nspr_version	4.6.0
 
 Name:           nss
 Version:        3.11.7
-Release:        %mkrel 4
+Release:        %mkrel 5
 Epoch:          2
 Summary:        Netscape Security Services
 Group:          System/Libraries
@@ -186,10 +187,10 @@ cd mozilla/dist/$(uname -s)*
             %{buildroot}%{_libdir}
 
 %{__mkdir_p} %{buildroot}%{_libdir}/pkgconfig
-%{__cat} %{SOURCE1} | sed -e "s,%%libdir%%,/%{_lib},g" \
+%{__cat} %{SOURCE1} | sed -e "s,%%libdir%%,%{_libdir},g" \
                           -e "s,%%prefix%%,%{_prefix},g" \
                           -e "s,%%exec_prefix%%,%{_prefix},g" \
-                          -e "s,%%includedir%%,%{_includedir}/nss3,g" \
+                          -e "s,%%includedir%%,%{_includedir}/nss,g" \
                           -e "s,%%NSPR_VERSION%%,%{nspr_version},g" \
                           -e "s,%%NSS_VERSION%%,%{version},g" > \
                           %{buildroot}%{_libdir}/pkgconfig/nss.pc
