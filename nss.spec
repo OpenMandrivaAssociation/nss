@@ -1,6 +1,6 @@
 %bcond_without  lib
 
-%define major   3
+%define major   4
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname -d %{name}
 %define sdevelname %mklibname -d -s %{name}
@@ -15,7 +15,7 @@ Group:          System/Libraries
 License:        MPL/GPL/LGPL
 URL:            http://www.mozilla.org/projects/security/pki/nss/index.html
 Source0:        ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{cvsver}_RTM/src/nss-%{version}.tar.gz
-Source1:        nss.pc
+Source1:        nss.pc.in
 Source2:        nss-config.in
 Source3:        blank-cert8.db
 Source4:        blank-key3.db
@@ -186,8 +186,13 @@ cd mozilla/dist/$(uname -s)*
             %{buildroot}%{_libdir}
 
 %{__mkdir_p} %{buildroot}%{_libdir}/pkgconfig
-%{__install} %{SOURCE1} %{buildroot}%{_libdir}/pkgconfig/nss.pc
-%{__perl} -pi -e 's|(^libdir=)(.*)|\1%{_libdir}|' %{buildroot}%{_libdir}/pkgconfig/nss.pc
+%{__cat} %{SOURCE1} | sed -e "s,%%libdir%%,/%{_lib},g" \
+                          -e "s,%%prefix%%,%{_prefix},g" \
+                          -e "s,%%exec_prefix%%,%{_prefix},g" \
+                          -e "s,%%includedir%%,%{_includedir}/nss3,g" \
+                          -e "s,%%NSPR_VERSION%%,%{nspr_version},g" \
+                          -e "s,%%NSS_VERSION%%,%{version},g" > \
+                          %{buildroot}%{_libdir}/pkgconfig/nss.pc
 %endif
 
 cd ../../..
