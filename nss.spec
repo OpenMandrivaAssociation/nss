@@ -8,7 +8,7 @@
 
 Name:           nss
 Version:        3.11.7
-Release:        %mkrel 3
+Release:        %mkrel 4
 Epoch:          2
 Summary:        Netscape Security Services
 Group:          System/Libraries
