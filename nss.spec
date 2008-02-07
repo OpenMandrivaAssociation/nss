@@ -1,6 +1,6 @@
 %bcond_without  lib
 
-%define major   4
+%define major   3
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname -d %{name}
 %define sdevelname %mklibname -d -s %{name}
@@ -9,7 +9,7 @@
 
 Name:           nss
 Version:        3.11.7
-Release:        %mkrel 6
+Release:        %mkrel 4
 Epoch:          2
 Summary:        Netscape Security Services
 Group:          System/Libraries
