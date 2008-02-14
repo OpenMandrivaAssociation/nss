@@ -4,12 +4,12 @@
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname -d %{name}
 %define sdevelname %mklibname -d -s %{name}
-%define cvsver  3_11_7
+%define cvsver  3_11_9
 %define	nspr_version	4.6.0
 
 Name:           nss
-Version:        3.11.7
-Release:        %mkrel 4
+Version:        3.11.9
+Release:        %mkrel 1
 Epoch:          2
 Summary:        Netscape Security Services
 Group:          System/Libraries
