@@ -9,7 +9,7 @@
 
 Name:           nss
 Version:        3.11.9
-Release:        %mkrel 1
+Release:        %mkrel 2
 Epoch:          2
 Summary:        Netscape Security Services
 Group:          System/Libraries
@@ -35,13 +35,13 @@ Patch1:         nss-smartcard-auth.patch
 Patch2:         nss-bug180726.patch
 Patch3:         nss-fixrandom.patch
 %if %mdkversion >= 200700
-BuildRequires:  rootcerts >= 1:20070713.00
+BuildRequires:  rootcerts >= 1:20080117.00
 %endif
 BuildRequires:  libnspr-devel
 BuildRequires:  libz-devel
 BuildRequires:  zip
 Conflicts:      perl-PAR
-Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-root
+Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Network Security Services (NSS) is a set of libraries designed to
