@@ -264,14 +264,18 @@ cd ../../../../..
 
 %if %with lib
 %post -n %{libname}
+%if %mdkversion < 200900
 /sbin/ldconfig
+%endif
 %create_ghostfile %{_libdir}/libsoftokn%{major}.chk root root 644
 %create_ghostfile %{_libdir}/libfreebl%{major}.chk root root 644
 %{_bindir}/shlibsign -i %{_libdir}/libsoftokn%{major}.so >/dev/null 2>/dev/null
 %{_bindir}/shlibsign -i %{_libdir}/libfreebl%{major}.so >/dev/null 2>/dev/null
 
 %postun -n %{libname}
+%if %mdkversion < 200900
 /sbin/ldconfig
+%endif
 %endif
 
 %files
