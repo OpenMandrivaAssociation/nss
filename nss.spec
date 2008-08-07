@@ -337,6 +337,7 @@ popd
 %{_libdir}/libsmime%{major}.so
 %{_libdir}/libsoftokn%{major}.so
 %{_libdir}/libssl%{major}.so
+%{_libdir}/libnssutil%{major}.so
 %defattr(0644,root,root,0755)
 %ghost %{_libdir}/libsoftokn%{major}.chk
 %ghost %{_libdir}/libfreebl%{major}.chk
