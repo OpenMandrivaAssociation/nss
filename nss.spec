@@ -332,7 +332,6 @@ popd
 %defattr(0755,root,root,0755)
 %{_libdir}/libfreebl%{major}.so
 %{_libdir}/libnss%{major}.so
-%{_libdir}/libnssutils%{major}.so
 %{_libdir}/libnssckbi.so
 %{_libdir}/libsmime%{major}.so
 %{_libdir}/libsoftokn%{major}.so
