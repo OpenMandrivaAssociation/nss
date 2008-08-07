@@ -4,12 +4,12 @@
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname -d %{name}
 %define sdevelname %mklibname -d -s %{name}
-%define cvsver  3_11_9
+%define cvsver  3_12
 %define	nspr_version	4.6.0
 
 Name:           nss
-Version:        3.11.9
-Release:        %mkrel 3
+Version:        3.12
+Release:        %mkrel 1
 Epoch:          2
 Summary:        Netscape Security Services
 Group:          System/Libraries
@@ -31,7 +31,6 @@ Source7:        verisign-class-3-secure-server-ca.der
 # verified in person with a government official
 Source8:        http://www.icpbrasil.gov.br/certificadoACRaiz.crt
 Patch0:         nss-no-rpath.patch
-Patch1:         nss-smartcard-auth.patch
 Patch2:         nss-bug180726.patch
 Patch3:         nss-fixrandom.patch
 %if %mdkversion >= 200700
@@ -105,7 +104,6 @@ Static libraries for doing development with Network Security Services.
 %setup -q
 sh %{SOURCE6} > /dev/null
 %patch0 -p0
-%patch1 -p0 -b .smartcard-auth.patch
 %patch2 -p0
 %patch3 -p0
 
@@ -126,9 +124,9 @@ export USE_64=1
 %endif
 
 # Parallel is broken as of 3.11.4 :(
-%{__make} -C ./mozilla/security/coreconf
-%{__make} -C ./mozilla/security/dbm
-%{__make} -C ./mozilla/security/nss
+%make -j1 -C ./mozilla/security/coreconf
+%make -j1 -C ./mozilla/security/dbm
+%make -j1 -C ./mozilla/security/nss
 
 # install new Verisign intermediate certificate
 # http://qa.mandriva.com/show_bug.cgi?id=29612
@@ -144,25 +142,22 @@ libpath=`%{_bindir}/find mozilla/dist/ -name "Linux2.*" -type d`
 # to use the built libraries instead of requiring nss
 # again as buildrequires
 export LD_LIBRARY_PATH="$PWD/$libpath/lib"
+
 pushd mozilla/security/nss/lib/ckfw/builtins
-%if %mdkversion > 200600
+
+# recreate certificates
 %{__perl} ./certdata.perl < /etc/pki/tls/mozilla/certdata.txt
-%else
-$ADDBUILTIN -n "VeriSign Class 3 Secure Server CA" \
-        -t CT,C,C < %{SOURCE7} >> certdata.txt
-$ADDBUILTIN -n "Autoridade Certificadora Raiz Brasileira" \
-        -t CT,C,C < %{SOURCE8} >> certdata.txt
-%{__perl} ./certdata.perl < certdata.txt
-%endif
-%{__make} clean
-%{__make}
+
+%make clean
+%make
+
 popd
 export LD_LIBRARY_PATH="$OLD"
 
 %install
 %{__rm} -rf %{buildroot}
 
-cd mozilla/dist/$(uname -s)*
+pushd mozilla/dist/$(uname -s)*
 
 %{__mkdir_p} %{buildroot}%{_bindir}
 %{__cp} -aL bin/* %{buildroot}%{_bindir}
@@ -196,7 +191,7 @@ cd mozilla/dist/$(uname -s)*
                           %{buildroot}%{_libdir}/pkgconfig/nss.pc
 %endif
 
-cd ../../..
+popd
 
 %if %with lib
 export NSS_VMAJOR=`%{__cat} mozilla/security/nss/lib/nss/nss.h | %{__grep} "#define.*NSS_VMAJOR" | %{__awk} '{print $3}'`
@@ -214,10 +209,10 @@ export NSS_VPATCH=`%{__cat} mozilla/security/nss/lib/nss/nss.h | %{__grep} "#def
                                > %{buildroot}/%{_bindir}/nss-config
 %endif
 
-cd mozilla/security/nss/cmd/smimetools
+pushd mozilla/security/nss/cmd/smimetools
 %{__install} -m 0755 smime %{buildroot}%{_bindir}
 %{__perl} -pi -e 's|/usr/local/bin|%{_bindir}|g' %{buildroot}%{_bindir}/smime
-cd ../../../../..
+popd
 
 # add docs
 %{__mkdir_p} docs/SSLsample
@@ -434,6 +429,7 @@ cd ../../../../..
 %{_includedir}/nss/sslerr.h
 %{_includedir}/nss/sslproto.h
 %{_includedir}/nss/sslt.h
+%{_includedir}/nss/utilrename.h
 %{_includedir}/nss/watcomfx.h
 %{_libdir}/pkgconfig/nss.pc
 
