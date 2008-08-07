@@ -33,11 +33,13 @@ Source8:        http://www.icpbrasil.gov.br/certificadoACRaiz.crt
 Patch0:         nss-no-rpath.patch
 Patch2:         nss-bug180726.patch
 Patch3:         nss-fixrandom.patch
+Patch4:		nss-nolocalsql.patch
 %if %mdkversion >= 200700
 BuildRequires:  rootcerts >= 1:20080117.00
 %endif
 BuildRequires:  libnspr-devel
 BuildRequires:  libz-devel
+BuildRequires:	sqlite3-devel
 BuildRequires:  zip
 Conflicts:      perl-PAR
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -106,6 +108,7 @@ sh %{SOURCE6} > /dev/null
 %patch0 -p0
 %patch2 -p0
 %patch3 -p0
+%patch4 -p0
 
 %build
 export BUILD_OPT=1
@@ -174,6 +177,8 @@ pushd mozilla/dist/$(uname -s)*
             lib/libnssb.a \
             lib/libnssckbi.so \
             lib/libnssckfw.a \
+            lib/libnssutil%{major}.so \
+	    lib/libnssutil.a \
             lib/libsmime.a \
             lib/libsmime%{major}.so \
             lib/libsoftokn%{major}.so \
@@ -327,6 +332,7 @@ popd
 %defattr(0755,root,root,0755)
 %{_libdir}/libfreebl%{major}.so
 %{_libdir}/libnss%{major}.so
+%{_libdir}/libnssutils%{major}.so
 %{_libdir}/libnssckbi.so
 %{_libdir}/libsmime%{major}.so
 %{_libdir}/libsoftokn%{major}.so
@@ -437,6 +443,7 @@ popd
 %defattr(0644,root,root,0755)
 %{_libdir}/libcrmf.a
 %{_libdir}/libnss.a
+%{_libdir}/libnssutil.a
 %{_libdir}/libnssb.a
 %{_libdir}/libnssckfw.a
 %{_libdir}/libsmime.a
