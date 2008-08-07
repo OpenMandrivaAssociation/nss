@@ -177,8 +177,8 @@ pushd mozilla/dist/$(uname -s)*
             lib/libnssb.a \
             lib/libnssckbi.so \
             lib/libnssckfw.a \
-            lib/libnssutil%{major}.so \
-	    lib/libnssutil.a \
+#	    lib/libnssutil%{major}.so \
+#	    lib/libnssutil.a \
             lib/libsmime.a \
             lib/libsmime%{major}.so \
             lib/libsoftokn%{major}.so \
@@ -332,7 +332,7 @@ popd
 %defattr(0755,root,root,0755)
 %{_libdir}/libfreebl%{major}.so
 %{_libdir}/libnss%{major}.so
-%{_libdir}/libnssutils%{major}.so
+#%{_libdir}/libnssutils%{major}.so
 %{_libdir}/libnssckbi.so
 %{_libdir}/libsmime%{major}.so
 %{_libdir}/libsoftokn%{major}.so
@@ -443,7 +443,7 @@ popd
 %defattr(0644,root,root,0755)
 %{_libdir}/libcrmf.a
 %{_libdir}/libnss.a
-%{_libdir}/libnssutil.a
+#%{_libdir}/libnssutil.a
 %{_libdir}/libnssb.a
 %{_libdir}/libnssckfw.a
 %{_libdir}/libsmime.a
