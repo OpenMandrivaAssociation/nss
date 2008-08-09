@@ -13,7 +13,7 @@ Release:        %mkrel 4
 Epoch:          2
 Summary:        Netscape Security Services
 Group:          System/Libraries
-License:        MPL/GPL/LGPL
+License:        MPLv1.1 or GPLv2+ or LGPLv2+
 URL:            http://www.mozilla.org/projects/security/pki/nss/index.html
 Source0:        ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{cvsver}_RTM/src/nss-%{version}.tar.gz
 Source1:        nss.pc.in
@@ -21,7 +21,6 @@ Source2:        nss-config.in
 Source3:        blank-cert8.db
 Source4:        blank-key3.db
 Source5:        blank-secmod.db
-Source6:        nss-clobber.sh
 # https://www.verisign.com/support/verisign-intermediate-ca/secure-site-intermediate/index.html
 # converted from PEM to DER format with openssl command:
 # openssl x509 -in cert.pem -inform PEM -outform DER -out cert.der
@@ -31,7 +30,6 @@ Source7:        verisign-class-3-secure-server-ca.der
 # verified in person with a government official
 Source8:        http://www.icpbrasil.gov.br/certificadoACRaiz.crt
 Patch0:         nss-no-rpath.patch
-Patch2:         nss-bug180726.patch
 Patch3:         nss-fixrandom.patch
 Patch4:		nss-nolocalsql.patch
 %if %mdkversion >= 200700
@@ -104,9 +102,7 @@ Static libraries for doing development with Network Security Services.
 
 %prep
 %setup -q
-sh %{SOURCE6} > /dev/null
 %patch0 -p0
-%patch2 -p0
 %patch3 -p0
 %patch4 -p0
 
