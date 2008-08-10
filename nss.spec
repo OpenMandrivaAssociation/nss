@@ -1,11 +1,11 @@
 %bcond_without  lib
 
-%define major   3
+%define major 3
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname -d %{name}
 %define sdevelname %mklibname -d -s %{name}
-%define cvsver  3_12
-%define	nspr_version	4.6.0
+%define cvsver 3_12
+%define	nspr_version 4.7.1
 
 Name:           nss
 Version:        3.12
@@ -117,15 +117,19 @@ export PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
 export PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
 export NSPR_INCLUDE_DIR=`%{_bindir}/pkg-config --cflags-only-I nspr | %{__sed} 's/-I//'`
 export NSPR_LIB_DIR=`%{_bindir}/pkg-config --libs-only-L nspr | %{__sed} 's/-L//'`
-
+export MOZILLA_CLIENT=1
+export NS_USE_GCC=1
+export NSS_USE_SYSTEM_SQLITE=1
+export NSS_ENABLE_ECC=1
 %ifarch x86_64 ppc64 ia64 s390x
 export USE_64=1
 %endif
 
 # Parallel is broken as of 3.11.4 :(
-%make -j1 -C ./mozilla/security/coreconf
-%make -j1 -C ./mozilla/security/dbm
-%make -j1 -C ./mozilla/security/nss
+%make -j1 -C ./mozilla/security/nss \
+	build_coreconf \
+	build_dbm \
+	all
 
 # install new Verisign intermediate certificate
 # http://qa.mandriva.com/show_bug.cgi?id=29612
@@ -173,6 +177,7 @@ pushd mozilla/dist/$(uname -s)*
             lib/libnssb.a \
             lib/libnssckbi.so \
             lib/libnssckfw.a \
+            lib/libnssdbm%{major}.so \
 	    lib/libnssutil%{major}.so \
 	    lib/libnssutil.a \
             lib/libsmime.a \
@@ -333,6 +338,7 @@ popd
 %{_libdir}/libsoftokn%{major}.so
 %{_libdir}/libssl%{major}.so
 %{_libdir}/libnssutil%{major}.so
+%{_libdir}/libnssdbm%{major}.so
 %defattr(0644,root,root,0755)
 %ghost %{_libdir}/libsoftokn%{major}.chk
 %ghost %{_libdir}/libfreebl%{major}.chk
