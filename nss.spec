@@ -7,39 +7,39 @@
 %define cvsver 3_12
 %define	nspr_version 4.7.1
 
-Name:           nss
-Version:        3.12
-Release:        %mkrel 4
-Epoch:          2
-Summary:        Netscape Security Services
-Group:          System/Libraries
-License:        MPLv1.1 or GPLv2+ or LGPLv2+
-URL:            http://www.mozilla.org/projects/security/pki/nss/index.html
-Source0:        ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{cvsver}_RTM/src/nss-%{version}.tar.gz
-Source1:        nss.pc.in
-Source2:        nss-config.in
-Source3:        blank-cert8.db
-Source4:        blank-key3.db
-Source5:        blank-secmod.db
+Name:		nss
+Version:	3.12
+Release:	%mkrel 5
+Epoch:		2
+Summary:	Netscape Security Services
+Group:		System/Libraries
+License:	MPLv1.1 or GPLv2+ or LGPLv2+
+URL:		http://www.mozilla.org/projects/security/pki/nss/index.html
+Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{cvsver}_RTM/src/nss-%{version}.tar.gz
+Source1:	nss.pc.in
+Source2:	nss-config.in
+Source3:	blank-cert8.db
+Source4:	blank-key3.db
+Source5:	blank-secmod.db
 # https://www.verisign.com/support/verisign-intermediate-ca/secure-site-intermediate/index.html
 # converted from PEM to DER format with openssl command:
 # openssl x509 -in cert.pem -inform PEM -outform DER -out cert.der
 # this way we can avoid a buildrequires for openssl
-Source7:        verisign-class-3-secure-server-ca.der
+Source7:	verisign-class-3-secure-server-ca.der
 # Brasilian government certificate
 # verified in person with a government official
-Source8:        http://www.icpbrasil.gov.br/certificadoACRaiz.crt
-Patch0:         nss-no-rpath.patch
-Patch3:         nss-fixrandom.patch
+Source8:	http://www.icpbrasil.gov.br/certificadoACRaiz.crt
+Patch0:		nss-no-rpath.patch
+Patch3:		nss-fixrandom.patch
 Patch4:		nss-nolocalsql.patch
 %if %mdkversion >= 200700
-BuildRequires:  rootcerts >= 1:20080117.00
+BuildRequires:	rootcerts >= 1:20080117.00
 %endif
-BuildRequires:  libnspr-devel
-BuildRequires:  libz-devel
+BuildRequires:	libnspr-devel
+BuildRequires:	libz-devel
 BuildRequires:	sqlite3-devel
-BuildRequires:  zip
-Conflicts:      perl-PAR
+BuildRequires:	zip
+Conflicts:	perl-PAR
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -58,11 +58,11 @@ libraries.
 
 %if %with lib
 %package -n %{libname}
-Summary:        Network Security Services (NSS)
-Group:          System/Libraries
-Provides:       mozilla-nss = %{epoch}:%{version}-%{release}
-Requires(post): nss
-Requires(post): rpm-helper
+Summary:	Network Security Services (NSS)
+Group:		System/Libraries
+Provides:	mozilla-nss = %{epoch}:%{version}-%{release}
+Requires(post):	nss
+Requires(post):	rpm-helper
 
 %description -n %{libname}
 Network Security Services (NSS) is a set of libraries designed to
@@ -74,26 +74,26 @@ detailed information on standards supported, see
 http://www.mozilla.org/projects/security/pki/nss/overview.html.
 
 %package -n %{develname}
-Summary:        Network Security Services (NSS) - development files
-Group:          Development/C++
-Requires:       %{libname} = %{epoch}:%{version}-%{release}
-Requires:       libnspr-devel
-Provides:       libnss-devel = %{epoch}:%{version}-%{release}
-Provides:       nss-devel = %{epoch}:%{version}-%{release}
+Summary:	Network Security Services (NSS) - development files
+Group:		Development/C++
+Requires:	%{libname} = %{epoch}:%{version}-%{release}
+Requires:	libnspr-devel
+Provides:	libnss-devel = %{epoch}:%{version}-%{release}
+Provides:	nss-devel = %{epoch}:%{version}-%{release}
 Obsoletes:	%{libname}-devel
 
 %description -n %{develname}
 Header files to doing development with Network Security Services.
 
 %package -n %{sdevelname}
-Summary:        Network Security Services (NSS) - static libraries
-Group:          Development/C++
-Requires:       %{libname} = %{epoch}:%{version}-%{release}
-Requires:       %{develname} = %{epoch}:%{version}-%{release}
-Requires:       nspr-devel
-Provides:       libnss-static-devel = %{epoch}:%{version}-%{release}
-Provides:       nss-static-devel = %{epoch}:%{version}-%{release}
-Conflicts:      libopenssl-static-devel
+Summary:	Network Security Services (NSS) - static libraries
+Group:		Development/C++
+Requires:	%{libname} = %{epoch}:%{version}-%{release}
+Requires:	%{develname} = %{epoch}:%{version}-%{release}
+Requires:	libnspr-devel
+Provides:	libnss-static-devel = %{epoch}:%{version}-%{release}
+Provides:	nss-static-devel = %{epoch}:%{version}-%{release}
+Conflicts:	libopenssl-static-devel
 Obsoletes:	%{libname}-static-devel
 
 %description -n %{sdevelname}
