@@ -9,7 +9,7 @@
 
 Name:		nss
 Version:	3.12
-Release:	%mkrel 5
+Release:	%mkrel 6
 Epoch:		2
 Summary:	Netscape Security Services
 Group:		System/Libraries
@@ -63,6 +63,26 @@ Group:		System/Libraries
 Provides:	mozilla-nss = %{epoch}:%{version}-%{release}
 Requires(post):	nss
 Requires(post):	rpm-helper
+# ugly provides due to ugly nss libnames and sonames
+%ifarch x86_64 ia64 amd64 sparc64 ppc64
+Provides:	devel(libfreebl%{major}(64bit))
+Provides:	devel(libnss%{major}(64bit))
+Provides:	devel(libnssckbi(64bit))
+Provides:	devel(libnssdbm%{major}(64bit))
+Provides:	devel(libnssutil%{major}(64bit))
+Provides:	devel(libsmime%{major}(64bit))
+Provides:	devel(libsoftokn%{major}(64bit))
+Provides:	devel(libssl%{major}(64bit))
+%else
+Provides:	devel(libfreebl%{major})
+Provides:	devel(libnss%{major})
+Provides:	devel(libnssckbi)
+Provides:	devel(libnssdbm%{major})
+Provides:	devel(libnssutil%{major})
+Provides:	devel(libsmime%{major})
+Provides:	devel(libsoftokn%{major})
+Provides:	devel(libssl%{major})
+%endif
 
 %description -n %{libname}
 Network Security Services (NSS) is a set of libraries designed to
