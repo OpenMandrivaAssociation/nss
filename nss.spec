@@ -9,7 +9,7 @@
 
 Name:		nss
 Version:	3.12
-Release:	%mkrel 6
+Release:	%mkrel 7
 Epoch:		2
 Summary:	Netscape Security Services
 Group:		System/Libraries
@@ -39,7 +39,6 @@ BuildRequires:	libnspr-devel
 BuildRequires:	libz-devel
 BuildRequires:	sqlite3-devel
 BuildRequires:	zip
-Conflicts:	perl-PAR
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
