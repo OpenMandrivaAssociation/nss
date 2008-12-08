@@ -9,7 +9,7 @@
 
 Name:		nss
 Version:	3.12
-Release:	%mkrel 7
+Release:	%mkrel 8
 Epoch:		2
 Summary:	Netscape Security Services
 Group:		System/Libraries
@@ -62,26 +62,6 @@ Group:		System/Libraries
 Provides:	mozilla-nss = %{epoch}:%{version}-%{release}
 Requires(post):	nss
 Requires(post):	rpm-helper
-# ugly provides due to ugly nss libnames and sonames
-%ifarch x86_64 ia64 amd64 sparc64 ppc64
-Provides:	devel(libfreebl%{major}(64bit))
-Provides:	devel(libnss%{major}(64bit))
-Provides:	devel(libnssckbi(64bit))
-Provides:	devel(libnssdbm%{major}(64bit))
-Provides:	devel(libnssutil%{major}(64bit))
-Provides:	devel(libsmime%{major}(64bit))
-Provides:	devel(libsoftokn%{major}(64bit))
-Provides:	devel(libssl%{major}(64bit))
-%else
-Provides:	devel(libfreebl%{major})
-Provides:	devel(libnss%{major})
-Provides:	devel(libnssckbi)
-Provides:	devel(libnssdbm%{major})
-Provides:	devel(libnssutil%{major})
-Provides:	devel(libsmime%{major})
-Provides:	devel(libsoftokn%{major})
-Provides:	devel(libssl%{major})
-%endif
 
 %description -n %{libname}
 Network Security Services (NSS) is a set of libraries designed to
@@ -100,6 +80,7 @@ Requires:	libnspr-devel
 Provides:	libnss-devel = %{epoch}:%{version}-%{release}
 Provides:	nss-devel = %{epoch}:%{version}-%{release}
 Obsoletes:	%{libname}-devel
+Conflicts:	%{libname} < 2:3.12-8
 
 %description -n %{develname}
 Header files to doing development with Network Security Services.
@@ -186,25 +167,35 @@ pushd mozilla/dist/$(uname -s)*
 
 %if %with lib
 %{__mkdir_p} %{buildroot}%{_libdir}
+%{__mkdir_p} %{buildroot}/%{_lib}
 %{__mkdir_p} %{buildroot}%{_includedir}/nss
 %{__cp} -aL ../public/nss/* %{buildroot}%{_includedir}/nss
 
 %{__cp} -aL lib/libcrmf.a \
-            lib/libnss%{major}.so \
-            lib/libfreebl%{major}.so \
             lib/libnss.a \
             lib/libnssb.a \
             lib/libnssckbi.so \
             lib/libnssckfw.a \
-            lib/libnssdbm%{major}.so \
-	    lib/libnssutil%{major}.so \
 	    lib/libnssutil.a \
             lib/libsmime.a \
-            lib/libsmime%{major}.so \
-            lib/libsoftokn%{major}.so \
             lib/libssl.a \
-            lib/libssl%{major}.so \
             %{buildroot}%{_libdir}
+
+# Copy the binary libraries we want
+for file in libsoftokn3.so libfreebl3.so libnss3.so libnssutil3.so \
+            libssl3.so libsmime3.so libnssckbi.so libnssdbm3.so
+do
+  %{__install} -m 755 lib/$file %buildroot/%{_lib}
+  ln -sf ../../%{_lib}/$file %buildroot/%{_libdir}/$file
+done
+
+# These ghost files will be generated in the post step
+# Make sure chk files can be found in both places
+for file in libsoftokn3.chk libfreebl3.chk
+do
+  touch %{buildroot}/%{_lib}/$file
+  ln -s ../../%{_lib}/$file %buildroot/%{_libdir}/$file
+done
 
 %{__mkdir_p} %{buildroot}%{_libdir}/pkgconfig
 %{__cat} %{SOURCE1} | sed -e "s,%%libdir%%,%{_libdir},g" \
@@ -263,12 +254,6 @@ popd
 %{__mkdir_p} docs/ssltap
 %{__cp} -a mozilla/security/nss/cmd/ssltap/*.html docs/ssltap/
 
-%if %with lib
-# These ghost files will be generated in the post step
-/bin/touch %{buildroot}%{_libdir}/libsoftokn%{major}.chk
-/bin/touch %{buildroot}%{_libdir}/libfreebl%{major}.chk
-%endif
-
 # Install the empty NSS db files
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/pki/nssdb
 %{__install} -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/pki/nssdb/cert8.db
@@ -287,10 +272,10 @@ popd
 %if %mdkversion < 200900
 /sbin/ldconfig
 %endif
-%create_ghostfile %{_libdir}/libsoftokn%{major}.chk root root 644
-%create_ghostfile %{_libdir}/libfreebl%{major}.chk root root 644
-%{_bindir}/shlibsign -i %{_libdir}/libsoftokn%{major}.so >/dev/null 2>/dev/null
-%{_bindir}/shlibsign -i %{_libdir}/libfreebl%{major}.so >/dev/null 2>/dev/null
+%create_ghostfile /%{_lib}/libsoftokn%{major}.chk root root 644
+%create_ghostfile /%{_lib}/libfreebl%{major}.chk root root 644
+%{_bindir}/shlibsign -i /%{_lib}/libsoftokn%{major}.so >/dev/null 2>/dev/null
+%{_bindir}/shlibsign -i /%{_lib}/libfreebl%{major}.so >/dev/null 2>/dev/null
 
 %postun -n %{libname}
 %if %mdkversion < 200900
@@ -350,22 +335,23 @@ popd
 %if %with lib
 %files -n %{libname}
 %defattr(0755,root,root,0755)
-%{_libdir}/libfreebl%{major}.so
-%{_libdir}/libnss%{major}.so
-%{_libdir}/libnssckbi.so
-%{_libdir}/libsmime%{major}.so
-%{_libdir}/libsoftokn%{major}.so
-%{_libdir}/libssl%{major}.so
-%{_libdir}/libnssutil%{major}.so
-%{_libdir}/libnssdbm%{major}.so
+/%{_lib}/libfreebl%{major}.so
+/%{_lib}/libnss%{major}.so
+/%{_lib}/libnssckbi.so
+/%{_lib}/libsmime%{major}.so
+/%{_lib}/libsoftokn%{major}.so
+/%{_lib}/libssl%{major}.so
+/%{_lib}/libnssutil%{major}.so
+/%{_lib}/libnssdbm%{major}.so
 %defattr(0644,root,root,0755)
-%ghost %{_libdir}/libsoftokn%{major}.chk
-%ghost %{_libdir}/libfreebl%{major}.chk
+%ghost /%{_lib}/libsoftokn%{major}.chk
+%ghost /%{_lib}/libfreebl%{major}.chk
 
 %files -n %{develname}
 %defattr(0644,root,root,0755)
 %attr(0755,root,root) %{_bindir}/nss-config
 %attr(0755,root,root) %{multiarch_bindir}/nss-config
+%_libdir/*.so
 %dir %{_includedir}/nss
 %{_includedir}/nss/base64.h
 %{_includedir}/nss/blapit.h
@@ -459,6 +445,8 @@ popd
 %{_includedir}/nss/utilrename.h
 %{_includedir}/nss/watcomfx.h
 %{_libdir}/pkgconfig/nss.pc
+%{_libdir}/libsoftokn%{major}.chk
+%{_libdir}/libfreebl%{major}.chk
 
 %files -n %{sdevelname}
 %defattr(0644,root,root,0755)
