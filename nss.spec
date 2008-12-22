@@ -9,7 +9,7 @@
 
 Name:		nss
 Version:	3.12
-Release:	%mkrel 8
+Release:	%mkrel 9
 Epoch:		2
 Summary:	Netscape Security Services
 Group:		System/Libraries
@@ -32,6 +32,7 @@ Source8:	http://www.icpbrasil.gov.br/certificadoACRaiz.crt
 Patch0:		nss-no-rpath.patch
 Patch3:		nss-fixrandom.patch
 Patch4:		nss-nolocalsql.patch
+Patch5:		%{name}-3.12-format_not_a_string_literal_and_no_format_arguments.patch
 %if %mdkversion >= 200700
 BuildRequires:	rootcerts >= 1:20080117.00
 %endif
@@ -105,11 +106,14 @@ Static libraries for doing development with Network Security Services.
 %patch0 -p0
 %patch3 -p0
 %patch4 -p0
+%patch5 -p1
 
 %build
+%setup_compile_flags
 export BUILD_OPT=1
-export OPTIMIZER="%{optflags} -fno-strict-aliasing"
-export XCFLAGS="%{optflags} -fno-strict-aliasing"
+export OPTIMIZER="%{optflags}"
+export XCFLAGS="%{optflags}"
+export LDOPTS="$LDFLAGS"
 export LIBDIR=%{_libdir}
 export USE_SYSTEM_ZLIB=1
 export ZLIB_LIBS="-lz"
@@ -185,8 +189,8 @@ pushd mozilla/dist/$(uname -s)*
 for file in libsoftokn3.so libfreebl3.so libnss3.so libnssutil3.so \
             libssl3.so libsmime3.so libnssckbi.so libnssdbm3.so
 do
-  %{__install} -m 755 lib/$file %buildroot/%{_lib}
-  ln -sf ../../%{_lib}/$file %buildroot/%{_libdir}/$file
+  %{__install} -m 755 lib/$file %{buildroot}/%{_lib}
+  ln -sf ../../%{_lib}/$file %{buildroot}%{_libdir}/$file
 done
 
 # These ghost files will be generated in the post step
@@ -194,7 +198,7 @@ done
 for file in libsoftokn3.chk libfreebl3.chk
 do
   touch %{buildroot}/%{_lib}/$file
-  ln -s ../../%{_lib}/$file %buildroot/%{_libdir}/$file
+  ln -s ../../%{_lib}/$file %{buildroot}%{_libdir}/$file
 done
 
 %{__mkdir_p} %{buildroot}%{_libdir}/pkgconfig
