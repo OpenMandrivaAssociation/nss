@@ -32,7 +32,8 @@ Source8:	http://www.icpbrasil.gov.br/certificadoACRaiz.crt
 Patch0:		nss-no-rpath.patch
 Patch3:		nss-fixrandom.patch
 Patch4:		nss-nolocalsql.patch
-Patch5:		%{name}-3.12-format_not_a_string_literal_and_no_format_arguments.patch
+Patch5:		nss-3.12-format_not_a_string_literal_and_no_format_arguments.patch
+Patch6:		nss-3.12-make-room-for-string-terminator.patch
 %if %mdkversion >= 200700
 BuildRequires:	rootcerts >= 1:20080117.00
 %endif
@@ -107,6 +108,7 @@ Static libraries for doing development with Network Security Services.
 %patch3 -p0
 %patch4 -p0
 %patch5 -p1
+%patch6 -p1 -b .invalid_ptr
 
 %build
 %setup_compile_flags
