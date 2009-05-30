@@ -9,7 +9,7 @@
 
 Name:		nss
 Version:	3.12.3
-Release:	%mkrel 1
+Release:	%mkrel 2
 Epoch:		2
 Summary:	Netscape Security Services
 Group:		System/Libraries
@@ -290,7 +290,6 @@ popd
 %files
 %defattr(0644,root,root,0755)
 %doc docs/*
-      /usr/bin/
 %attr(0755,root,root) %{_bindir}/addbuiltin
 %attr(0755,root,root) %{_bindir}/atob
 %attr(0755,root,root) %{_bindir}/bltest
