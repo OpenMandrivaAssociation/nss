@@ -5,17 +5,17 @@
 %define develname %mklibname -d %{name}
 %define sdevelname %mklibname -d -s %{name}
 %define cvsver 3_12
-%define	nspr_version 4.7.1
+%define	nspr_version 4.7.4
 
 Name:		nss
-Version:	3.12
-Release:	%mkrel 12
+Version:	3.12.3
+Release:	%mkrel 1
 Epoch:		2
 Summary:	Netscape Security Services
 Group:		System/Libraries
 License:	MPLv1.1 or GPLv2+ or LGPLv2+
 URL:		http://www.mozilla.org/projects/security/pki/nss/index.html
-Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{cvsver}_RTM/src/nss-%{version}.tar.gz
+Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{cvsver}_RTM/src/nss-%{version}.tar.bz2
 Source1:	nss.pc.in
 Source2:	nss-config.in
 Source3:	blank-cert8.db
@@ -32,12 +32,11 @@ Source8:	http://www.icpbrasil.gov.br/certificadoACRaiz.crt
 Patch0:		nss-no-rpath.patch
 Patch3:		nss-fixrandom.patch
 Patch4:		nss-nolocalsql.patch
-Patch5:		nss-3.12-format_not_a_string_literal_and_no_format_arguments.patch
-Patch6:		nss-3.12-make-room-for-string-terminator.patch
+Patch5:		nss-3.12.3-format_not_a_string_literal_and_no_format_arguments.patch
 %if %mdkversion >= 200700
 BuildRequires:	rootcerts >= 1:20080117.00
 %endif
-BuildRequires:	libnspr-devel
+BuildRequires:	libnspr-devel >= %{nspr_version}
 BuildRequires:	libz-devel
 BuildRequires:	sqlite3-devel
 BuildRequires:	zip
@@ -108,7 +107,6 @@ Static libraries for doing development with Network Security Services.
 %patch3 -p0
 %patch4 -p0
 %patch5 -p1
-%patch6 -p1 -b .invalid_ptr
 
 %build
 %setup_compile_flags
@@ -238,7 +236,7 @@ popd
 
 # add docs
 %{__mkdir_p} docs/SSLsample
-%{__cp} -a mozilla/security/nss/cmd/SSLsample/README docs/SSLsample/
+#%{__cp} -a mozilla/security/nss/cmd/SSLsample/README docs/SSLsample/
 
 %{__mkdir_p} docs/bltest
 %{__cp} -a mozilla/security/nss/cmd/bltest/tests/* docs/bltest/
@@ -292,6 +290,7 @@ popd
 %files
 %defattr(0644,root,root,0755)
 %doc docs/*
+      /usr/bin/
 %attr(0755,root,root) %{_bindir}/addbuiltin
 %attr(0755,root,root) %{_bindir}/atob
 %attr(0755,root,root) %{_bindir}/bltest
@@ -299,7 +298,7 @@ popd
 %attr(0755,root,root) %{_bindir}/certcgi
 %attr(0755,root,root) %{_bindir}/certutil
 %attr(0755,root,root) %{_bindir}/checkcert
-%attr(0755,root,root) %{_bindir}/client
+%attr(0755,root,root) %{_bindir}/conflict
 %attr(0755,root,root) %{_bindir}/cmsutil
 %attr(0755,root,root) %{_bindir}/crlutil
 %attr(0755,root,root) %{_bindir}/crmftest
@@ -310,6 +309,7 @@ popd
 %attr(0755,root,root) %{_bindir}/makepqg
 %attr(0755,root,root) %{_bindir}/mangle
 %attr(0755,root,root) %{_bindir}/modutil
+%attr(0755,root,root) %{_bindir}/nonspr10
 %attr(0755,root,root) %{_bindir}/ocspclnt
 %attr(0755,root,root) %{_bindir}/oidcalc
 %attr(0755,root,root) %{_bindir}/p7content
@@ -319,10 +319,10 @@ popd
 %attr(0755,root,root) %{_bindir}/pk11mode
 %attr(0755,root,root) %{_bindir}/pk12util
 %attr(0755,root,root) %{_bindir}/pp
+%attr(0755,root,root) %{_bindir}/remtest
 %attr(0755,root,root) %{_bindir}/rsaperf
 %attr(0755,root,root) %{_bindir}/sdrtest
 %attr(0755,root,root) %{_bindir}/selfserv
-%attr(0755,root,root) %{_bindir}/server
 %attr(0755,root,root) %{_bindir}/shlibsign
 %attr(0755,root,root) %{_bindir}/signtool
 %attr(0755,root,root) %{_bindir}/signver
@@ -403,6 +403,7 @@ popd
 %{_includedir}/nss/nsslocks.h
 %{_includedir}/nss/nssrwlk.h
 %{_includedir}/nss/nssrwlkt.h
+%{_includedir}/nss/nssutil.h
 %{_includedir}/nss/ocsp.h
 %{_includedir}/nss/ocspt.h
 %{_includedir}/nss/p12.h
@@ -449,7 +450,6 @@ popd
 %{_includedir}/nss/sslproto.h
 %{_includedir}/nss/sslt.h
 %{_includedir}/nss/utilrename.h
-%{_includedir}/nss/watcomfx.h
 %{_libdir}/pkgconfig/nss.pc
 %{_libdir}/libsoftokn%{major}.chk
 %{_libdir}/libfreebl%{major}.chk
