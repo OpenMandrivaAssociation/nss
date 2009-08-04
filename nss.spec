@@ -8,14 +8,14 @@
 %define	nspr_version 4.7.4
 
 Name:		nss
-Version:	3.12.3
-Release:	%mkrel 2
+Version:	3.12.3.1
+Release:	%mkrel 1
 Epoch:		2
 Summary:	Netscape Security Services
 Group:		System/Libraries
 License:	MPLv1.1 or GPLv2+ or LGPLv2+
 URL:		http://www.mozilla.org/projects/security/pki/nss/index.html
-Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{cvsver}_RTM/src/nss-%{version}.tar.bz2
+Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{cvsver}_RTM/src/nss-%{version}.tar.gz
 Source1:	nss.pc.in
 Source2:	nss-config.in
 Source3:	blank-cert8.db
