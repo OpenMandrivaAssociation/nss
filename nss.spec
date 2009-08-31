@@ -8,7 +8,7 @@
 %define	nspr_version 4.7.4
 
 Name:		nss
-Version:	3.12.3.1
+Version:	3.12.4
 Release:	%mkrel 1
 Epoch:		2
 Summary:	Netscape Security Services
@@ -102,6 +102,7 @@ Static libraries for doing development with Network Security Services.
 %endif
 
 %prep
+
 %setup -q
 %patch0 -p0
 %patch3 -p0
@@ -292,13 +293,14 @@ popd
 %doc docs/*
 %attr(0755,root,root) %{_bindir}/addbuiltin
 %attr(0755,root,root) %{_bindir}/atob
+%attr(0755,root,root) %{_bindir}/baddbdir
 %attr(0755,root,root) %{_bindir}/bltest
 %attr(0755,root,root) %{_bindir}/btoa
 %attr(0755,root,root) %{_bindir}/certcgi
 %attr(0755,root,root) %{_bindir}/certutil
 %attr(0755,root,root) %{_bindir}/checkcert
-%attr(0755,root,root) %{_bindir}/conflict
 %attr(0755,root,root) %{_bindir}/cmsutil
+%attr(0755,root,root) %{_bindir}/conflict
 %attr(0755,root,root) %{_bindir}/crlutil
 %attr(0755,root,root) %{_bindir}/crmftest
 %attr(0755,root,root) %{_bindir}/dbtest
