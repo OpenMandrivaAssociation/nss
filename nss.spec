@@ -8,8 +8,8 @@
 %define	nspr_version 4.7.4
 
 Name:		nss
-Version:	3.12.4
-Release:	%mkrel 2
+Version:	3.12.5
+Release:	%mkrel 1
 Epoch:		2
 Summary:	Netscape Security Services
 Group:		System/Libraries
