@@ -310,6 +310,7 @@ popd
 %attr(0755,root,root) %{_bindir}/makepqg
 %attr(0755,root,root) %{_bindir}/mangle
 %attr(0755,root,root) %{_bindir}/modutil
+%attr(0755,root,root) %{_bindir}/multinit
 %attr(0755,root,root) %{_bindir}/nonspr10
 %attr(0755,root,root) %{_bindir}/ocspclnt
 %attr(0755,root,root) %{_bindir}/oidcalc
