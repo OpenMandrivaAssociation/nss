@@ -9,7 +9,7 @@
 
 Name:		nss
 Version:	3.12.5
-Release:	%mkrel 3
+Release:	%mkrel 4
 Epoch:		2
 Summary:	Netscape Security Services
 Group:		System/Libraries
@@ -34,7 +34,7 @@ Patch3:		nss-fixrandom.patch
 Patch4:		nss-nolocalsql.patch
 Patch5:		nss-3.12.3-format_not_a_string_literal_and_no_format_arguments.patch
 %if %mdkversion >= 200700
-BuildRequires:	rootcerts >= 1:20080117.00
+BuildRequires:	rootcerts >= 1:20100216.01
 %endif
 BuildRequires:	libnspr-devel >= %{nspr_version}
 BuildRequires:	libz-devel
