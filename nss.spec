@@ -8,8 +8,8 @@
 %define	nspr_version 4.7.4
 
 Name:		nss
-Version:	3.12.5
-Release:	%mkrel 4
+Version:	3.12.6
+Release:	%mkrel 0.0.1
 Epoch:		2
 Summary:	Netscape Security Services
 Group:		System/Libraries
@@ -30,9 +30,11 @@ Source7:	verisign-class-3-secure-server-ca.der
 # verified in person with a government official
 Source8:	http://www.icpbrasil.gov.br/certificadoACRaiz.crt
 Patch0:		nss-no-rpath.patch
-Patch3:		nss-fixrandom.patch
-Patch4:		nss-nolocalsql.patch
-Patch5:		nss-3.12.3-format_not_a_string_literal_and_no_format_arguments.patch
+Patch1:		nss-fixrandom.patch
+Patch2:		nss-nolocalsql.patch
+Patch3:		nss-3.12.3-format_not_a_string_literal_and_no_format_arguments.patch
+Patch4:		renegotiate-transitional.patch
+Patch5:		validate-arguments.patch
 %if %mdkversion >= 200700
 BuildRequires:	rootcerts >= 1:20100216.01
 %endif
@@ -105,9 +107,15 @@ Static libraries for doing development with Network Security Services.
 
 %setup -q
 %patch0 -p0
-%patch3 -p0
-%patch4 -p0
-%patch5 -p1
+%patch1 -p0
+%patch2 -p1
+%patch3 -p1
+%patch4 -p0 -b .transitional
+%patch5 -p0 -b .validate
+
+find . -type d -perm 0700 -exec chmod 755 {} \;
+find . -type f -perm 0555 -exec chmod 755 {} \;
+find . -type f -perm 0444 -exec chmod 644 {} \;
 
 %build
 %setup_compile_flags
@@ -305,6 +313,7 @@ popd
 %attr(0755,root,root) %{_bindir}/crmftest
 %attr(0755,root,root) %{_bindir}/dbtest
 %attr(0755,root,root) %{_bindir}/derdump
+%attr(0755,root,root) %{_bindir}/dertimetest
 %attr(0755,root,root) %{_bindir}/digest
 %attr(0755,root,root) %{_bindir}/fipstest
 %attr(0755,root,root) %{_bindir}/makepqg
