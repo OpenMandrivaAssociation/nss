@@ -5,11 +5,20 @@
 %define develname %mklibname -d %{name}
 %define sdevelname %mklibname -d -s %{name}
 %define cvsver 3_12
-%define	nspr_version 4.7.4
+%define	nspr_version 4.8.4
+
+%if %mandriva_branch == Cooker
+# Cooker
+%define release %mkrel 2
+%else
+# Old distros
+%define subrel 2
+%define release %mkrel 0
+%endif
 
 Name:		nss
 Version:	3.12.6
-Release:	%mkrel 1
+Release:	%{release}
 Epoch:		2
 Summary:	Netscape Security Services
 Group:		System/Libraries
