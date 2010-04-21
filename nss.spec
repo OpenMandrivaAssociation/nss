@@ -9,7 +9,7 @@
 
 %if %mandriva_branch == Cooker
 # Cooker
-%define release %mkrel 3
+%define release %mkrel 4
 %else
 # Old distros
 %define subrel 3
@@ -53,7 +53,6 @@ BuildRequires:	rootcerts >= 1:20100216.01
 BuildRequires:	libnspr-devel >= %{nspr_version}
 BuildRequires:	libz-devel
 %if %mdkversion >= 200800
-Requires:	%{mklibname sqlite3_ 0} >= %{sqlite3_version}
 BuildRequires:	libsqlite3-devel >= 3.6.22
 %endif
 BuildRequires:	zip
@@ -80,6 +79,9 @@ Group:		System/Libraries
 Provides:	mozilla-nss = %{epoch}:%{version}-%{release}
 Requires(post):	nss
 Requires(post):	rpm-helper
+%if %mdkversion >= 200800
+Requires:	%{mklibname sqlite3_ 0} >= %{sqlite3_version}
+%endif
 
 %description -n %{libname}
 Network Security Services (NSS) is a set of libraries designed to
