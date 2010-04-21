@@ -9,12 +9,15 @@
 
 %if %mandriva_branch == Cooker
 # Cooker
-%define release %mkrel 2
+%define release %mkrel 3
 %else
 # Old distros
-%define subrel 2
+%define subrel 3
 %define release %mkrel 0
 %endif
+
+# this seems fragile, so require the exact version or later (#58754)
+%define sqlite3_version %(pkg-config --modversion sqlite3 &>/dev/null && pkg-config --modversion sqlite3 2>/dev/null || echo 0)
 
 Name:		nss
 Version:	3.12.6
@@ -49,7 +52,10 @@ BuildRequires:	rootcerts >= 1:20100216.01
 %endif
 BuildRequires:	libnspr-devel >= %{nspr_version}
 BuildRequires:	libz-devel
-BuildRequires:	sqlite3-devel
+%if %mdkversion >= 200800
+Requires:	%{mklibname sqlite3_ 0} >= %{sqlite3_version}
+BuildRequires:	libsqlite3-devel >= 3.6.22
+%endif
 BuildRequires:	zip
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
