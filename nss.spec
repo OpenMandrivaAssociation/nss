@@ -48,7 +48,7 @@ Patch3:		nss-3.12.3-format_not_a_string_literal_and_no_format_arguments.patch
 Patch4:		renegotiate-transitional.patch
 Patch5:		validate-arguments.patch
 %if %mdkversion >= 200700
-BuildRequires:	rootcerts >= 1:20100216.01
+BuildRequires:	rootcerts >= 1:20100408.00
 %endif
 BuildRequires:	libnspr-devel >= %{nspr_version}
 BuildRequires:	libz-devel
