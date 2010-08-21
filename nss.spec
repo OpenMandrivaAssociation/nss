@@ -5,11 +5,11 @@
 %define develname %mklibname -d %{name}
 %define sdevelname %mklibname -d -s %{name}
 %define cvsver 3_12
-%define	nspr_version 4.8.4
+%define	nspr_version 4.8.6
 
 %if %mandriva_branch == Cooker
 # Cooker
-%define release %mkrel 6
+%define release %mkrel 1
 %else
 # Old distros
 %define subrel 3
@@ -20,7 +20,7 @@
 %define sqlite3_version %(pkg-config --modversion sqlite3 &>/dev/null && pkg-config --modversion sqlite3 2>/dev/null || echo 0)
 
 Name:		nss
-Version:	3.12.6
+Version:	3.12.7
 Release:	%{release}
 Epoch:		2
 Summary:	Netscape Security Services
@@ -44,7 +44,7 @@ Source8:	http://www.icpbrasil.gov.br/certificadoACRaiz.crt
 Patch0:		nss-no-rpath.patch
 Patch1:		nss-fixrandom.patch
 Patch2:		nss-nolocalsql.patch
-Patch3:		nss-3.12.3-format_not_a_string_literal_and_no_format_arguments.patch
+Patch3:		nss-3.12.7-format_not_a_string_literal_and_no_format_arguments.patch
 Patch4:		renegotiate-transitional.patch
 Patch5:		validate-arguments.patch
 %if %mdkversion >= 200700
