@@ -11,7 +11,7 @@
 
 %if %mandriva_branch == Cooker
 # Cooker
-%define release %mkrel 3
+%define release %mkrel 1
 %else
 # Old distros
 %define subrel 1
@@ -23,7 +23,7 @@
 %define nspr_version %(pkg-config --modversion nspr &>/dev/null && pkg-config --modversion nspr 2>/dev/null || echo 0)
 
 Name:		nss
-Version:	3.12.7
+Version:	3.12.8
 Release:	%{release}
 Epoch:		2
 Summary:	Netscape Security Services
@@ -46,10 +46,8 @@ Source7:	verisign-class-3-secure-server-ca.der
 Source8:	http://www.icpbrasil.gov.br/certificadoACRaiz.crt
 Patch0:		nss-no-rpath.patch
 Patch1:		nss-fixrandom.patch
-Patch2:		nss-nolocalsql.patch
 Patch3:		nss-3.12.7-format_not_a_string_literal_and_no_format_arguments.patch
 Patch4:		renegotiate-transitional.patch
-Patch5:		validate-arguments.patch
 %if %mdkversion >= 200700
 BuildRequires:	rootcerts >= 1:20100827.00
 %endif
@@ -129,10 +127,8 @@ Static libraries for doing development with Network Security Services.
 %setup -q
 %patch0 -p0
 %patch1 -p0
-%patch2 -p1
 %patch3 -p1
 %patch4 -p0 -b .transitional
-%patch5 -p0 -b .validate
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
@@ -395,8 +391,8 @@ popd
 %dir %{_includedir}/nss
 %{_includedir}/nss/base64.h
 %{_includedir}/nss/blapit.h
-%{_includedir}/nss/cert.h
 %{_includedir}/nss/certdb.h
+%{_includedir}/nss/cert.h
 %{_includedir}/nss/certt.h
 %{_includedir}/nss/ciferfam.h
 %{_includedir}/nss/cmmf.h
@@ -411,13 +407,12 @@ popd
 %{_includedir}/nss/ecl-exp.h
 %{_includedir}/nss/hasht.h
 %{_includedir}/nss/jar-ds.h
-%{_includedir}/nss/jar.h
 %{_includedir}/nss/jarfile.h
+%{_includedir}/nss/jar.h
 %{_includedir}/nss/key.h
 %{_includedir}/nss/keyhi.h
 %{_includedir}/nss/keyt.h
 %{_includedir}/nss/keythi.h
-%{_includedir}/nss/nss.h
 %{_includedir}/nss/nssb64.h
 %{_includedir}/nss/nssb64t.h
 %{_includedir}/nss/nssbase.h
@@ -426,15 +421,17 @@ popd
 %{_includedir}/nss/nssckbi.h
 %{_includedir}/nss/nssckepv.h
 %{_includedir}/nss/nssckft.h
-%{_includedir}/nss/nssckfw.h
 %{_includedir}/nss/nssckfwc.h
+%{_includedir}/nss/nssckfw.h
 %{_includedir}/nss/nssckfwt.h
 %{_includedir}/nss/nssckg.h
 %{_includedir}/nss/nssckmdt.h
 %{_includedir}/nss/nssckt.h
+%{_includedir}/nss/nss.h
 %{_includedir}/nss/nssilckt.h
 %{_includedir}/nss/nssilock.h
 %{_includedir}/nss/nsslocks.h
+%{_includedir}/nss/nsslowhash.h
 %{_includedir}/nss/nssrwlk.h
 %{_includedir}/nss/nssrwlkt.h
 %{_includedir}/nss/nssutil.h
@@ -448,8 +445,8 @@ popd
 %{_includedir}/nss/pk11priv.h
 %{_includedir}/nss/pk11pub.h
 %{_includedir}/nss/pk11sdr.h
-%{_includedir}/nss/pkcs11.h
 %{_includedir}/nss/pkcs11f.h
+%{_includedir}/nss/pkcs11.h
 %{_includedir}/nss/pkcs11n.h
 %{_includedir}/nss/pkcs11p.h
 %{_includedir}/nss/pkcs11t.h
@@ -479,8 +476,8 @@ popd
 %{_includedir}/nss/secport.h
 %{_includedir}/nss/shsign.h
 %{_includedir}/nss/smime.h
-%{_includedir}/nss/ssl.h
 %{_includedir}/nss/sslerr.h
+%{_includedir}/nss/ssl.h
 %{_includedir}/nss/sslproto.h
 %{_includedir}/nss/sslt.h
 %{_includedir}/nss/utilrename.h
