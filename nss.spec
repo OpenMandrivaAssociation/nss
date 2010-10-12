@@ -5,11 +5,13 @@
 %define develname %mklibname -d %{name}
 %define sdevelname %mklibname -d -s %{name}
 %define cvsver 3_12
+
+%define nspr_libname %mklibname nspr 4
 %define	nspr_version 4.8.6
 
 %if %mandriva_branch == Cooker
 # Cooker
-%define release %mkrel 2
+%define release %mkrel 3
 %else
 # Old distros
 %define subrel 1
@@ -18,6 +20,7 @@
 
 # this seems fragile, so require the exact version or later (#58754)
 %define sqlite3_version %(pkg-config --modversion sqlite3 &>/dev/null && pkg-config --modversion sqlite3 2>/dev/null || echo 0)
+%define nspr_version %(pkg-config --modversion nspr &>/dev/null && pkg-config --modversion nspr 2>/dev/null || echo 0)
 
 Name:		nss
 Version:	3.12.7
@@ -50,7 +53,7 @@ Patch5:		validate-arguments.patch
 %if %mdkversion >= 200700
 BuildRequires:	rootcerts >= 1:20100827.00
 %endif
-BuildRequires:	libnspr-devel >= %{nspr_version}
+BuildRequires:	libnspr-devel >= 2:%{nspr_version}
 BuildRequires:	libz-devel
 %if %mdkversion >= 200800
 BuildRequires:	libsqlite3-devel >= 3.6.22
@@ -82,6 +85,7 @@ Requires(post):	rpm-helper
 %if %mdkversion >= 200800
 Requires:	%{mklibname sqlite3_ 0} >= %{sqlite3_version}
 %endif
+Requires:	%{nspr_libname} >= 2:%{nspr_version}
 
 %description -n %{libname}
 Network Security Services (NSS) is a set of libraries designed to
