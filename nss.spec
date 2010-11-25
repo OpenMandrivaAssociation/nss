@@ -11,10 +11,10 @@
 
 %if %mandriva_branch == Cooker
 # Cooker
-%define release %mkrel 1
+%define release %mkrel 2
 %else
 # Old distros
-%define subrel 1
+%define subrel 2
 %define release %mkrel 0
 %endif
 
@@ -49,7 +49,7 @@ Patch1:		nss-fixrandom.patch
 Patch3:		nss-3.12.7-format_not_a_string_literal_and_no_format_arguments.patch
 Patch4:		renegotiate-transitional.patch
 %if %mdkversion >= 200700
-BuildRequires:	rootcerts >= 1:20100827.00
+BuildRequires:	rootcerts >= 1:20101119.00
 %endif
 BuildRequires:	libnspr-devel >= 2:%{nspr_version}
 BuildRequires:	libz-devel
