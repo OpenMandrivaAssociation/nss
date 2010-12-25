@@ -11,10 +11,10 @@
 
 %if %mandriva_branch == Cooker
 # Cooker
-%define release %mkrel 2
+%define release %mkrel 3
 %else
 # Old distros
-%define subrel 2
+%define subrel 3
 %define release %mkrel 0
 %endif
 
@@ -51,7 +51,7 @@ Patch4:		renegotiate-transitional.patch
 %if %mdkversion >= 200700
 BuildRequires:	rootcerts >= 1:20101119.00
 %endif
-BuildRequires:	libnspr-devel >= 2:%{nspr_version}
+BuildRequires:	libnspr-devel >= 2:4.8.6
 BuildRequires:	libz-devel
 %if %mdkversion >= 200800
 BuildRequires:	libsqlite3-devel >= 3.6.22
