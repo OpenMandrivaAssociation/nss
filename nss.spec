@@ -7,14 +7,14 @@
 %define cvsver 3_12
 
 %define nspr_libname %mklibname nspr 4
-%define	nspr_version 4.8.6
+%define	nspr_version 4.8.7
 
 %if %mandriva_branch == Cooker
 # Cooker
-%define release %mkrel 3
+%define release %mkrel 1
 %else
 # Old distros
-%define subrel 3
+%define subrel 1
 %define release %mkrel 0
 %endif
 
@@ -23,7 +23,7 @@
 %define nspr_version %(pkg-config --modversion nspr &>/dev/null && pkg-config --modversion nspr 2>/dev/null || echo 0)
 
 Name:		nss
-Version:	3.12.8
+Version:	3.12.9
 Release:	%{release}
 Epoch:		2
 Summary:	Netscape Security Services
