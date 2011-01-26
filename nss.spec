@@ -11,7 +11,7 @@
 
 %if %mandriva_branch == Cooker
 # Cooker
-%define release %mkrel 1
+%define release %mkrel 2
 %else
 # Old distros
 %define subrel 1
@@ -141,14 +141,14 @@ find . -type f -perm 0444 -exec chmod 644 {} \;
 export BUILD_OPT=1
 export OPTIMIZER="%{optflags}"
 export XCFLAGS="%{optflags}"
-export LDOPTS="$LDFLAGS"
+export ARCHFLAG="$LDFLAGS"
 export LIBDIR=%{_libdir}
 export USE_SYSTEM_ZLIB=1
 export ZLIB_LIBS="-lz"
 export PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
 export PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
-export NSPR_INCLUDE_DIR=`%{_bindir}/pkg-config --cflags-only-I nspr | %{__sed} 's/-I//'`
-export NSPR_LIB_DIR=`%{_bindir}/pkg-config --libs-only-L nspr | %{__sed} 's/-L//'`
+export NSPR_INCLUDE_DIR=`%{_bindir}/pkg-config --cflags-only-I nspr | sed 's/-I//'`
+export NSPR_LIB_DIR=`%{_bindir}/pkg-config --libs-only-L nspr | sed 's/-L//'`
 export MOZILLA_CLIENT=1
 export NS_USE_GCC=1
 export NSS_USE_SYSTEM_SQLITE=1
@@ -230,7 +230,7 @@ do
 done
 
 %{__mkdir_p} %{buildroot}%{_libdir}/pkgconfig
-%{__cat} %{SOURCE1} | sed -e "s,%%libdir%%,%{_libdir},g" \
+cat %{SOURCE1} | sed -e "s,%%libdir%%,%{_libdir},g" \
                           -e "s,%%prefix%%,%{_prefix},g" \
                           -e "s,%%exec_prefix%%,%{_prefix},g" \
                           -e "s,%%includedir%%,%{_includedir}/nss,g" \
@@ -242,12 +242,12 @@ done
 popd
 
 %if %with lib
-export NSS_VMAJOR=`%{__cat} mozilla/security/nss/lib/nss/nss.h | %{__grep} "#define.*NSS_VMAJOR" | %{__awk} '{print $3}'`
-export NSS_VMINOR=`%{__cat} mozilla/security/nss/lib/nss/nss.h | %{__grep} "#define.*NSS_VMINOR" | %{__awk} '{print $3}'`
-export NSS_VPATCH=`%{__cat} mozilla/security/nss/lib/nss/nss.h | %{__grep} "#define.*NSS_VPATCH" | %{__awk} '{print $3}'`
+export NSS_VMAJOR=`cat mozilla/security/nss/lib/nss/nss.h | grep "#define.*NSS_VMAJOR" | awk '{print $3}'`
+export NSS_VMINOR=`cat mozilla/security/nss/lib/nss/nss.h | grep "#define.*NSS_VMINOR" | awk '{print $3}'`
+export NSS_VPATCH=`cat mozilla/security/nss/lib/nss/nss.h | grep "#define.*NSS_VPATCH" | awk '{print $3}'`
 
 %{__mkdir_p} %{buildroot}%{_bindir}
-%{__cat} %{SOURCE2} | %{__sed} -e "s,@libdir@,%{_libdir},g" \
+cat %{SOURCE2} | sed -e "s,@libdir@,%{_libdir},g" \
                                -e "s,@prefix@,%{_prefix},g" \
                                -e "s,@exec_prefix@,%{_prefix},g" \
                                -e "s,@includedir@,%{_includedir}/nss%{major},g" \
