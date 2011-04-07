@@ -11,10 +11,10 @@
 
 %if %mandriva_branch == Cooker
 # Cooker
-%define release %mkrel 4
+%define release %mkrel 5
 %else
 # Old distros
-%define subrel 1
+%define subrel 2
 %define release %mkrel 0
 %endif
 
@@ -36,6 +36,7 @@ Source2:	nss-config.in
 Source3:	blank-cert8.db
 Source4:	blank-key3.db
 Source5:	blank-secmod.db
+Source6:	certdata_empty.txt
 # https://www.verisign.com/support/verisign-intermediate-ca/secure-site-intermediate/index.html
 # converted from PEM to DER format with openssl command:
 # openssl x509 -in cert.pem -inform PEM -outform DER -out cert.der
@@ -157,11 +158,25 @@ export NSS_ENABLE_ECC=1
 export USE_64=1
 %endif
 
+# (oe) the "trust no one" scenario, it goes like:
+# 1. mv /%{_lib}/libnssckbi.so /%{_lib}/libnssckbi.so.BAK
+# 2. mv /%{_lib}/libnssckbi_empty.so /%{_lib}/libnssckbi.so
+# 3. restart ff/tb
+# it has to be done manually for now, but at least we have a way for 
+# users to quickly mitigate future problems, or whatever :-)
+
+pushd mozilla/security/nss/lib/ckfw/builtins
+%{__perl} ./certdata.perl < %{SOURCE6}
+popd
+
 # Parallel is broken as of 3.11.4 :(
 %make -j1 -C ./mozilla/security/nss \
 	build_coreconf \
 	build_dbm \
 	all
+
+# tuck away the empty libnssckbi.so library
+cp -p mozilla/security/nss/lib/ckfw/builtins/Linux*/libnssckbi.so libnssckbi_empty.so
 
 # install new Verisign intermediate certificate
 # http://qa.mandriva.com/show_bug.cgi?id=29612
@@ -304,6 +319,9 @@ popd
 
 %{_bindir}/find docs -type f | %{_bindir}/xargs -t %{__perl} -pi -e 's/\r$//g'
 
+# install the empty libnssckbi.so library (use alternatives?)
+install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
+
 %multiarch_binaries %{buildroot}%{_bindir}/nss-config
 
 %clean
@@ -384,6 +402,7 @@ popd
 /%{_lib}/libfreebl%{major}.so
 /%{_lib}/libnss%{major}.so
 /%{_lib}/libnssckbi.so
+/%{_lib}/libnssckbi_empty.so
 /%{_lib}/libsmime%{major}.so
 /%{_lib}/libsoftokn%{major}.so
 /%{_lib}/libssl%{major}.so
