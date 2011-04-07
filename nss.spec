@@ -180,6 +180,16 @@ export LD_LIBRARY_PATH="$PWD/$libpath/lib"
 
 pushd mozilla/security/nss/lib/ckfw/builtins
 
+# (oe) for reference:
+# *ALL* of the root CA certs are hard coded into the libnssckbi.so library.
+# So, for Mandriva we can add/remove certs easily in the rootcerts package. Please
+# checkout and examine the rootcerts package.
+# Once this has been done and the new rootcerts package has been installed this
+# package (nss) has to be rebuilt to pickup the changes made. The "recreate 
+# certificates" lines below generates a new certdata.c source containing the root
+# CA certs for mozilla.
+# *ALL* of the mozilla based softwares that support SSL has to link against
+# the NSS library.
 # recreate certificates
 %{__perl} ./certdata.perl < /etc/pki/tls/mozilla/certdata.txt
 
