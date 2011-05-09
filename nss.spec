@@ -7,14 +7,14 @@
 %define cvsver 3_12
 
 %define nspr_libname %mklibname nspr 4
-%define	nspr_version 4.8.7
+%define	nspr_version 4.8.8
 
 %if %mandriva_branch == Cooker
 # Cooker
-%define release %mkrel 5
+%define release %mkrel 1
 %else
 # Old distros
-%define subrel 2
+%define subrel 1
 %define release %mkrel 0
 %endif
 
@@ -23,7 +23,7 @@
 %define nspr_version %(pkg-config --modversion nspr &>/dev/null && pkg-config --modversion nspr 2>/dev/null || echo 0)
 
 Name:		nss
-Version:	3.12.9
+Version:	3.12.10
 Release:	%{release}
 Epoch:		2
 Summary:	Netscape Security Services
@@ -50,9 +50,9 @@ Patch1:		nss-fixrandom.patch
 Patch3:		nss-3.12.7-format_not_a_string_literal_and_no_format_arguments.patch
 Patch4:		renegotiate-transitional.patch
 %if %mdkversion >= 200700
-BuildRequires:	rootcerts >= 1:20110323.00
+BuildRequires:	rootcerts >= 1:20110413.00
 %endif
-BuildRequires:	libnspr-devel >= 2:4.8.6
+BuildRequires:	libnspr-devel >= 2:4.8.8
 BuildRequires:	libz-devel
 %if %mdkversion >= 200800
 BuildRequires:	libsqlite3-devel >= 3.6.22
