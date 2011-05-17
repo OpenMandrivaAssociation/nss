@@ -22,6 +22,10 @@
 %define sqlite3_version %(pkg-config --modversion sqlite3 &>/dev/null && pkg-config --modversion sqlite3 2>/dev/null || echo 0)
 %define nspr_version %(pkg-config --modversion nspr &>/dev/null && pkg-config --modversion nspr 2>/dev/null || echo 0)
 
+%define build_empty 0
+%{?_with_empty:   %{expand: %%global build_empty 1}}
+%{?_without_empty:   %{expand: %%global build_empty 0}}
+
 Name:		nss
 Version:	3.12.10
 Release:	%{release}
@@ -49,6 +53,7 @@ Patch0:		nss-no-rpath.patch
 Patch1:		nss-fixrandom.patch
 Patch3:		nss-3.12.7-format_not_a_string_literal_and_no_format_arguments.patch
 Patch4:		renegotiate-transitional.patch
+Patch5:		nss-3.12.10-new_certdata.txt_format.diff
 %if %mdkversion >= 200700
 BuildRequires:	rootcerts >= 1:20110413.00
 %endif
@@ -58,7 +63,7 @@ BuildRequires:	libz-devel
 BuildRequires:	libsqlite3-devel >= 3.6.22
 %endif
 BuildRequires:	zip
-Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Network Security Services (NSS) is a set of libraries designed to
@@ -130,6 +135,7 @@ Static libraries for doing development with Network Security Services.
 %patch1 -p0
 %patch3 -p1
 %patch4 -p0 -b .transitional
+%patch5 -p1
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
@@ -158,6 +164,7 @@ export NSS_ENABLE_ECC=1
 export USE_64=1
 %endif
 
+%if %{build_empty}
 # (oe) the "trust no one" scenario, it goes like:
 # 1. mv /%{_lib}/libnssckbi.so /%{_lib}/libnssckbi.so.BAK
 # 2. mv /%{_lib}/libnssckbi_empty.so /%{_lib}/libnssckbi.so
@@ -168,6 +175,7 @@ export USE_64=1
 pushd mozilla/security/nss/lib/ckfw/builtins
 %{__perl} ./certdata.perl < %{SOURCE6}
 popd
+%endif
 
 # Parallel is broken as of 3.11.4 :(
 %make -j1 -C ./mozilla/security/nss \
@@ -175,8 +183,10 @@ popd
 	build_dbm \
 	all
 
+%if %{build_empty}
 # tuck away the empty libnssckbi.so library
 cp -p mozilla/security/nss/lib/ckfw/builtins/Linux*/libnssckbi.so libnssckbi_empty.so
+%endif
 
 # install new Verisign intermediate certificate
 # http://qa.mandriva.com/show_bug.cgi?id=29612
@@ -209,7 +219,7 @@ pushd mozilla/security/nss/lib/ckfw/builtins
 %{__perl} ./certdata.perl < /etc/pki/tls/mozilla/certdata.txt
 
 %make clean
-%make
+%make -j1
 
 popd
 export LD_LIBRARY_PATH="$OLD"
@@ -319,8 +329,10 @@ popd
 
 %{_bindir}/find docs -type f | %{_bindir}/xargs -t %{__perl} -pi -e 's/\r$//g'
 
+%if %{build_empty}
 # install the empty libnssckbi.so library (use alternatives?)
 install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
+%endif
 
 %multiarch_binaries %{buildroot}%{_bindir}/nss-config
 
@@ -402,7 +414,9 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 /%{_lib}/libfreebl%{major}.so
 /%{_lib}/libnss%{major}.so
 /%{_lib}/libnssckbi.so
+%if %{build_empty}
 /%{_lib}/libnssckbi_empty.so
+%endif
 /%{_lib}/libsmime%{major}.so
 /%{_lib}/libsoftokn%{major}.so
 /%{_lib}/libssl%{major}.so
