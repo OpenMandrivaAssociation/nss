@@ -27,7 +27,7 @@
 %{?_without_empty:   %{expand: %%global build_empty 0}}
 
 Name:		nss
-Version:	3.12.10
+Version:	3.12.11
 Release:	%{release}
 Epoch:		2
 Summary:	Netscape Security Services
@@ -53,7 +53,7 @@ Patch0:		nss-no-rpath.patch
 Patch1:		nss-fixrandom.patch
 Patch3:		nss-3.12.7-format_not_a_string_literal_and_no_format_arguments.patch
 Patch4:		renegotiate-transitional.patch
-Patch5:		nss-3.12.10-new_certdata.txt_format.diff
+Patch5:		nss-3.12.11-new_certdata.txt_format.diff
 %if %mdkversion >= 200700
 BuildRequires:	rootcerts >= 1:20110413.00
 %endif
