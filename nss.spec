@@ -4,17 +4,17 @@
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname -d %{name}
 %define sdevelname %mklibname -d -s %{name}
-%define cvsver 3_12
+%define cvsver 3_13
 
 %define nspr_libname %mklibname nspr 4
 %define	nspr_version 4.8.8
 
 %if %mandriva_branch == Cooker
 # Cooker
-%define release %mkrel 3
+%define release %mkrel 1
 %else
 # Old distros
-%define subrel 3
+%define subrel 1
 %define release %mkrel 0
 %endif
 
@@ -27,7 +27,7 @@
 %{?_without_empty:   %{expand: %%global build_empty 0}}
 
 Name:		nss
-Version:	3.12.11
+Version:	3.13.1
 Release:	%{release}
 Epoch:		2
 Summary:	Netscape Security Services
@@ -53,15 +53,10 @@ Patch0:		nss-no-rpath.patch
 Patch1:		nss-fixrandom.patch
 Patch3:		nss-3.12.7-format_not_a_string_literal_and_no_format_arguments.patch
 Patch4:		renegotiate-transitional.patch
-Patch5:		nss-3.12.11-new_certdata.txt_format.diff
-%if %mdkversion >= 200700
-BuildRequires:	rootcerts >= 1:20110902.00
-%endif
+BuildRequires:	rootcerts >= 1:20111103.00
 BuildRequires:	libnspr-devel >= 2:4.8.8
 BuildRequires:	libz-devel
-%if %mdkversion >= 200800
 BuildRequires:	libsqlite3-devel >= 3.6.22
-%endif
 BuildRequires:	zip
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
@@ -86,9 +81,7 @@ Group:		System/Libraries
 Provides:	mozilla-nss = %{epoch}:%{version}-%{release}
 Requires(post):	nss
 Requires(post):	rpm-helper
-%if %mdkversion >= 200800
 Requires:	%{mklibname sqlite3_ 0} >= %{sqlite3_version}
-%endif
 Requires:	%{nspr_libname} >= 2:%{nspr_version}
 
 %description -n %{libname}
@@ -103,7 +96,7 @@ http://www.mozilla.org/projects/security/pki/nss/overview.html.
 %package -n %{develname}
 Summary:	Network Security Services (NSS) - development files
 Group:		Development/C++
-Requires:	%{libname} = %{epoch}:%{version}-%{release}
+Requires:	%{libname} >= %{epoch}:%{version}-%{release}
 Requires:	libnspr-devel
 Provides:	libnss-devel = %{epoch}:%{version}-%{release}
 Provides:	nss-devel = %{epoch}:%{version}-%{release}
@@ -116,8 +109,8 @@ Header files to doing development with Network Security Services.
 %package -n %{sdevelname}
 Summary:	Network Security Services (NSS) - static libraries
 Group:		Development/C++
-Requires:	%{libname} = %{epoch}:%{version}-%{release}
-Requires:	%{develname} = %{epoch}:%{version}-%{release}
+Requires:	%{libname} >= %{epoch}:%{version}-%{release}
+Requires:	%{develname} >= %{epoch}:%{version}-%{release}
 Requires:	libnspr-devel
 Provides:	libnss-static-devel = %{epoch}:%{version}-%{release}
 Provides:	nss-static-devel = %{epoch}:%{version}-%{release}
@@ -135,16 +128,13 @@ Static libraries for doing development with Network Security Services.
 %patch1 -p0
 %patch3 -p1
 %patch4 -p0 -b .transitional
-%patch5 -p1
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
 find . -type f -perm 0444 -exec chmod 644 {} \;
 
 %build
-%if %mdkversion >= 200900
 %setup_compile_flags
-%endif
 export BUILD_OPT=1
 export OPTIMIZER="%{optflags}"
 export XCFLAGS="%{optflags}"
@@ -336,24 +326,16 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 
 %multiarch_binaries %{buildroot}%{_bindir}/nss-config
 
-%clean
-%{__rm} -rf %{buildroot}
-
 %if %with lib
 %post -n %{libname}
-%if %mdkversion < 200900
-/sbin/ldconfig
-%endif
 %create_ghostfile /%{_lib}/libsoftokn%{major}.chk root root 644
 %create_ghostfile /%{_lib}/libfreebl%{major}.chk root root 644
 %{_bindir}/shlibsign -i /%{_lib}/libsoftokn%{major}.so >/dev/null 2>/dev/null
 %{_bindir}/shlibsign -i /%{_lib}/libfreebl%{major}.so >/dev/null 2>/dev/null
+%endif
 
-%postun -n %{libname}
-%if %mdkversion < 200900
-/sbin/ldconfig
-%endif
-%endif
+%clean
+%{__rm} -rf %{buildroot}
 
 %files
 %defattr(0644,root,root,0755)
@@ -366,6 +348,7 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %attr(0755,root,root) %{_bindir}/certcgi
 %attr(0755,root,root) %{_bindir}/certutil
 %attr(0755,root,root) %{_bindir}/checkcert
+%attr(0755,root,root) %{_bindir}/chktest
 %attr(0755,root,root) %{_bindir}/cmsutil
 %attr(0755,root,root) %{_bindir}/conflict
 %attr(0755,root,root) %{_bindir}/crlutil
@@ -374,6 +357,7 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %attr(0755,root,root) %{_bindir}/derdump
 %attr(0755,root,root) %{_bindir}/dertimetest
 %attr(0755,root,root) %{_bindir}/digest
+%attr(0755,root,root) %{_bindir}/encodeinttest
 %attr(0755,root,root) %{_bindir}/fipstest
 %attr(0755,root,root) %{_bindir}/makepqg
 %attr(0755,root,root) %{_bindir}/mangle
