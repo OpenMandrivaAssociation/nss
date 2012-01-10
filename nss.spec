@@ -69,7 +69,7 @@ Summary:	Netscape Security Services - shlibsign
 Group:		System/Libraries
 Conflicts:	%{name} < 2:3.13.1-2
 
-%description
+%description shlibsign
 This package contains the binary shlibsign needed by %{libname}.
 
 %if %with lib
