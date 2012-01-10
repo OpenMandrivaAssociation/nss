@@ -9,15 +9,6 @@
 %define nspr_libname %mklibname nspr 4
 %define	nspr_version 4.8.8
 
-%if %mandriva_branch == Cooker
-# Cooker
-%define release %mkrel 1
-%else
-# Old distros
-%define subrel 1
-%define release %mkrel 0
-%endif
-
 # this seems fragile, so require the exact version or later (#58754)
 %define sqlite3_version %(pkg-config --modversion sqlite3 &>/dev/null && pkg-config --modversion sqlite3 2>/dev/null || echo 0)
 %define nspr_version %(pkg-config --modversion nspr &>/dev/null && pkg-config --modversion nspr 2>/dev/null || echo 0)
@@ -27,9 +18,9 @@
 %{?_without_empty:   %{expand: %%global build_empty 0}}
 
 Name:		nss
-Version:	3.13.1
-Release:	%{release}
 Epoch:		2
+Version:	3.13.1
+Release:	2
 Summary:	Netscape Security Services
 Group:		System/Libraries
 License:	MPLv1.1 or GPLv2+ or LGPLv2+
@@ -58,7 +49,6 @@ BuildRequires:	libnspr-devel >= 2:4.8.8
 BuildRequires:	libz-devel
 BuildRequires:	libsqlite3-devel >= 3.6.22
 BuildRequires:	zip
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Network Security Services (NSS) is a set of libraries designed to
@@ -74,15 +64,20 @@ libraries have been not been included due to conflicts with the Mozilla
 libraries.
 %endif
 
+%package shlibsign
+Summary:	Netscape Security Services - shlibsign
+Group:		System/Libraries
+Conflicts:	%{name} < 2:3.13.1-2
+
+%description
+This package contains the binary shlibsign needed by %{libname}.
+
 %if %with lib
 %package -n %{libname}
 Summary:	Network Security Services (NSS)
 Group:		System/Libraries
-Provides:	mozilla-nss = %{epoch}:%{version}-%{release}
-Requires(post):	nss
-Requires(post):	rpm-helper
-Requires:	%{mklibname sqlite3_ 0} >= %{sqlite3_version}
-Requires:	%{nspr_libname} >= 2:%{nspr_version}
+Requires(post): nss-shlibsign
+Requires(post): rpm-helper
 
 %description -n %{libname}
 Network Security Services (NSS) is a set of libraries designed to
@@ -97,11 +92,8 @@ http://www.mozilla.org/projects/security/pki/nss/overview.html.
 Summary:	Network Security Services (NSS) - development files
 Group:		Development/C++
 Requires:	%{libname} >= %{epoch}:%{version}-%{release}
-Requires:	libnspr-devel
-Provides:	libnss-devel = %{epoch}:%{version}-%{release}
 Provides:	nss-devel = %{epoch}:%{version}-%{release}
 Obsoletes:	%{libname}-devel
-Conflicts:	%{libname} < 2:3.12-8
 
 %description -n %{develname}
 Header files to doing development with Network Security Services.
@@ -111,8 +103,6 @@ Summary:	Network Security Services (NSS) - static libraries
 Group:		Development/C++
 Requires:	%{libname} >= %{epoch}:%{version}-%{release}
 Requires:	%{develname} >= %{epoch}:%{version}-%{release}
-Requires:	libnspr-devel
-Provides:	libnss-static-devel = %{epoch}:%{version}-%{release}
 Provides:	nss-static-devel = %{epoch}:%{version}-%{release}
 Conflicts:	libopenssl-static-devel
 Obsoletes:	%{libname}-static-devel
@@ -334,11 +324,7 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %{_bindir}/shlibsign -i /%{_lib}/libfreebl%{major}.so >/dev/null 2>/dev/null
 %endif
 
-%clean
-%{__rm} -rf %{buildroot}
-
 %files
-%defattr(0644,root,root,0755)
 %doc docs/*
 %attr(0755,root,root) %{_bindir}/addbuiltin
 %attr(0755,root,root) %{_bindir}/atob
@@ -377,7 +363,6 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %attr(0755,root,root) %{_bindir}/rsaperf
 %attr(0755,root,root) %{_bindir}/sdrtest
 %attr(0755,root,root) %{_bindir}/selfserv
-%attr(0755,root,root) %{_bindir}/shlibsign
 %attr(0755,root,root) %{_bindir}/signtool
 %attr(0755,root,root) %{_bindir}/signver
 %attr(0755,root,root) %{_bindir}/smime
@@ -392,9 +377,11 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %config(noreplace) %{_sysconfdir}/pki/nssdb/key3.db
 %config(noreplace) %{_sysconfdir}/pki/nssdb/secmod.db
 
+%files shlibsign
+%attr(0755,root,root) %{_bindir}/shlibsign
+
 %if %with lib
 %files -n %{libname}
-%defattr(0755,root,root,0755)
 /%{_lib}/libfreebl%{major}.so
 /%{_lib}/libnss%{major}.so
 /%{_lib}/libnssckbi.so
@@ -411,7 +398,6 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %ghost /%{_lib}/libfreebl%{major}.chk
 
 %files -n %{develname}
-%defattr(0644,root,root,0755)
 %attr(0755,root,root) %{_bindir}/nss-config
 %attr(0755,root,root) %{multiarch_bindir}/nss-config
 %_libdir/*.so
