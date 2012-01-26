@@ -20,7 +20,7 @@
 Name:		nss
 Epoch:		2
 Version:	3.13.1
-Release:	3
+Release:	4
 Summary:	Netscape Security Services
 Group:		System/Libraries
 License:	MPLv1.1 or GPLv2+ or LGPLv2+
