@@ -20,7 +20,7 @@
 Name:		nss
 Epoch:		2
 Version:	3.13.1
-Release:	2
+Release:	3
 Summary:	Netscape Security Services
 Group:		System/Libraries
 License:	MPLv1.1 or GPLv2+ or LGPLv2+
@@ -44,7 +44,7 @@ Patch0:		nss-no-rpath.patch
 Patch1:		nss-fixrandom.patch
 Patch3:		nss-3.12.7-format_not_a_string_literal_and_no_format_arguments.patch
 Patch4:		renegotiate-transitional.patch
-BuildRequires:	rootcerts >= 1:20111103.00
+BuildRequires:	rootcerts >= 1:20120117.00
 BuildRequires:	libnspr-devel >= 2:4.8.8
 BuildRequires:	libz-devel
 BuildRequires:	libsqlite3-devel >= 3.6.22
