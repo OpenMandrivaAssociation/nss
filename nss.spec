@@ -8,7 +8,7 @@
 %define cvsver 3_13
 
 %define nspr_libname %mklibname nspr 4
-%define	nspr_version 4.8.8
+%define	nspr_version 4.9
 
 # this seems fragile, so require the exact version or later (#58754)
 %define sqlite3_version %(pkg-config --modversion sqlite3 &>/dev/null && pkg-config --modversion sqlite3 2>/dev/null || echo 0)
@@ -20,11 +20,11 @@
 
 Name:		nss
 Epoch:		2
-Version:	3.13.1
-Release:	5
+Version:	3.13.2
+Release:	1
 Summary:	Netscape Security Services
 Group:		System/Libraries
-License:	MPLv1.1 or GPLv2+ or LGPLv2+
+License:	MPL or GPLv2+ or LGPLv2+
 URL:		http://www.mozilla.org/projects/security/pki/nss/index.html
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{cvsver}_RTM/src/nss-%{version}.tar.gz
 Source1:	nss.pc.in
@@ -98,7 +98,7 @@ Group:		Development/C++
 Requires:	%{libname} >= %{EVRD}
 Requires:	%{libfreebl} >= %{EVRD}
 Provides:	nss-devel = %{EVRD}
-Obsoletes:	%{libname}-devel
+%rename %{libname}-devel
 
 %description -n %{develname}
 Header files to doing development with Network Security Services.
@@ -110,7 +110,7 @@ Requires:	%{libname} >= %{EVRD}
 Requires:	%{develname} >= %{EVRD}
 Provides:	nss-static-devel = %{EVRD}
 Conflicts:	libopenssl-static-devel
-Obsoletes:	%{libname}-static-devel
+%rename %{libname}-static-devel
 
 %description -n %{sdevelname}
 Static libraries for doing development with Network Security Services.
@@ -127,6 +127,8 @@ Static libraries for doing development with Network Security Services.
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
 find . -type f -perm 0444 -exec chmod 644 {} \;
+find . -name '*.h' -executable -exec chmod -x {} \;
+find . -name '*.c' -executable -exec chmod -x {} \;
 
 %build
 %setup_compile_flags
@@ -287,7 +289,7 @@ popd
 #%{__cp} -a mozilla/security/nss/cmd/SSLsample/README docs/SSLsample/
 
 %{__mkdir_p} docs/bltest
-%{__cp} -a mozilla/security/nss/cmd/bltest/tests/* docs/bltest/
+cp -a mozilla/security/nss/cmd/bltest/tests/* docs/bltest/
 
 %{__mkdir_p} docs/certcgi
 %{__cp} -a mozilla/security/nss/cmd/certcgi/*.html docs/certcgi/
