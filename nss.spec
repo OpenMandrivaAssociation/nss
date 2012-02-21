@@ -2,6 +2,7 @@
 
 %define major 3
 %define libname %mklibname %{name} %{major}
+%define libfreebl %mklibname freebl %{major}
 %define develname %mklibname -d %{name}
 %define sdevelname %mklibname -d -s %{name}
 %define cvsver 3_13
@@ -20,7 +21,7 @@
 Name:		nss
 Epoch:		2
 Version:	3.13.1
-Release:	4
+Release:	5
 Summary:	Netscape Security Services
 Group:		System/Libraries
 License:	MPLv1.1 or GPLv2+ or LGPLv2+
@@ -70,29 +71,33 @@ Group:		System/Libraries
 Conflicts:	%{name} < 2:3.13.1-2
 
 %description shlibsign
-This package contains the binary shlibsign needed by %{libname}.
+This package contains the binary shlibsign needed by libfreebl3 and libsoftokn3.
 
 %if %with lib
 %package -n %{libname}
 Summary:	Network Security Services (NSS)
 Group:		System/Libraries
-Requires(post): nss-shlibsign
-Requires(post): rpm-helper
 
 %description -n %{libname}
-Network Security Services (NSS) is a set of libraries designed to
-support cross-platform development of security-enabled server
-applications. Applications built with NSS can support SSL v2 and v3,
-TLS, PKCS #5, PKCS #7, PKCS #11, PKCS
-#12, S/MIME, X.509 v3 certificates, and other security standards. For
-detailed information on standards supported, see
-http://www.mozilla.org/projects/security/pki/nss/overview.html.
+This package contains the shared libraries libnss3, libnssckbi, libnssdbm3,
+libnssutil3, libsmime3, and libssl3.
+
+%package -n %{libfreebl}
+Summary:	Network Security Services (NSS)
+Group:		System/Libraries
+Requires(post): nss-shlibsign
+Requires(post): rpm-helper
+Conflicts: %{_lib}nss3 < 2:3.13.1-5
+
+%description -n %{libfreebl}
+This package contains the shared libraries libfreebl3 and libsoftokn3.
 
 %package -n %{develname}
 Summary:	Network Security Services (NSS) - development files
 Group:		Development/C++
-Requires:	%{libname} >= %{epoch}:%{version}-%{release}
-Provides:	nss-devel = %{epoch}:%{version}-%{release}
+Requires:	%{libname} >= %{EVRD}
+Requires:	%{libfreebl} >= %{EVRD}
+Provides:	nss-devel = %{EVRD}
 Obsoletes:	%{libname}-devel
 
 %description -n %{develname}
@@ -101,9 +106,9 @@ Header files to doing development with Network Security Services.
 %package -n %{sdevelname}
 Summary:	Network Security Services (NSS) - static libraries
 Group:		Development/C++
-Requires:	%{libname} >= %{epoch}:%{version}-%{release}
-Requires:	%{develname} >= %{epoch}:%{version}-%{release}
-Provides:	nss-static-devel = %{epoch}:%{version}-%{release}
+Requires:	%{libname} >= %{EVRD}
+Requires:	%{develname} >= %{EVRD}
+Provides:	nss-static-devel = %{EVRD}
 Conflicts:	libopenssl-static-devel
 Obsoletes:	%{libname}-static-devel
 
@@ -317,7 +322,7 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %multiarch_binaries %{buildroot}%{_bindir}/nss-config
 
 %if %with lib
-%post -n %{libname}
+%posttrans -n %{libfreebl}
 %create_ghostfile /%{_lib}/libsoftokn%{major}.chk root root 644
 %create_ghostfile /%{_lib}/libfreebl%{major}.chk root root 644
 %{_bindir}/shlibsign -i /%{_lib}/libsoftokn%{major}.so >/dev/null 2>/dev/null
@@ -381,21 +386,23 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %attr(0755,root,root) %{_bindir}/shlibsign
 
 %if %with lib
-%files -n %{libname}
+%files -n %{libfreebl}
 /%{_lib}/libfreebl%{major}.so
+/%{_lib}/libsoftokn%{major}.so
+%defattr(0644,root,root,0755)
+%ghost /%{_lib}/libfreebl%{major}.chk
+%ghost /%{_lib}/libsoftokn%{major}.chk
+
+%files -n %{libname}
 /%{_lib}/libnss%{major}.so
 /%{_lib}/libnssckbi.so
 %if %{build_empty}
 /%{_lib}/libnssckbi_empty.so
 %endif
-/%{_lib}/libsmime%{major}.so
-/%{_lib}/libsoftokn%{major}.so
-/%{_lib}/libssl%{major}.so
 /%{_lib}/libnssutil%{major}.so
 /%{_lib}/libnssdbm%{major}.so
-%defattr(0644,root,root,0755)
-%ghost /%{_lib}/libsoftokn%{major}.chk
-%ghost /%{_lib}/libfreebl%{major}.chk
+/%{_lib}/libsmime%{major}.so
+/%{_lib}/libssl%{major}.so
 
 %files -n %{develname}
 %attr(0755,root,root) %{_bindir}/nss-config
