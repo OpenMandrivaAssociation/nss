@@ -1,3 +1,12 @@
+%if %mandriva_branch == Cooker
+# Cooker
+%define release %mkrel 1
+%else
+# Old distros
+%define subrel 1
+%define release %mkrel 0
+%endif
+
 %bcond_without  lib
 
 %define major 3
@@ -20,8 +29,8 @@
 
 Name:		nss
 Epoch:		2
-Version:	3.13.2
-Release:	1
+Version:	3.13.3
+Release:	%{release}
 Summary:	Netscape Security Services
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -45,7 +54,7 @@ Patch0:		nss-no-rpath.patch
 Patch1:		nss-fixrandom.patch
 Patch3:		nss-3.12.7-format_not_a_string_literal_and_no_format_arguments.patch
 Patch4:		renegotiate-transitional.patch
-BuildRequires:	rootcerts >= 1:20120117.00
+BuildRequires:	rootcerts >= 1:20120218.00
 BuildRequires:	nspr-devel >= 2:4.8.8
 BuildRequires:	zlib-devel
 BuildRequires:	sqlite3-devel >= 3.6.22
