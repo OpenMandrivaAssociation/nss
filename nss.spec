@@ -1,6 +1,6 @@
 %if %mandriva_branch == Cooker
 # Cooker
-%define release %mkrel 2
+%define release %mkrel 3
 %else
 # Old distros
 %define subrel 1
@@ -17,7 +17,7 @@
 %define cvsver 3_13
 
 %define nspr_libname %mklibname nspr 4
-%define	nspr_version 4.9
+%define	nspr_version 4.9.0
 
 # this seems fragile, so require the exact version or later (#58754)
 %define sqlite3_version %(pkg-config --modversion sqlite3 &>/dev/null && pkg-config --modversion sqlite3 2>/dev/null || echo 0)
@@ -55,9 +55,9 @@ Patch1:		nss-fixrandom.patch
 Patch3:		nss-3.12.7-format_not_a_string_literal_and_no_format_arguments.patch
 Patch4:		renegotiate-transitional.patch
 BuildRequires:	rootcerts >= 1:20120218.00
-BuildRequires:	nspr-devel >= 2:4.8.8
+BuildRequires:	nspr-devel >= 2:4.9.0
 BuildRequires:	zlib-devel
-BuildRequires:	sqlite3-devel >= 3.6.22
+BuildRequires:	sqlite3-devel >= 3.7.7.1
 BuildRequires:	zip
 
 %description
@@ -104,9 +104,9 @@ This package contains the shared libraries libfreebl3 and libsoftokn3.
 %package -n %{develname}
 Summary:	Network Security Services (NSS) - development files
 Group:		Development/C++
-Requires:	%{libname} >= %{EVRD}
-Requires:	%{libfreebl} >= %{EVRD}
-Provides:	nss-devel = %{EVRD}
+Requires:	%{libname} >= %{epoch}:%{version}-%{release}
+Requires:	%{libfreebl} >= %{epoch}:%{version}-%{release}
+Provides:	nss-devel = %{epoch}:%{version}-%{release}
 %rename %{libname}-devel
 
 %description -n %{develname}
@@ -115,9 +115,9 @@ Header files to doing development with Network Security Services.
 %package -n %{sdevelname}
 Summary:	Network Security Services (NSS) - static libraries
 Group:		Development/C++
-Requires:	%{libname} >= %{EVRD}
-Requires:	%{develname} >= %{EVRD}
-Provides:	nss-static-devel = %{EVRD}
+Requires:	%{libname} >= %{epoch}:%{version}-%{release}
+Requires:	%{develname} >= %{epoch}:%{version}-%{release}
+Provides:	nss-static-devel = %{epoch}:%{version}-%{release}
 Conflicts:	libopenssl-static-devel
 %rename %{libname}-static-devel
 
@@ -194,7 +194,7 @@ if [ -z "$ADDBUILTIN" ]; then
 fi
 ADDBUILTIN="$PWD/$ADDBUILTIN"
 OLD="$LD_LIBRARY_PATH"
-libpath=`%{_bindir}/find mozilla/dist/ -name "Linux2.*" -type d`
+libpath=`%{_bindir}/find mozilla/dist/ -name "Linux*" -type d`
 # to use the built libraries instead of requiring nss
 # again as buildrequires
 export LD_LIBRARY_PATH="$PWD/$libpath/lib"
