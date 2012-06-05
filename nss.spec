@@ -29,7 +29,7 @@
 
 Name:		nss
 Epoch:		2
-Version:	3.13.4
+Version:	3.13.5
 Release:	%{release}
 Summary:	Netscape Security Services
 Group:		System/Libraries
