@@ -1,10 +1,10 @@
 %if %mandriva_branch == Cooker
 # Cooker
-%define release %mkrel 1
+%define release 1
 %else
 # Old distros
 %define subrel 1
-%define release %mkrel 0
+%define release 0
 %endif
 
 %bcond_without  lib
@@ -29,7 +29,7 @@
 
 Name:		nss
 Epoch:		2
-Version:	3.13.5
+Version:	3.13.6
 Release:	%{release}
 Summary:	Netscape Security Services
 Group:		System/Libraries
