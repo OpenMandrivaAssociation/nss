@@ -136,6 +136,7 @@ Static libraries for doing development with Network Security Services.
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
 find . -type f -perm 0444 -exec chmod 644 {} \;
+find . -type f -perm 0640 -exec chmod 644 {} \;
 find . -name '*.h' -executable -exec chmod -x {} \;
 find . -name '*.c' -executable -exec chmod -x {} \;
 
