@@ -1,10 +1,2 @@
 sources:
-  "blank-cert8.db:"	d272a7b58364862613d44261c5744f7a336bf177
-  "blank-key3.db:"	7f78b5bcecdb5005e7b803604b2ec9d1a9df2fb5
-  "blank-secmod.db:"	bd748cf6e1465a1bbe6e751b72ffc0076aff0b50
-  "certdata_empty.txt:"	e0f5ebb31ae1fd8f37366aac7e96554506aa8ee1
-  "certificadoACRaiz.crt:"	8efdcabc93e61e925d4d1ded181a4320a467a139
-  "nss-3.13.6.tar.gz:"	1f86a7c787e8fe3ebd1dd1cce127e57fb347dac3
-  "nss-config.in:"	29be3b0133390a84f5883569039952e242e0d274
-  "nss.pc.in:"	292c3b347e4933d8b52e196dead6df27eb6c9c1c
-  "verisign-class-3-secure-server-ca.der:"	188590e94878478e33b6194e59fbbb28ff0888d5
+  "nss-3.13.6.tar.gz": 1f86a7c787e8fe3ebd1dd1cce127e57fb347dac3

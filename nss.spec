@@ -1,12 +1,3 @@
-%if %mandriva_branch == Cooker
-# Cooker
-%define release 2
-%else
-# Old distros
-%define subrel 1
-%define release 0
-%endif
-
 %bcond_without  lib
 
 %define major 3
@@ -30,7 +21,7 @@
 Name:		nss
 Epoch:		2
 Version:	3.13.6
-Release:	%{release}
+Release:	5
 Summary:	Netscape Security Services
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -80,7 +71,8 @@ Group:		System/Libraries
 Conflicts:	%{name} < 2:3.13.1-2
 
 %description shlibsign
-This package contains the binary shlibsign needed by libfreebl3 and libsoftokn3.
+This package contains the binary shlibsign needed by libfreebl3
+and libsoftokn3.
 
 %if %with lib
 %package -n %{libname}
@@ -136,7 +128,6 @@ Static libraries for doing development with Network Security Services.
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
 find . -type f -perm 0444 -exec chmod 644 {} \;
-find . -type f -perm 0640 -exec chmod 644 {} \;
 find . -name '*.h' -executable -exec chmod -x {} \;
 find . -name '*.c' -executable -exec chmod -x {} \;
 
@@ -222,8 +213,6 @@ popd
 export LD_LIBRARY_PATH="$OLD"
 
 %install
-%{__rm} -rf %{buildroot}
-
 pushd mozilla/dist/$(uname -s)*
 
 %{__mkdir_p} %{buildroot}%{_bindir}
@@ -300,6 +289,7 @@ popd
 
 %{__mkdir_p} docs/bltest
 cp -a mozilla/security/nss/cmd/bltest/tests/* docs/bltest/
+chmod -R a+r docs
 
 %{__mkdir_p} docs/certcgi
 %{__cp} -a mozilla/security/nss/cmd/certcgi/*.html docs/certcgi/
@@ -417,6 +407,7 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 /%{_lib}/libssl%{major}.so
 
 %files -n %{develname}
+%defattr(0644,root,root,0755)
 %attr(0755,root,root) %{_bindir}/nss-config
 %attr(0755,root,root) %{multiarch_bindir}/nss-config
 %_libdir/*.so
@@ -527,3 +518,408 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %{_libdir}/libsmime.a
 %{_libdir}/libssl.a
 %endif
+
+
+%changelog
+* Tue Jun 05 2012 Oden Eriksson <oeriksson@mandriva.com> 2:3.13.5-1mdv2012.0
++ Revision: 802609
+- 3.13.5
+
+* Mon Apr 09 2012 Oden Eriksson <oeriksson@mandriva.com> 2:3.13.4-1
++ Revision: 789950
+- 3.13.4
+- fix deps
+- revert rpm5 only crap
+
+* Wed Mar 07 2012 Per Ãyvind Karlsen <peroyvind@mandriva.org> 2:3.13.3-2
++ Revision: 782704
+- rebuild with internal dependency generator
+
+* Sat Mar 03 2012 Oden Eriksson <oeriksson@mandriva.com> 2:3.13.3-1
++ Revision: 782020
+- 3.13.3
+
+* Tue Feb 21 2012 Dmitry Mikhirev <dmikhirev@mandriva.org> 2:3.13.2-1
++ Revision: 778646
+- new version 3.13.2
+
+  + Matthew Dawkins <mattydaw@mandriva.org>
+    - split out libfreebl lib pkg
+    - this should address dep loop problems
+    - if glibc and libc ever get properly split
+    - used EVRD macro
+    - moved signing of libfreebl libs to posttrans
+    - updated descriptions
+
+* Thu Jan 26 2012 Oden Eriksson <oeriksson@mandriva.com> 2:3.13.1-4
++ Revision: 769168
+- bump release
+
+* Thu Jan 26 2012 Oden Eriksson <oeriksson@mandriva.com> 2:3.13.1-3
++ Revision: 769165
+- fix deps
+- rebuilt to pickup the changes in rootcerts as of 2012/01/17
+
+* Tue Jan 10 2012 Matthew Dawkins <mattydaw@mandriva.org> 2:3.13.1-2
++ Revision: 759561
+- fixed shlibsign description
+- split out shlibsign binary
+- this helps break a huge dep LOOP
+- glibc<>nss<>perl
+- cleaned up spec a bit
+
+* Sat Nov 05 2011 Oden Eriksson <oeriksson@mandriva.com> 2:3.13.1-1
++ Revision: 720519
+- 3.13.1
+- rediff the renegotiate-transitional patch
+- drop the new_certdata.txt format patch as it is fixed since 3.13
+
+* Wed Sep 07 2011 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.11-3
++ Revision: 698538
+- pick up the fix for MFSA 2011-35
+
+* Wed Aug 31 2011 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.11-2
++ Revision: 697592
+- pick up the fix for MFSA 2011-34
+
+* Fri Aug 12 2011 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.11-1
++ Revision: 694115
+- 3.12.11
+- rediffed the new_certdata.txt_format patch
+
+* Tue May 17 2011 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.10-1
++ Revision: 675834
+- allow build with the new format of the certdata.txt file from cvs
+- don't build the libnssckbi_empty.so library per default
+- 3.12.10
+- adjust deps a bit
+
+* Thu Apr 07 2011 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.9-5
++ Revision: 651409
+- added some funny stuff :-)
+- document the ssl crap in the spec file...
+
+* Fri Mar 25 2011 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.9-4
++ Revision: 648517
+- rebuilt against new certdata.txt file
+
+* Sat Feb 26 2011 Funda Wang <fwang@mandriva.org> 2:3.12.9-3
++ Revision: 639991
+- rebuild
+
+* Wed Jan 26 2011 Funda Wang <fwang@mandriva.org> 2:3.12.9-2
++ Revision: 632997
+- fix build with latest rpm (wrong definition acturally)
+
+* Fri Jan 14 2011 Funda Wang <fwang@mandriva.org> 2:3.12.9-1
++ Revision: 631033
+- new version 3.12.9
+
+* Sat Dec 25 2010 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.8-3mdv2011.0
++ Revision: 625024
+- rebuilt to pickup rootcerts-20101202 changes
+- fix #61964 (nss should depend of the latest version of nspr)
+
+* Thu Nov 25 2010 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.8-2mdv2011.0
++ Revision: 601067
+- rebuilt to pickup the changes in rootcerts-20101119.00
+
+* Tue Oct 12 2010 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.8-1mdv2011.0
++ Revision: 585167
+- 3.12.8
+- rediffed one patch
+- dropped bsolete patches
+
+* Tue Oct 12 2010 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.7-3mdv2011.0
++ Revision: 585103
+- require the version, or later of the nspr libs nss was built against. fixes #61249
+
+* Thu Sep 09 2010 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.7-2mdv2011.0
++ Revision: 576968
+- fix backporting to older products
+- rebuilt against new rootcerts-20100827
+
+* Sat Aug 21 2010 Funda Wang <fwang@mandriva.org> 2:3.12.7-1mdv2011.0
++ Revision: 571721
+- New version 3.12.7
+
+* Mon May 17 2010 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.6-6mdv2010.1
++ Revision: 545022
+- fix deps
+- rebuilt against rootcerts-20100408.00
+
+* Tue Apr 27 2010 Christophe Fergeau <cfergeau@mandriva.com> 2:3.12.6-5mdv2010.1
++ Revision: 539590
+- rebuild so that shared libraries are properly stripped again
+
+* Wed Apr 21 2010 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.6-4mdv2010.1
++ Revision: 537675
+- dacapo, but for the nss library
+
+* Wed Apr 21 2010 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.6-3mdv2010.1
++ Revision: 537664
+- require the exact version of sqlite3 it was built against or a later version
+
+* Tue Apr 13 2010 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.6-2mdv2010.1
++ Revision: 534197
+- added backporting magic for updates
+- adjust deps
+
+* Thu Apr 01 2010 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.6-1mdv2010.1
++ Revision: 530645
+- 3.12.6 (official release)
+
+* Tue Mar 23 2010 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.6-0.0.1mdv2010.1
++ Revision: 526884
+- use a cvs snap (NSS_3_12_6_RTM)
+- rediffed the sqlite patch
+- added two patches from fedora
+
+* Fri Mar 12 2010 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.5-4mdv2010.1
++ Revision: 518394
+- rebuilt to pickup changes from rootcerts-20100216.01
+
+* Wed Feb 03 2010 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.5-3mdv2010.1
++ Revision: 500472
+- rebuilt to pickup fixes in rootcerts-20091203.04
+
+* Sun Jan 24 2010 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.5-2mdv2010.1
++ Revision: 495471
+- rebuilt against rootcerts-20091203.00
+
+* Wed Dec 16 2009 Funda Wang <fwang@mandriva.org> 2:3.12.5-1mdv2010.1
++ Revision: 479151
+- fix file list
+- new version 3.12.5
+
+* Mon Oct 19 2009 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.4-2mdv2010.0
++ Revision: 458252
+- rebuilt to pickup changes from rootcerts-20090831.00-1mdv2010.0
+
+* Mon Aug 31 2009 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.4-1mdv2010.0
++ Revision: 422988
+- 3.12.4
+- nuke one *.orig file
+
+* Tue Aug 04 2009 Oden Eriksson <oeriksson@mandriva.com> 2:3.12.3.1-1mdv2010.0
++ Revision: 408938
+- 3.12.3.1
+
+* Sat May 30 2009 Tomasz Pawel Gajc <tpg@mandriva.org> 2:3.12.3-2mdv2010.0
++ Revision: 381501
+- fix file list one more time
+
+* Sat May 30 2009 Tomasz Pawel Gajc <tpg@mandriva.org> 2:3.12.3-1mdv2010.0
++ Revision: 381500
+- update to new version 3.12.3
+  rediff patch 4 and 5
+- drop patch 6, fixed upstream
+- fix file list
+
+* Mon Mar 23 2009 Oden Eriksson <oeriksson@mandriva.com> 2:3.12-12mdv2009.1
++ Revision: 360727
+- rebuilt to pickup new data from the rootcerts (20090115.00) package
+
+* Sun Jan 25 2009 Per Ãyvind Karlsen <peroyvind@mandriva.org> 2:3.12-11mdv2009.1
++ Revision: 333523
+- bump..
+- increase size for string allocated by one to make room for string terminator
+  (P6, fixes /usr/bin/addbuiltin SIGABRT with 'free(): invalid pointer')
+
+* Sun Jan 25 2009 Oden Eriksson <oeriksson@mandriva.com> 2:3.12-10mdv2009.1
++ Revision: 333463
+- rebuilt with a better patch for fixing -Werror=format-security (P5)
+- fix broken patch
+
+* Mon Dec 22 2008 Tomasz Pawel Gajc <tpg@mandriva.org> 2:3.12-9mdv2009.1
++ Revision: 317711
+- build with %%setup_compile_flags macro
+- Patch5: fix building with -Werror=format-security
+- spec file clean
+
+* Mon Dec 08 2008 Funda Wang <fwang@mandriva.org> 2:3.12-8mdv2009.1
++ Revision: 311850
+- use fedora package layout (put actual .so at /lib, and devel symbolic link at /usr/lib)
+
+* Thu Oct 23 2008 Guillaume Rousse <guillomovitch@mandriva.org> 2:3.12-7mdv2009.1
++ Revision: 296799
+- remove undocumented and unexplainable conflict with perl-PAR
+
+  + Oden Eriksson <oeriksson@mandriva.com>
+    - added ugly provides due to ugly nss libnames and sonames
+
+* Sun Aug 10 2008 Tomasz Pawel Gajc <tpg@mandriva.org> 2:3.12-5mdv2009.0
++ Revision: 270259
+- fix mixture of tabs and spaces
+- bump release tag
+- package libnssdbm3.so, hopefully this will fix bug #42603
+- export few options for nss build
+
+  + Frederik Himpe <fhimpe@mandriva.org>
+    - Fix license
+    - Remove nss-clobber.sh and noexecstack patch, both are
+      not necessary anymore according to RH
+
+* Sat Aug 09 2008 Tiago Salem <salem@mandriva.com.br> 2:3.12-4mdv2009.0
++ Revision: 269769
+- add -lnssutil3 to nss-config.in
+- bump release
+
+* Fri Aug 08 2008 Tiago Salem <salem@mandriva.com.br> 2:3.12-3mdv2009.0
++ Revision: 269661
+- add missing -lnssutil3 to nss.pc (breaks thunderbird build)
+- bump release
+
+* Thu Aug 07 2008 Funda Wang <fwang@mandriva.org> 2:3.12-2mdv2009.0
++ Revision: 266297
+- bump release
+- use system sqlite3
+- add nssutil.so
+
+  + Tomasz Pawel Gajc <tpg@mandriva.org>
+    - package libnssutil3.so also
+
+* Thu Aug 07 2008 Tomasz Pawel Gajc <tpg@mandriva.org> 2:3.12-1mdv2009.0
++ Revision: 265867
+- update to new version 3.12
+- drop patch1, fixed upstream
+- fix file list
+- spec file clean
+
+* Tue Jun 17 2008 Thierry Vignaud <tv@mandriva.org> 2:3.11.9-3mdv2009.0
++ Revision: 223350
+- rebuild
+
+  + Pixel <pixel@mandriva.com>
+    - do not call ldconfig in %%post/%%postun, it is now handled by filetriggers
+
+* Thu Feb 14 2008 Oden Eriksson <oeriksson@mandriva.com> 2:3.11.9-2mdv2008.1
++ Revision: 168377
+- rebuilt to pickup new root ca's in rootcerts-20080117.00
+
+* Thu Feb 14 2008 Marcelo Ricardo Leitner <mrl@mandriva.com> 2:3.11.9-1mdv2008.1
++ Revision: 167772
+- New upstream: 3.11.9
+
+* Thu Feb 07 2008 Per Ãyvind Karlsen <peroyvind@mandriva.org> 2:3.11.7-4mdv2008.1
++ Revision: 163760
+- really fix incorrect major
+- bump back release a bit since neither of previous ones went through :)
+- bah! nss.pc should be working properly now! %%&#?\194?\164%%#
+- grf, fix nspr version require and, libdir path and include path
+- fix nss.pc so we don't ship an old, static one..
+
+* Thu Dec 20 2007 Oden Eriksson <oeriksson@mandriva.com> 2:3.11.7-3mdv2008.1
++ Revision: 135405
+- use the correct syntax for the rootcerts build dependency
+- rebuilt to pickup latest rootcerts (hardcoded into the %%{_libdir}/libnssckbi.so library)
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - kill re-definition of %%buildroot on Pixel's request
+
+* Fri Jul 20 2007 Funda Wang <fwang@mandriva.org> 2:3.11.7-2mdv2008.0
++ Revision: 53912
+- fix static devel requires
+
+* Fri Jul 20 2007 Funda Wang <fwang@mandriva.org> 2:3.11.7-1mdv2008.0
++ Revision: 53885
+- fix file list
+- New version
+
+* Sun Jun 24 2007 David Walluck <walluck@mandriva.org> 2:3.11.5-5mdv2008.0
++ Revision: 43748
+- add patch for certdata.txt
+- spec cleanup
+
+
+* Wed Mar 21 2007 Andreas Hasenack <andreas@mandriva.com> 3.11.5-4mdv2007.1
++ Revision: 147547
+- fix library path
+- add back Brazilian Gov. certificate
+- add new Verisign certificate (#29612)
+
+* Fri Mar 09 2007 David Walluck <walluck@mandriva.org> 2:3.11.5-4mdv2007.1
++ Revision: 139555
+- fix description
+
+* Fri Mar 09 2007 David Walluck <walluck@mandriva.org> 2:3.11.5-3mdv2007.1
++ Revision: 138691
+- add docs to file list (accidently removed)
+
+* Fri Mar 09 2007 David Walluck <walluck@mandriva.org> 2:3.11.5-2mdv2007.1
++ Revision: 138688
+- really enable lib
+  static-devel package conflicts with libopenssl-static-devel
+  use find and xargs to remove CVS directories
+  use cp -a everywhere
+  macros
+  mark nss-config as multiarch
+  fix duplicate nss-config in file list
+  run shlibsign in libnss %%post (requires nss)
+  use explicit file list
+
+* Fri Mar 09 2007 David Walluck <walluck@mandriva.org> 2:3.11.5-1mdv2007.1
++ Revision: 138582
+- 3.11.5
+
+* Tue Mar 06 2007 Marcelo Ricardo Leitner <mrl@mandriva.com> 2:3.11.4-8mdv2007.1
++ Revision: 133767
+- Fix lib versions on nss-config
+
+* Tue Mar 06 2007 Marcelo Ricardo Leitner <mrl@mandriva.com> 2:3.11.4-7mdv2007.1
++ Revision: 133671
+- Add support to /usr/bin/nss-config (based on Fedora's one)
+
+* Sun Mar 04 2007 David Walluck <walluck@mandriva.org> 2:3.11.4-6mdv2007.1
++ Revision: 132567
+- rebuild
+
+* Wed Feb 21 2007 GÃ¶tz Waschk <waschk@mandriva.org> 2:3.11.4-5mdv2007.1
++ Revision: 123208
+- rebuild
+
+  + Oden Eriksson <oeriksson@mandriva.com>
+    - fix deps
+
+* Fri Feb 09 2007 Marcelo Ricardo Leitner <mrl@mandriva.com> 2:3.11.4-3mdv2007.1
++ Revision: 118491
+- Added pkcs11 devel files to libnss3-devel package.
+
+* Thu Feb 08 2007 Marcelo Ricardo Leitner <mrl@mandriva.com> 2:3.11.4-2mdv2007.1
++ Revision: 118137
+- Bump epoch, so we upgrade cleanly old firefox's libnss3.
+- Do not enforce (wrong) nspr version.
+- Removed patch nss-system-nspr: prefer doing it via env. variables.
+- Tagged as license LGPL too
+- Enabled the library.
+- Do not use chrpath: it is not needed, and we are using this library now.
+- Fixed epoch stuff on library packages.
+- Added ldconfig call to library package.
+
+* Sat Dec 16 2006 David Walluck <walluck@mandriva.org> 1:3.11.4-1mdv2007.1
++ Revision: 98079
+- 3.11.4
+- Import nss
+
+* Fri Apr 28 2006 Oden Eriksson <oeriksson@mandriva.com> 1:3.11-1mdk
+- drop redundant patches; P0,P4
+- drop upstream patches; P2,P3,P85
+- added P50,P51 from fedora
+
+* Fri Nov 11 2005 Oden Eriksson <oeriksson@mandriva.com> 1:3.9.2-1mdk
+- rolled back to match mozilla-firefox libs
+- added some patches from the mozilla-firefox package
+- added P4 to teach it ~/.mozilla
+
+* Sat Nov 05 2005 Nicolas Lécureuil <neoclust@mandriva.org> 3.10.2-3mdk
+- Fix BuildRequires
+
+* Fri Nov 04 2005 Nicolas Lécureuil <neoclust@mandriva.org> 3.10.2-2mdk
+- Fix BuildRequires
+
+* Wed Nov 02 2005 David Walluck <walluck@mandrake.org> 0:3.10.2-1mdk
+- 3.10.2
+
+* Fri Jan 28 2005 David Walluck <walluck@mandrake.org> 3.9.2-1mdk
+- release
+
