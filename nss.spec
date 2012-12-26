@@ -1,13 +1,12 @@
 %bcond_without  lib
+%define url_ver	%(echo 3.14.1| sed -e 's|\.|_|g')
 
 %define major	3
 %define libname	%mklibname %{name} %{major}
 %define libfreebl %mklibname freebl %{major}
 %define devname	%mklibname -d %{name}
 %define sdevname %mklibname -d -s %{name}
-%define cvsver 3_13
 
-%define nspr_libname %mklibname nspr 4
 %define	nspr_version 4.9.0
 
 # this seems fragile, so require the exact version or later (#58754)
@@ -26,8 +25,8 @@ Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 URL:		http://www.mozilla.org/projects/security/pki/nss/index.html
-Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{cvsver}_RTM/src/nss-%{version}.tar.gz
-Source1:	ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{cvsver}_RTM/src/nss-%{version}.tar.gz.asc
+Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz
+Source1:	ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz.asc
 Source2:	nss.pc.in
 Source3:	nss-config.in
 Source4:	blank-cert8.db
