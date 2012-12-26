@@ -1,5 +1,5 @@
 %bcond_without  lib
-%define url_ver	%(echo 3.14.1| sed -e 's|\.|_|g')
+%define url_ver	%(echo %{version}| sed -e "s|\\.|_|g")
 
 %define major	3
 %define libname	%mklibname %{name} %{major}
@@ -43,8 +43,7 @@ Source8:	verisign-class-3-secure-server-ca.der
 Source9:	http://www.icpbrasil.gov.br/certificadoACRaiz.crt
 Patch0:		nss-no-rpath.patch
 Patch1:		nss-fixrandom.patch
-Patch3:		nss-3.12.7-format_not_a_string_literal_and_no_format_arguments.patch
-Patch4:		renegotiate-transitional.patch
+Patch2:		renegotiate-transitional.patch
 BuildRequires:	rootcerts >= 1:20120218.00
 BuildRequires:	zip
 BuildRequires:	pkgconfig(nspr)
@@ -120,10 +119,7 @@ Static libraries for doing development with Network Security Services.
 %prep
 
 %setup -q
-%patch0 -p0
-%patch1 -p0
-%patch3 -p1
-%patch4 -p0 -b .transitional
+%apply_patches
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
@@ -265,7 +261,7 @@ popd
 %if %with lib
 export NSS_VMAJOR=`cat mozilla/security/nss/lib/nss/nss.h | grep "#define.*NSS_VMAJOR" | awk '{print $3}'`
 export NSS_VMINOR=`cat mozilla/security/nss/lib/nss/nss.h | grep "#define.*NSS_VMINOR" | awk '{print $3}'`
-export NSS_VPATCH=`cat mozilla/security/nss/lib/nss/nss.h | grep "#define.*NSS_VPATCH" | awk '{print $3}'`
+export NSS_VPATCH=`echo %{version} | sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
 
 %{__mkdir_p} %{buildroot}%{_bindir}
 cat %{SOURCE2} | sed -e "s,@libdir@,%{_libdir},g" \
@@ -352,12 +348,16 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %attr(0755,root,root) %{_bindir}/digest
 %attr(0755,root,root) %{_bindir}/encodeinttest
 %attr(0755,root,root) %{_bindir}/fipstest
+%attr(0755,root,root) %{_bindir}/httpserv
+%attr(0755,root,root) %{_bindir}/listsuites
+%attr(0755,root,root) %{_bindir}/lowhashtest
 %attr(0755,root,root) %{_bindir}/makepqg
 %attr(0755,root,root) %{_bindir}/mangle
 %attr(0755,root,root) %{_bindir}/modutil
 %attr(0755,root,root) %{_bindir}/multinit
 %attr(0755,root,root) %{_bindir}/nonspr10
 %attr(0755,root,root) %{_bindir}/ocspclnt
+%attr(0755,root,root) %{_bindir}/ocspresp
 %attr(0755,root,root) %{_bindir}/oidcalc
 %attr(0755,root,root) %{_bindir}/p7content
 %attr(0755,root,root) %{_bindir}/p7env
@@ -365,10 +365,14 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %attr(0755,root,root) %{_bindir}/p7verify
 %attr(0755,root,root) %{_bindir}/pk11mode
 %attr(0755,root,root) %{_bindir}/pk12util
+%attr(0755,root,root) %{_bindir}/pk1sign
+%attr(0755,root,root) %{_bindir}/pkix-errcodes
 %attr(0755,root,root) %{_bindir}/pp
+%attr(0755,root,root) %{_bindir}/pwdecrypt
 %attr(0755,root,root) %{_bindir}/remtest
 %attr(0755,root,root) %{_bindir}/rsaperf
 %attr(0755,root,root) %{_bindir}/sdrtest
+%attr(0755,root,root) %{_bindir}/secmodtest
 %attr(0755,root,root) %{_bindir}/selfserv
 %attr(0755,root,root) %{_bindir}/signtool
 %attr(0755,root,root) %{_bindir}/signver
@@ -503,6 +507,9 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %{_includedir}/nss/ssl.h
 %{_includedir}/nss/sslproto.h
 %{_includedir}/nss/sslt.h
+%{_includedir}/nss/utilmodt.h
+%{_includedir}/nss/utilpars.h
+%{_includedir}/nss/utilparst.h
 %{_includedir}/nss/utilrename.h
 %{_libdir}/pkgconfig/nss.pc
 %{_libdir}/libsoftokn%{major}.chk
