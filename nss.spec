@@ -21,7 +21,7 @@ Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
 Version:	3.14.1
-Release:	2
+Release:	3
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 URL:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -157,7 +157,7 @@ export USE_64=1
 # users to quickly mitigate future problems, or whatever :-)
 
 pushd mozilla/security/nss/lib/ckfw/builtins
-%{__perl} ./certdata.perl < %{SOURCE6}
+%{__perl} ./certdata.perl < %{SOURCE7}
 popd
 %endif
 
@@ -264,7 +264,7 @@ export NSS_VMINOR=`cat mozilla/security/nss/lib/nss/nss.h | grep "#define.*NSS_V
 export NSS_VPATCH=`echo %{version} | sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
 
 %{__mkdir_p} %{buildroot}%{_bindir}
-cat %{SOURCE2} | sed -e "s,@libdir@,%{_libdir},g" \
+cat %{SOURCE3} | sed -e "s,@libdir@,%{_libdir},g" \
                                -e "s,@prefix@,%{_prefix},g" \
                                -e "s,@exec_prefix@,%{_prefix},g" \
                                -e "s,@includedir@,%{_includedir}/nss%{major},g" \
@@ -306,9 +306,9 @@ chmod -R a+r docs
 
 # Install the empty NSS db files
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/pki/nssdb
-%{__install} -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/pki/nssdb/cert8.db
-%{__install} -m 644 %{SOURCE4} %{buildroot}%{_sysconfdir}/pki/nssdb/key3.db
-%{__install} -m 644 %{SOURCE5} %{buildroot}%{_sysconfdir}/pki/nssdb/secmod.db
+%{__install} -m 644 %{SOURCE4} %{buildroot}%{_sysconfdir}/pki/nssdb/cert8.db
+%{__install} -m 644 %{SOURCE5} %{buildroot}%{_sysconfdir}/pki/nssdb/key3.db
+%{__install} -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/pki/nssdb/secmod.db
 
 %{_bindir}/find docs -type f | %{_bindir}/xargs -t %{__perl} -pi -e 's/\r$//g'
 
