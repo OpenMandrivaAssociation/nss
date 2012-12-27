@@ -21,7 +21,7 @@ Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
 Version:	3.14.1
-Release:	1
+Release:	2
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 URL:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -247,7 +247,7 @@ do
 done
 
 %{__mkdir_p} %{buildroot}%{_libdir}/pkgconfig
-cat %{SOURCE1} | sed -e "s,%%libdir%%,%{_libdir},g" \
+cat %{SOURCE2} | sed -e "s,%%libdir%%,%{_libdir},g" \
                           -e "s,%%prefix%%,%{_prefix},g" \
                           -e "s,%%exec_prefix%%,%{_prefix},g" \
                           -e "s,%%includedir%%,%{_includedir}/nss,g" \
