@@ -189,7 +189,9 @@ make -j1 -C ./mozilla/security/nss \
 	TARGETCCC="$TARGETCCC" \
 	TARGETRANLIB="$TARGETRANLIB" \
 	AR="%__ar cr \"\$@\"" \
+%if %cross_compiling
 	CPU_ARCH="$CPU_ARCH" \
+%endif
 	build_coreconf build_dbm all
 
 %if %{build_empty}
