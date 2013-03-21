@@ -1,5 +1,3 @@
-removed_sources:
-  nss-3.13.6.tar.gz: 1f86a7c787e8fe3ebd1dd1cce127e57fb347dac3
 sources:
   blank-cert8.db: d272a7b58364862613d44261c5744f7a336bf177
   blank-key3.db: 7f78b5bcecdb5005e7b803604b2ec9d1a9df2fb5

@@ -1,0 +1,34 @@
+diff --git a/mozilla/security/coreconf/Linux.mk b/mozilla/security/coreconf/Linux.mk
+index a586e5e..ec43193 100644
+--- a/mozilla/security/coreconf/Linux.mk
++++ b/mozilla/security/coreconf/Linux.mk
+@@ -16,9 +16,13 @@ ifeq ($(USE_PTHREADS),1)
+ 	IMPL_STRATEGY = _PTH
+ endif
+ 
+-CC			= gcc
+-CCC			= g++
+-RANLIB			= ranlib
++TARGETCC               = gcc
++TARGETCCC              = g++
++TARGETRANLIB           = ranlib
++
++CC                     = $(TARGETCC)
++CCC                    = $(TARGETCCC)
++RANLIB                 = $(TARGETRANLIB)
+ 
+ DEFAULT_COMPILER = gcc
+ 
+--- nss-3.14.3/mozilla/security/nss/cmd/shlibsign/sign.sh.bero	2013-03-21 16:19:04.000000000 +0000
++++ nss-3.14.3/mozilla/security/nss/cmd/shlibsign/sign.sh	2013-03-21 16:20:55.000000000 +0000
+@@ -45,7 +45,9 @@ WIN*)
+     export LIBRARY_PATH
+     ADDON_PATH=${1}/lib:${4}:$ADDON_PATH
+     export ADDON_PATH
++    # The fallback to system shlibsign is for crosscompiling -- in that case, the
++    # just-built version will (obviously) fail to run
+     echo "${2}"/shlibsign -v -i "${5}"
+-    "${2}"/shlibsign -v -i "${5}"
++    "${2}"/shlibsign -v -i "${5}" || /usr/bin/shlibsign -v -i "${5}"
+     ;;
+ esac

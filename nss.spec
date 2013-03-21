@@ -21,7 +21,7 @@ Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
 Version:	3.14.3
-Release:	3
+Release:	4
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 URL:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -44,6 +44,7 @@ Source9:	http://www.icpbrasil.gov.br/certificadoACRaiz.crt
 Patch0:		nss-no-rpath.patch
 Patch1:		nss-fixrandom.patch
 Patch2:		renegotiate-transitional.patch
+Patch3:		nss-cross.patch
 BuildRequires:	rootcerts >= 1:20120218.00
 BuildRequires:	zip
 BuildRequires:	pkgconfig(nspr)
@@ -144,9 +145,6 @@ export MOZILLA_CLIENT=1
 export NS_USE_GCC=1
 export NSS_USE_SYSTEM_SQLITE=1
 export NSS_ENABLE_ECC=1
-%ifarch x86_64 ppc64 ia64 s390x
-export USE_64=1
-%endif
 
 %if %{build_empty}
 # (oe) the "trust no one" scenario, it goes like:
@@ -161,11 +159,38 @@ pushd mozilla/security/nss/lib/ckfw/builtins
 popd
 %endif
 
+%if %cross_compiling
+	# Compile tools used at build time (nsinstall) in native
+	# mode before setting up the environment for crosscompiling
+	export USE_64=1
+	make -j1 -C ./mozilla/security/nss \
+		build_coreconf build_dbm all
+
+	CPU_ARCH="%_target_cpu"
+	if echo $CPU_ARCH |grep -qE '(i.86|pentium.|athlon)'; then
+		CPU_ARCH=x86
+	fi
+	export CPU_ARCH
+%endif
+
+export NATIVE_CC="/usr/bin/gcc"
+export TARGETCC="%{__cc}"
+export TARGETCCC="%{__cxx}"
+export TARGETRANLIB="%{__ranlib}"
+%ifarch x86_64 ppc64 ia64 s390x aarch64
+export USE_64=1
+%else
+unset USE_64 || :
+%endif
+
 # Parallel is broken as of 3.11.4 :(
-%make -j1 -C ./mozilla/security/nss \
-	build_coreconf \
-	build_dbm \
-	all
+make -j1 -C ./mozilla/security/nss \
+	TARGETCC="$TARGETCC" \
+	TARGETCCC="$TARGETCCC" \
+	TARGETRANLIB="$TARGETRANLIB" \
+	AR="%__ar cr \"\$@\"" \
+	CPU_ARCH="$CPU_ARCH" \
+	build_coreconf build_dbm all
 
 %if %{build_empty}
 # tuck away the empty libnssckbi.so library
