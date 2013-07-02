@@ -1,7 +1,7 @@
-diff --git a/mozilla/security/coreconf/Linux.mk b/mozilla/security/coreconf/Linux.mk
+diff --git a/nss/coreconf/Linux.mk b/nss/coreconf/Linux.mk
 index a586e5e..ec43193 100644
---- a/mozilla/security/coreconf/Linux.mk
-+++ b/mozilla/security/coreconf/Linux.mk
+--- a/nss/coreconf/Linux.mk
++++ b/nss/coreconf/Linux.mk
 @@ -16,9 +16,13 @@ ifeq ($(USE_PTHREADS),1)
  	IMPL_STRATEGY = _PTH
  endif
@@ -19,8 +19,8 @@ index a586e5e..ec43193 100644
  
  DEFAULT_COMPILER = gcc
  
---- nss-3.14.3/mozilla/security/nss/cmd/shlibsign/sign.sh.bero	2013-03-21 16:19:04.000000000 +0000
-+++ nss-3.14.3/mozilla/security/nss/cmd/shlibsign/sign.sh	2013-03-21 16:20:55.000000000 +0000
+--- nss-3.14.3/nss/cmd/shlibsign/sign.sh.bero	2013-03-21 16:19:04.000000000 +0000
++++ nss-3.14.3/nss/cmd/shlibsign/sign.sh	2013-03-21 16:20:55.000000000 +0000
 @@ -45,7 +45,9 @@ WIN*)
      export LIBRARY_PATH
      ADDON_PATH=${1}/lib:${4}:$ADDON_PATH

@@ -1,4 +1,5 @@
 %bcond_without  lib
+%bcond_with	cross_compiling
 %define url_ver	%(echo %{version}| sed -e "s|\\.|_|g")
 
 %define major	3
@@ -7,7 +8,7 @@
 %define devname	%mklibname -d %{name}
 %define sdevname %mklibname -d -s %{name}
 
-%define	nspr_version 4.9.0
+%define	nspr_version 4.10
 
 # this seems fragile, so require the exact version or later (#58754)
 %define sqlite3_version %(pkg-config --modversion sqlite3 &>/dev/null && pkg-config --modversion sqlite3 2>/dev/null || echo 0)
@@ -20,7 +21,7 @@
 Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
-Version:	3.14.3
+Version:	3.15
 Release:	4
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -120,7 +121,12 @@ Static libraries for doing development with Network Security Services.
 %prep
 
 %setup -q
-%apply_patches
+#%  apply_patches
+%patch0 -p0
+%patch1 -p0
+%patch2 -p0 -b .transitional
+%patch3 -p1
+
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
@@ -154,7 +160,7 @@ export NSS_ENABLE_ECC=1
 # it has to be done manually for now, but at least we have a way for 
 # users to quickly mitigate future problems, or whatever :-)
 
-pushd mozilla/security/nss/lib/ckfw/builtins
+pushd nss/lib/ckfw/builtins
 %{__perl} ./certdata.perl < %{SOURCE7}
 popd
 %endif
@@ -163,7 +169,7 @@ popd
 	# Compile tools used at build time (nsinstall) in native
 	# mode before setting up the environment for crosscompiling
 	export USE_64=1
-	make -j1 -C ./mozilla/security/nss \
+	make -j1 -C ./nss \
 		build_coreconf build_dbm all
 
 	CPU_ARCH="%_target_cpu"
@@ -184,19 +190,26 @@ unset USE_64 || :
 %endif
 
 # Parallel is broken as of 3.11.4 :(
-make -j1 -C ./mozilla/security/nss \
-	TARGETCC="$TARGETCC" \
-	TARGETCCC="$TARGETCCC" \
-	TARGETRANLIB="$TARGETRANLIB" \
-	AR="%__ar cr \"\$@\"" \
-%if %cross_compiling
-	CPU_ARCH="$CPU_ARCH" \
-%endif
-	build_coreconf build_dbm all
+#make -j1 -C ./nss/coreconf ./nss/lib/dbm ./nss \
+#	TARGETCC="$TARGETCC" \
+#	TARGETCCC="$TARGETCCC" \
+#	TARGETRANLIB="$TARGETRANLIB" \
+#	AR="%__ar cr \"\$@\"" \
+#%if %cross_compiling
+#	CPU_ARCH="$CPU_ARCH" \
+#%endif
+#%if %with %{cross_compiling}
+#buildflags="TARGETCC='$TARGETCC' TARGETCCC='$TARGETCCC' TARGETRANLIB='$TARGETRANLIB' AR='%__ar" CPU_ARCH="$CPU_ARCH"
+#%else
+#buildflags="TARGETCC='$TARGETCC' TARGETCCC='$TARGETCCC' TARGETRANLIB='$TARGETRANLIB' AR='%__ar"
+#%endif
+%make -j1 -C ./nss/coreconf
+%make -j1 -C ./nss/lib/dbm
+%make -j1 -C ./nss
 
 %if %{build_empty}
 # tuck away the empty libnssckbi.so library
-cp -p mozilla/security/nss/lib/ckfw/builtins/Linux*/libnssckbi.so libnssckbi_empty.so
+cp -p nss/lib/ckfw/builtins/Linux*/libnssckbi.so libnssckbi_empty.so
 %endif
 
 # install new Verisign intermediate certificate
@@ -209,12 +222,12 @@ if [ -z "$ADDBUILTIN" ]; then
 fi
 ADDBUILTIN="$PWD/$ADDBUILTIN"
 OLD="$LD_LIBRARY_PATH"
-libpath=`%{_bindir}/find mozilla/dist/ -name "Linux*" -type d`
+libpath=`%{_bindir}/find ./dist/ -name "Linux*.*" -type d`
 # to use the built libraries instead of requiring nss
 # again as buildrequires
 export LD_LIBRARY_PATH="$PWD/$libpath/lib"
 
-pushd mozilla/security/nss/lib/ckfw/builtins
+pushd nss/lib/ckfw/builtins
 
 # (oe) for reference:
 # *ALL* of the root CA certs are hard coded into the libnssckbi.so library.
@@ -236,7 +249,7 @@ popd
 export LD_LIBRARY_PATH="$OLD"
 
 %install
-pushd mozilla/dist/$(uname -s)*
+pushd dist/$(uname -s)*
 
 %{__mkdir_p} %{buildroot}%{_bindir}
 %{__cp} -aL bin/* %{buildroot}%{_bindir}
@@ -286,8 +299,8 @@ cat %{SOURCE2} | sed -e "s,%%libdir%%,%{_libdir},g" \
 popd
 
 %if %with lib
-export NSS_VMAJOR=`cat mozilla/security/nss/lib/nss/nss.h | grep "#define.*NSS_VMAJOR" | awk '{print $3}'`
-export NSS_VMINOR=`cat mozilla/security/nss/lib/nss/nss.h | grep "#define.*NSS_VMINOR" | awk '{print $3}'`
+export NSS_VMAJOR=`%{__cat} nss/lib/nss/nss.h | %{__grep} "#define.*NSS_VMAJOR" | %{__awk} '{print $3}'`
+export NSS_VMINOR=`%{__cat} nss/lib/nss/nss.h | %{__grep} "#define.*NSS_VMINOR" | %{__awk} '{print $3}'`
 export NSS_VPATCH=`echo %{version} | sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
 
 %{__mkdir_p} %{buildroot}%{_bindir}
@@ -301,7 +314,7 @@ cat %{SOURCE3} | sed -e "s,@libdir@,%{_libdir},g" \
                                > %{buildroot}/%{_bindir}/nss-config
 %endif
 
-pushd mozilla/security/nss/cmd/smimetools
+pushd nss/cmd/smimetools
 %{__install} -m 0755 smime %{buildroot}%{_bindir}
 %{__perl} -pi -e 's|/usr/local/bin|%{_bindir}|g' %{buildroot}%{_bindir}/smime
 popd
@@ -311,25 +324,25 @@ popd
 #%{__cp} -a mozilla/security/nss/cmd/SSLsample/README docs/SSLsample/
 
 %{__mkdir_p} docs/bltest
-cp -a mozilla/security/nss/cmd/bltest/tests/* docs/bltest/
+cp -a nss/cmd/bltest/tests/* docs/bltest/
 chmod -R a+r docs
 
 %{__mkdir_p} docs/certcgi
-%{__cp} -a mozilla/security/nss/cmd/certcgi/*.html docs/certcgi/
-%{__cp} -a mozilla/security/nss/cmd/certcgi/HOWTO.txt docs/certcgi/
+%{__cp} -a nss/cmd/certcgi/*.html docs/certcgi/
+%{__cp} -a nss/cmd/certcgi/HOWTO.txt docs/certcgi/
 
 %{__mkdir_p} docs/modutil
-%{__cp} -a mozilla/security/nss/cmd/modutil/*.html docs/modutil/
+%{__cp} -a nss/cmd/modutil/*.html docs/modutil/
 
 %{__mkdir_p} docs/signtool
-%{__cp} -a mozilla/security/nss/cmd/signtool/README docs/signtool/
+%{__cp} -a nss/cmd/signtool/README docs/signtool/
 
 %{__mkdir_p} docs/signver
-%{__cp} -a mozilla/security/nss/cmd/signver/examples/1/*.pl docs/signver/
-%{__cp} -a mozilla/security/nss/cmd/signver/examples/1/*.html docs/signver/
+%{__cp} -a nss/cmd/signver/examples/1/*.pl docs/signver/
+%{__cp} -a nss/cmd/signver/examples/1/*.html docs/signver/
 
 %{__mkdir_p} docs/ssltap
-%{__cp} -a mozilla/security/nss/cmd/ssltap/*.html docs/ssltap/
+%{__cp} -a nss/cmd/ssltap/*.html docs/ssltap/
 
 # Install the empty NSS db files
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/pki/nssdb
