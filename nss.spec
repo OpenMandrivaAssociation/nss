@@ -403,6 +403,7 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %attr(0755,root,root) %{_bindir}/p7env
 %attr(0755,root,root) %{_bindir}/p7sign
 %attr(0755,root,root) %{_bindir}/p7verify
+%attr(0755,root,root) %{_bindir}/pk11gcmtest
 %attr(0755,root,root) %{_bindir}/pk11mode
 %attr(0755,root,root) %{_bindir}/pk12util
 %attr(0755,root,root) %{_bindir}/pk1sign
