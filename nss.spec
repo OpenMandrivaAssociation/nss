@@ -25,7 +25,7 @@ Version:	3.15.1
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
-URL:		http://www.mozilla.org/projects/security/pki/nss/index.html
+Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz
 #Source1:	ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz.asc
 Source2:	nss.pc.in
@@ -119,14 +119,12 @@ Static libraries for doing development with Network Security Services.
 %endif
 
 %prep
-
 %setup -q
 #%  apply_patches
 %patch0 -p0
 %patch1 -p0
 %patch2 -p0 -b .transitional
 %patch3 -p1
-
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
@@ -161,7 +159,7 @@ export NSS_ENABLE_ECC=1
 # users to quickly mitigate future problems, or whatever :-)
 
 pushd nss/lib/ckfw/builtins
-%{__perl} ./certdata.perl < %{SOURCE7}
+perl ./certdata.perl < %{SOURCE7}
 popd
 %endif
 
@@ -240,7 +238,7 @@ pushd nss/lib/ckfw/builtins
 # *ALL* of the mozilla based softwares that support SSL has to link against
 # the NSS library.
 # recreate certificates
-%{__perl} ./certdata.perl < /etc/pki/tls/mozilla/certdata.txt
+perl ./certdata.perl < /etc/pki/tls/mozilla/certdata.txt
 
 %make clean
 %make -j1
@@ -251,16 +249,16 @@ export LD_LIBRARY_PATH="$OLD"
 %install
 pushd dist/$(uname -s)*
 
-%{__mkdir_p} %{buildroot}%{_bindir}
-%{__cp} -aL bin/* %{buildroot}%{_bindir}
+mkdir -p %{buildroot}%{_bindir}
+cp -aL bin/* %{buildroot}%{_bindir}
 
 %if %with lib
-%{__mkdir_p} %{buildroot}%{_libdir}
-%{__mkdir_p} %{buildroot}/%{_lib}
-%{__mkdir_p} %{buildroot}%{_includedir}/nss
-%{__cp} -aL ../public/nss/* %{buildroot}%{_includedir}/nss
+mkdir -p %{buildroot}%{_libdir}
+mkdir -p %{buildroot}/%{_lib}
+mkdir -p %{buildroot}%{_includedir}/nss
+cp -aL ../public/nss/* %{buildroot}%{_includedir}/nss
 
-%{__cp} -aL lib/libcrmf.a \
+cp -aL lib/libcrmf.a \
             lib/libnss.a \
             lib/libnssb.a \
             lib/libnssckbi.so \
@@ -274,7 +272,7 @@ pushd dist/$(uname -s)*
 for file in libsoftokn3.so libfreebl3.so libnss3.so libnssutil3.so \
             libssl3.so libsmime3.so libnssckbi.so libnssdbm3.so
 do
-  %{__install} -m 755 lib/$file %{buildroot}/%{_lib}
+  install -m 755 lib/$file %{buildroot}/%{_lib}
   ln -sf ../../%{_lib}/$file %{buildroot}%{_libdir}/$file
 done
 
@@ -286,7 +284,7 @@ do
   ln -s ../../%{_lib}/$file %{buildroot}%{_libdir}/$file
 done
 
-%{__mkdir_p} %{buildroot}%{_libdir}/pkgconfig
+mkdir -p %{buildroot}%{_libdir}/pkgconfig
 cat %{SOURCE2} | sed -e "s,%%libdir%%,%{_libdir},g" \
                           -e "s,%%prefix%%,%{_prefix},g" \
                           -e "s,%%exec_prefix%%,%{_prefix},g" \
@@ -303,7 +301,7 @@ export NSS_VMAJOR=`%{__cat} nss/lib/nss/nss.h | %{__grep} "#define.*NSS_VMAJOR" 
 export NSS_VMINOR=`%{__cat} nss/lib/nss/nss.h | %{__grep} "#define.*NSS_VMINOR" | %{__awk} '{print $3}'`
 export NSS_VPATCH=`echo %{version} | sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
 
-%{__mkdir_p} %{buildroot}%{_bindir}
+mkdir -p %{buildroot}%{_bindir}
 cat %{SOURCE3} | sed -e "s,@libdir@,%{_libdir},g" \
                                -e "s,@prefix@,%{_prefix},g" \
                                -e "s,@exec_prefix@,%{_prefix},g" \
@@ -315,42 +313,42 @@ cat %{SOURCE3} | sed -e "s,@libdir@,%{_libdir},g" \
 %endif
 
 pushd nss/cmd/smimetools
-%{__install} -m 0755 smime %{buildroot}%{_bindir}
-%{__perl} -pi -e 's|/usr/local/bin|%{_bindir}|g' %{buildroot}%{_bindir}/smime
+install -m 0755 smime %{buildroot}%{_bindir}
+perl -pi -e 's|/usr/local/bin|%{_bindir}|g' %{buildroot}%{_bindir}/smime
 popd
 
 # add docs
-%{__mkdir_p} docs/SSLsample
-#%{__cp} -a mozilla/security/nss/cmd/SSLsample/README docs/SSLsample/
+mkdir -p docs/SSLsample
+#cp -a mozilla/security/nss/cmd/SSLsample/README docs/SSLsample/
 
-%{__mkdir_p} docs/bltest
+mkdir -p docs/bltest
 cp -a nss/cmd/bltest/tests/* docs/bltest/
 chmod -R a+r docs
 
-%{__mkdir_p} docs/certcgi
-%{__cp} -a nss/cmd/certcgi/*.html docs/certcgi/
-%{__cp} -a nss/cmd/certcgi/HOWTO.txt docs/certcgi/
+mkdir -p docs/certcgi
+cp -a nss/cmd/certcgi/*.html docs/certcgi/
+cp -a nss/cmd/certcgi/HOWTO.txt docs/certcgi/
 
-%{__mkdir_p} docs/modutil
-%{__cp} -a nss/cmd/modutil/*.html docs/modutil/
+mkdir -p docs/modutil
+cp -a nss/cmd/modutil/*.html docs/modutil/
 
-%{__mkdir_p} docs/signtool
-%{__cp} -a nss/cmd/signtool/README docs/signtool/
+mkdir -p docs/signtool
+cp -a nss/cmd/signtool/README docs/signtool/
 
-%{__mkdir_p} docs/signver
-%{__cp} -a nss/cmd/signver/examples/1/*.pl docs/signver/
-%{__cp} -a nss/cmd/signver/examples/1/*.html docs/signver/
+mkdir -p docs/signver
+cp -a nss/cmd/signver/examples/1/*.pl docs/signver/
+cp -a nss/cmd/signver/examples/1/*.html docs/signver/
 
-%{__mkdir_p} docs/ssltap
-%{__cp} -a nss/cmd/ssltap/*.html docs/ssltap/
+mkdir -p docs/ssltap
+cp -a nss/cmd/ssltap/*.html docs/ssltap/
 
 # Install the empty NSS db files
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/pki/nssdb
-%{__install} -m 644 %{SOURCE4} %{buildroot}%{_sysconfdir}/pki/nssdb/cert8.db
-%{__install} -m 644 %{SOURCE5} %{buildroot}%{_sysconfdir}/pki/nssdb/key3.db
-%{__install} -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/pki/nssdb/secmod.db
+mkdir -p %{buildroot}%{_sysconfdir}/pki/nssdb
+install -m 644 %{SOURCE4} %{buildroot}%{_sysconfdir}/pki/nssdb/cert8.db
+install -m 644 %{SOURCE5} %{buildroot}%{_sysconfdir}/pki/nssdb/key3.db
+install -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/pki/nssdb/secmod.db
 
-%{_bindir}/find docs -type f | %{_bindir}/xargs -t %{__perl} -pi -e 's/\r$//g'
+%{_bindir}/find docs -type f | %{_bindir}/xargs -t perl -pi -e 's/\r$//g'
 
 %if %{build_empty}
 # install the empty libnssckbi.so library (use alternatives?)
@@ -452,7 +450,6 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 /%{_lib}/libssl%{major}.so
 
 %files -n %{devname}
-%defattr(0644,root,root,0755)
 %attr(0755,root,root) %{_bindir}/nss-config
 %attr(0755,root,root) %{multiarch_bindir}/nss-config
 %_libdir/*.so
@@ -557,7 +554,6 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %{_libdir}/libfreebl%{major}.chk
 
 %files -n %{sdevname}
-%defattr(0644,root,root,0755)
 %{_libdir}/libcrmf.a
 %{_libdir}/libnss.a
 %{_libdir}/libnssutil.a
