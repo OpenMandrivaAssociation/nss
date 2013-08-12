@@ -136,7 +136,7 @@ find . -name '*.h' -executable -exec chmod -x {} \;
 find . -name '*.c' -executable -exec chmod -x {} \;
 
 %build
-%serverbuild_hardened
+%serverbuild
 %setup_compile_flags
 export BUILD_OPT=1
 export OPTIMIZER="%{optflags}"
