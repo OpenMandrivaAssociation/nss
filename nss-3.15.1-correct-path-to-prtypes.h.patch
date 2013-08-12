@@ -1,0 +1,11 @@
+--- nss-3.15.1/nss/lib/util/hasht.h	2013-06-27 17:58:08.000000000 +0000
++++ nss-3.15.1/nss/lib/util/hasht.h.tpg	2013-08-12 07:28:35.342936969 +0000
+@@ -5,7 +5,7 @@
+ #ifndef _HASHT_H_
+ #define _HASHT_H_
+ 
+-#include "prtypes.h"
++#include "nspr4/prtypes.h"
+ 
+ /* Opaque objects */
+ typedef struct SECHashObjectStr SECHashObject;
