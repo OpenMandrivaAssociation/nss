@@ -22,7 +22,7 @@ Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
 Version:	3.15.1
-Release:	1
+Release:	2
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -46,6 +46,8 @@ Patch0:		nss-no-rpath.patch
 Patch1:		nss-fixrandom.patch
 Patch2:		renegotiate-transitional.patch
 Patch3:		nss-cross.patch
+# (tpg) be carefull with last nspr4-4.10 because prtypes.h was moved to include/nspr4/
+Patch4:		nss-3.15.1-correct-path-to-prtypes.h.patch
 BuildRequires:	rootcerts >= 1:20120218.00
 BuildRequires:	zip
 BuildRequires:	pkgconfig(nspr)
@@ -125,6 +127,7 @@ Static libraries for doing development with Network Security Services.
 %patch1 -p0
 %patch2 -p0 -b .transitional
 %patch3 -p1
+%patch4 -p1
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
@@ -133,6 +136,7 @@ find . -name '*.h' -executable -exec chmod -x {} \;
 find . -name '*.c' -executable -exec chmod -x {} \;
 
 %build
+%serverbuild_hardened
 %setup_compile_flags
 export BUILD_OPT=1
 export OPTIMIZER="%{optflags}"
