@@ -22,7 +22,7 @@ Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
 Version:	3.15.3
-Release:	3
+Release:	4
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
