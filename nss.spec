@@ -21,7 +21,7 @@
 Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
-Version:	3.16.3
+Version:	3.17.1
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -522,6 +522,7 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %{_includedir}/nss/pkcs11u.h
 %{_includedir}/nss/pkcs12.h
 %{_includedir}/nss/pkcs12t.h
+%{_includedir}/nss/pkcs1sig.h
 %{_includedir}/nss/pkcs7t.h
 %{_includedir}/nss/portreg.h
 %{_includedir}/nss/preenc.h
