@@ -21,13 +21,13 @@
 Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
-Version:	3.17.4
+Version:	3.18.1
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
-Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz
-#Source1:	ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz.asc
+Source0:	http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz
+#Source1:	http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz.asc
 Source2:	nss.pc.in
 Source3:	nss-config.in
 Source4:	blank-cert8.db
