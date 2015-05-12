@@ -13,10 +13,11 @@ removed_sources:
   nss-3.17.1.tar.gz: 32347d8b476efa5c7a4cfa21f8e5a1d0d89942ea
   nss-3.17.2.tar.gz: c518e0726e89210219e3c583bfa08e40fb39385a
   nss-3.17.4.tar.gz: 76beddfea9f1503920e40d7066aa704bbaeef558
+  nss-3.18.1.tar.gz: 0c1bd239aba56bf1f05ec19748cf8141895668db
 sources:
   blank-cert8.db: d272a7b58364862613d44261c5744f7a336bf177
   blank-key3.db: 7f78b5bcecdb5005e7b803604b2ec9d1a9df2fb5
   blank-secmod.db: bd748cf6e1465a1bbe6e751b72ffc0076aff0b50
   certificadoACRaiz.crt: 8efdcabc93e61e925d4d1ded181a4320a467a139
-  nss-3.18.1.tar.gz: 0c1bd239aba56bf1f05ec19748cf8141895668db
+  nss-3.19.tar.gz: 5c344b28abe7e0529d58373c5005ccfc66869716
   verisign-class-3-secure-server-ca.der: 188590e94878478e33b6194e59fbbb28ff0888d5
