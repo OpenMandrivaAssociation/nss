@@ -135,6 +135,9 @@ find . -type f -perm 0444 -exec chmod 644 {} \;
 find . -name '*.h' -executable -exec chmod -x {} \;
 find . -name '*.c' -executable -exec chmod -x {} \;
 
+# remove hardcoded gcc
+sed -i 's!gcc!%{__cc}!g' nss/coreconf/Linux.mk
+
 %build
 %serverbuild
 %setup_compile_flags
