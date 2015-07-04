@@ -21,7 +21,7 @@
 Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
-Version:	3.18.1
+Version:	3.19.2
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -134,6 +134,9 @@ find . -type f -perm 0555 -exec chmod 755 {} \;
 find . -type f -perm 0444 -exec chmod 644 {} \;
 find . -name '*.h' -executable -exec chmod -x {} \;
 find . -name '*.c' -executable -exec chmod -x {} \;
+
+# remove hardcoded gcc
+sed -i 's!gcc!%{__cc}!g' nss/coreconf/Linux.mk
 
 %build
 %serverbuild
