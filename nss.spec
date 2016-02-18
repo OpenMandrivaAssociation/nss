@@ -387,7 +387,6 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %attr(0755,root,root) %{_bindir}/btoa
 %attr(0755,root,root) %{_bindir}/certcgi
 %attr(0755,root,root) %{_bindir}/certutil
-%attr(0755,root,root) %{_bindir}/checkcert
 %attr(0755,root,root) %{_bindir}/chktest
 %attr(0755,root,root) %{_bindir}/cmsutil
 %attr(0755,root,root) %{_bindir}/conflict
