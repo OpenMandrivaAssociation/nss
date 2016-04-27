@@ -22,7 +22,7 @@
 Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
-Version:	3.21.1
+Version:	3.22.3
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -387,7 +387,6 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %attr(0755,root,root) %{_bindir}/btoa
 %attr(0755,root,root) %{_bindir}/certcgi
 %attr(0755,root,root) %{_bindir}/certutil
-%attr(0755,root,root) %{_bindir}/checkcert
 %attr(0755,root,root) %{_bindir}/chktest
 %attr(0755,root,root) %{_bindir}/cmsutil
 %attr(0755,root,root) %{_bindir}/conflict
