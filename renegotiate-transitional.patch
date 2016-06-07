@@ -1,11 +1,11 @@
 --- nss/lib/ssl/sslsock.c	2013-05-28 23:43:24.000000000 +0200
 +++ nss/lib/ssl/sslsock.c.oden	2013-06-26 10:52:13.194644826 +0200
 @@ -149,7 +149,7 @@ static sslOptions ssl_defaults = {
-     PR_FALSE,   /* noLocks            */
-     PR_FALSE,   /* enableSessionTickets */
-     PR_FALSE,   /* enableDeflate      */
--    2,          /* enableRenegotiation (default: requires extension) */
-+    3,          /* enableRenegotiation (default: requires extension) */
-     PR_FALSE,   /* requireSafeNegotiation */
-     PR_FALSE,   /* enableFalseStart   */
-     PR_TRUE,    /* cbcRandomIV        */
+     PR_FALSE,                /* noLocks            */
+     PR_FALSE,                /* enableSessionTickets */
+     PR_FALSE,                /* enableDeflate      */
+-    2,                       /* enableRenegotiation (default: requires extension) */
++    3,                       /* enableRenegotiation (default: requires extension) */
+     PR_FALSE,                /* requireSafeNegotiation */
+     PR_FALSE,                /* enableFalseStart   */
+     PR_TRUE,                 /* cbcRandomIV        */
