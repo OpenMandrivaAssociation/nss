@@ -22,8 +22,8 @@
 Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
-Version:	3.23
-Release:	1
+Version:	3.25
+Release:	2
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -143,6 +143,7 @@ sed -i 's!gcc!%{__cc}!g' nss/coreconf/Linux.mk
 %build
 %serverbuild
 %setup_compile_flags
+export CC=gcc
 export BUILD_OPT=1
 export OPTIMIZER="%{optflags}"
 export XCFLAGS="%{optflags} -Wno-error"
@@ -282,7 +283,7 @@ cp -aL lib/libcrmf.a \
             %{buildroot}%{_libdir}
 
 # Copy the binary libraries we want
-for file in libsoftokn3.so libfreebl3.so libnss3.so libnssutil3.so \
+for file in libsoftokn3.so libfreebl3.so libfreeblpriv3.so libnss3.so libnssutil3.so \
             libssl3.so libsmime3.so libnssckbi.so libnssdbm3.so
 do
   install -m 755 lib/$file %{buildroot}/%{_lib}
@@ -396,6 +397,7 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %attr(0755,root,root) %{_bindir}/derdump
 %attr(0755,root,root) %{_bindir}/dertimetest
 %attr(0755,root,root) %{_bindir}/digest
+%attr(0755,root,root) %{_bindir}/ecperf
 %attr(0755,root,root) %{_bindir}/encodeinttest
 %attr(0755,root,root) %{_bindir}/fipstest
 %attr(0755,root,root) %{_bindir}/httpserv
@@ -445,6 +447,7 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %if %with lib
 %files -n %{libfreebl}
 /%{_lib}/libfreebl%{major}.so
+/%{_lib}/libfreeblpriv%{major}.so
 /%{_lib}/libsoftokn%{major}.so
 %defattr(0644,root,root,0755)
 %ghost /%{_lib}/libfreebl%{major}.chk
@@ -490,6 +493,8 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %{_includedir}/nss/keyhi.h
 %{_includedir}/nss/keyt.h
 %{_includedir}/nss/keythi.h
+%{_includedir}/nss/lowkeyi.h
+%{_includedir}/nss/lowkeyti.h
 %{_includedir}/nss/nssb64.h
 %{_includedir}/nss/nssb64t.h
 %{_includedir}/nss/nssbase.h
