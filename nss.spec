@@ -22,8 +22,8 @@
 Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
-Version:	3.23
-Release:	3
+Version:	3.25
+Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -127,7 +127,7 @@ Static libraries for doing development with Network Security Services.
 #%  apply_patches
 %patch0 -p0
 %patch1 -p0
-%patch2 -p0 -b .transitional
+#patch2 -p0 -b .transitional
 %patch3 -p1
 %patch4 -p1
 
@@ -190,7 +190,7 @@ popd
 	export CPU_ARCH
 %endif
 
-export NATIVE_CC="/usr/bin/gcc"
+export NATIVE_CC="%__cc"
 export TARGETCC="%{__cc}"
 export TARGETCCC="%{__cxx}"
 export TARGETRANLIB="%{__ranlib}"
@@ -396,6 +396,7 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %attr(0755,root,root) %{_bindir}/derdump
 %attr(0755,root,root) %{_bindir}/dertimetest
 %attr(0755,root,root) %{_bindir}/digest
+%attr(0755,root,root) %{_bindir}/ecperf
 %attr(0755,root,root) %{_bindir}/encodeinttest
 %attr(0755,root,root) %{_bindir}/fipstest
 %attr(0755,root,root) %{_bindir}/httpserv
@@ -490,6 +491,8 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %{_includedir}/nss/keyhi.h
 %{_includedir}/nss/keyt.h
 %{_includedir}/nss/keythi.h
+%{_includedir}/nss/lowkeyi.h
+%{_includedir}/nss/lowkeyti.h
 %{_includedir}/nss/nssb64.h
 %{_includedir}/nss/nssb64t.h
 %{_includedir}/nss/nssbase.h
