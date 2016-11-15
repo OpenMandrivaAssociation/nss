@@ -22,13 +22,13 @@
 Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
-Version:	3.25
-Release:	2
+Version:	3.27.1
+Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
-Source0:	http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz
-#Source1:	http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz.asc
+Source0:	http://ftp.mozilla.org/pub/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz
+#Source1:	http://ftp.mozilla.org/pub/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz.asc
 Source2:	nss.pc.in
 Source3:	nss-config.in
 Source4:	blank-cert8.db
@@ -124,12 +124,7 @@ Static libraries for doing development with Network Security Services.
 
 %prep
 %setup -q
-#%  apply_patches
-%patch0 -p0
-%patch1 -p0
-%patch2 -p0 -b .transitional
-%patch3 -p1
-%patch4 -p1
+%apply_patches
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
@@ -143,7 +138,7 @@ sed -i 's!gcc!%{__cc}!g' nss/coreconf/Linux.mk
 %build
 %serverbuild
 %setup_compile_flags
-export CC=gcc
+export CC=%{__cc}
 export BUILD_OPT=1
 export OPTIMIZER="%{optflags}"
 export XCFLAGS="%{optflags} -Wno-error"
@@ -156,7 +151,6 @@ export PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
 export NSPR_INCLUDE_DIR=`%{_bindir}/pkg-config --cflags-only-I nspr | sed 's/-I//'`
 export NSPR_LIB_DIR=`%{_bindir}/pkg-config --libs-only-L nspr | sed 's/-L//'`
 export MOZILLA_CLIENT=1
-export NS_USE_GCC=1
 export NSS_USE_SYSTEM_SQLITE=1
 export NSS_ENABLE_ECC=1
 
@@ -191,7 +185,7 @@ popd
 	export CPU_ARCH
 %endif
 
-export NATIVE_CC="/usr/bin/gcc"
+export NATIVE_CC=%{_bindir}/clang
 export TARGETCC="%{__cc}"
 export TARGETCCC="%{__cxx}"
 export TARGETRANLIB="%{__ranlib}"
@@ -255,7 +249,7 @@ pushd nss/lib/ckfw/builtins
 perl ./certdata.perl < /etc/pki/tls/mozilla/certdata.txt
 
 %make clean
-%make -j1
+%make
 
 popd
 export LD_LIBRARY_PATH="$OLD"
@@ -398,6 +392,7 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %attr(0755,root,root) %{_bindir}/dertimetest
 %attr(0755,root,root) %{_bindir}/digest
 %attr(0755,root,root) %{_bindir}/ecperf
+%attr(0755,root,root) %{_bindir}/ectest
 %attr(0755,root,root) %{_bindir}/encodeinttest
 %attr(0755,root,root) %{_bindir}/fipstest
 %attr(0755,root,root) %{_bindir}/httpserv
