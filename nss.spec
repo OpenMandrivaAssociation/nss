@@ -22,7 +22,7 @@
 Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
-Version:	3.25
+Version:	3.27.1
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -124,12 +124,7 @@ Static libraries for doing development with Network Security Services.
 
 %prep
 %setup -q
-#%  apply_patches
-%patch0 -p0
-%patch1 -p0
-%patch2 -p0 -b .transitional
-%patch3 -p1
-%patch4 -p1
+%apply_patches
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
@@ -398,6 +393,7 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %attr(0755,root,root) %{_bindir}/dertimetest
 %attr(0755,root,root) %{_bindir}/digest
 %attr(0755,root,root) %{_bindir}/ecperf
+%attr(0755,root,root) %{_bindir}/ectest
 %attr(0755,root,root) %{_bindir}/encodeinttest
 %attr(0755,root,root) %{_bindir}/fipstest
 %attr(0755,root,root) %{_bindir}/httpserv
