@@ -22,13 +22,13 @@
 Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
-Version:	3.27.1
+Version:	3.28.1
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
-Source0:	http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz
-#Source1:	http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz.asc
+Source0:	http://ftp.mozilla.org/pub/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz
+#Source1:	http://ftp.mozilla.org/pub/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz.asc
 Source2:	nss.pc.in
 Source3:	nss-config.in
 Source4:	blank-cert8.db
@@ -46,7 +46,9 @@ Source9:	http://www.icpbrasil.gov.br/certificadoACRaiz.crt
 Patch0:		nss-no-rpath.patch
 Patch1:		nss-fixrandom.patch
 Patch2:		renegotiate-transitional.patch
+%if %{with cross_compiling}
 Patch3:		nss-cross.patch
+%endif
 # (tpg) be carefull with last nspr4-4.10 because prtypes.h was moved to include/nspr4/
 Patch4:		nss-3.15.1-correct-path-to-prtypes.h.patch
 
@@ -138,7 +140,7 @@ sed -i 's!gcc!%{__cc}!g' nss/coreconf/Linux.mk
 %build
 %serverbuild
 %setup_compile_flags
-export CC=gcc
+export CC=%{__cc}
 export BUILD_OPT=1
 export OPTIMIZER="%{optflags}"
 export XCFLAGS="%{optflags} -Wno-error"
@@ -151,7 +153,6 @@ export PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
 export NSPR_INCLUDE_DIR=`%{_bindir}/pkg-config --cflags-only-I nspr | sed 's/-I//'`
 export NSPR_LIB_DIR=`%{_bindir}/pkg-config --libs-only-L nspr | sed 's/-L//'`
 export MOZILLA_CLIENT=1
-export NS_USE_GCC=1
 export NSS_USE_SYSTEM_SQLITE=1
 export NSS_ENABLE_ECC=1
 
@@ -186,7 +187,7 @@ popd
 	export CPU_ARCH
 %endif
 
-export NATIVE_CC="/usr/bin/gcc"
+export NATIVE_CC=%{_bindir}/clang
 export TARGETCC="%{__cc}"
 export TARGETCCC="%{__cxx}"
 export TARGETRANLIB="%{__ranlib}"
@@ -250,7 +251,7 @@ pushd nss/lib/ckfw/builtins
 perl ./certdata.perl < /etc/pki/tls/mozilla/certdata.txt
 
 %make clean
-%make -j1
+%make
 
 popd
 export LD_LIBRARY_PATH="$OLD"
