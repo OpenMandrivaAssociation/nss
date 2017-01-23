@@ -3,12 +3,12 @@ index a586e5e..ec43193 100644
 --- a/nss/coreconf/Linux.mk
 +++ b/nss/coreconf/Linux.mk
 @@ -16,9 +16,13 @@ ifeq ($(USE_PTHREADS),1)
- 	IMPL_STRATEGY = _PTH
- endif
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
  
--CC			= gcc
--CCC			= g++
--RANLIB			= ranlib
+-CC     = gcc
+-CCC    = g++
+-RANLIB = ranlib
 +TARGETCC               = gcc
 +TARGETCCC              = g++
 +TARGETRANLIB           = ranlib
