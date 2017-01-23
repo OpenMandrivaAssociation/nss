@@ -22,7 +22,7 @@
 Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
-Version:	3.27.1
+Version:	3.28.1
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -46,7 +46,9 @@ Source9:	http://www.icpbrasil.gov.br/certificadoACRaiz.crt
 Patch0:		nss-no-rpath.patch
 Patch1:		nss-fixrandom.patch
 Patch2:		renegotiate-transitional.patch
+%if %{with cross_compiling}
 Patch3:		nss-cross.patch
+%endif
 # (tpg) be carefull with last nspr4-4.10 because prtypes.h was moved to include/nspr4/
 Patch4:		nss-3.15.1-correct-path-to-prtypes.h.patch
 
