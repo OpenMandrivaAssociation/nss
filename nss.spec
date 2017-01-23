@@ -169,7 +169,7 @@ export NSS_DISABLE_GTESTS=1
 # users to quickly mitigate future problems, or whatever :-)
 
 pushd nss/lib/ckfw/builtins
-perl ./certdata.perl < %{SOURCE7}
+perl ./certdata.perl %{SOURCE7}
 popd
 %endif
 
@@ -248,7 +248,7 @@ pushd nss/lib/ckfw/builtins
 # *ALL* of the mozilla based softwares that support SSL has to link against
 # the NSS library.
 # recreate certificates
-perl ./certdata.perl < /etc/pki/tls/mozilla/certdata.txt
+perl ./certdata.perl /etc/pki/tls/mozilla/certdata.txt
 
 %make clean
 %make
@@ -394,8 +394,8 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %attr(0755,root,root) %{_bindir}/dertimetest
 %attr(0755,root,root) %{_bindir}/digest
 %attr(0755,root,root) %{_bindir}/ecperf
-%attr(0755,root,root) %{_bindir}/ectest
 %attr(0755,root,root) %{_bindir}/encodeinttest
+%attr(0755,root,root) %{_bindir}/fbectest
 %attr(0755,root,root) %{_bindir}/fipstest
 %attr(0755,root,root) %{_bindir}/httpserv
 %attr(0755,root,root) %{_bindir}/listsuites
@@ -412,6 +412,7 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %attr(0755,root,root) %{_bindir}/p7env
 %attr(0755,root,root) %{_bindir}/p7sign
 %attr(0755,root,root) %{_bindir}/p7verify
+%attr(0755,root,root) %{_bindir}/pk11ectest
 %attr(0755,root,root) %{_bindir}/pk11gcmtest
 %attr(0755,root,root) %{_bindir}/pk11mode
 %attr(0755,root,root) %{_bindir}/pk12util
@@ -481,6 +482,7 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %{_includedir}/nss/crmft.h
 %{_includedir}/nss/cryptohi.h
 %{_includedir}/nss/cryptoht.h
+%{_includedir}/nss/eccutil.h
 %{_includedir}/nss/ecl-exp.h
 %{_includedir}/nss/hasht.h
 %{_includedir}/nss/jar-ds.h
