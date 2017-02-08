@@ -22,7 +22,7 @@
 Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
-Version:	3.28.1
+Version:	3.29
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
