@@ -93,8 +93,8 @@ libnssutil3, libsmime3, and libssl3.
 %package -n %{libfreebl}
 Summary:	Network Security Services (NSS)
 Group:		System/Libraries
-Requires(post): nss-shlibsign
-Requires(post): rpm-helper
+Requires(posttrans): nss-shlibsign
+Requires(posttrans): rpm-helper
 Conflicts: %{_lib}nss3 < 2:3.13.1-5
 
 %description -n %{libfreebl}
