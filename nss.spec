@@ -22,7 +22,7 @@
 Summary:	Netscape Security Services
 Name:		nss
 Epoch:		2
-Version:	3.29.5
+Version:	3.31
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -44,11 +44,7 @@ Source8:	verisign-class-3-secure-server-ca.der
 # verified in person with a government official
 Source9:	http://www.icpbrasil.gov.br/certificadoACRaiz.crt
 Patch0:		nss-no-rpath.patch
-Patch1:		nss-fixrandom.patch
 Patch2:		renegotiate-transitional.patch
-%if %{with cross_compiling}
-Patch3:		nss-cross.patch
-%endif
 # (tpg) be carefull with last nspr4-4.10 because prtypes.h was moved to include/nspr4/
 Patch4:		nss-3.15.1-correct-path-to-prtypes.h.patch
 
@@ -365,8 +361,6 @@ install -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/pki/nssdb/secmod.db
 install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %endif
 
-%multiarch_binaries %{buildroot}%{_bindir}/nss-config
-
 %if %with lib
 %posttrans -n %{libfreebl}
 %create_ghostfile /%{_lib}/libsoftokn%{major}.chk root root 644
@@ -464,108 +458,8 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 
 %files -n %{devname}
 %attr(0755,root,root) %{_bindir}/nss-config
-%attr(0755,root,root) %{multiarch_bindir}/nss-config
 %_libdir/*.so
-%dir %{_includedir}/nss
-%{_includedir}/nss/base64.h
-%{_includedir}/nss/blapit.h
-%{_includedir}/nss/certdb.h
-%{_includedir}/nss/cert.h
-%{_includedir}/nss/certt.h
-%{_includedir}/nss/ciferfam.h
-%{_includedir}/nss/cmmf.h
-%{_includedir}/nss/cmmft.h
-%{_includedir}/nss/cms.h
-%{_includedir}/nss/cmsreclist.h
-%{_includedir}/nss/cmst.h
-%{_includedir}/nss/crmf.h
-%{_includedir}/nss/crmft.h
-%{_includedir}/nss/cryptohi.h
-%{_includedir}/nss/cryptoht.h
-%{_includedir}/nss/eccutil.h
-%{_includedir}/nss/ecl-exp.h
-%{_includedir}/nss/hasht.h
-%{_includedir}/nss/jar-ds.h
-%{_includedir}/nss/jarfile.h
-%{_includedir}/nss/jar.h
-%{_includedir}/nss/key.h
-%{_includedir}/nss/keyhi.h
-%{_includedir}/nss/keyt.h
-%{_includedir}/nss/keythi.h
-%{_includedir}/nss/lowkeyi.h
-%{_includedir}/nss/lowkeyti.h
-%{_includedir}/nss/nssb64.h
-%{_includedir}/nss/nssb64t.h
-%{_includedir}/nss/nssbase.h
-%{_includedir}/nss/nssbaset.h
-%{_includedir}/nss/nssck.api
-%{_includedir}/nss/nssckbi.h
-%{_includedir}/nss/nssckepv.h
-%{_includedir}/nss/nssckft.h
-%{_includedir}/nss/nssckfwc.h
-%{_includedir}/nss/nssckfw.h
-%{_includedir}/nss/nssckfwt.h
-%{_includedir}/nss/nssckg.h
-%{_includedir}/nss/nssckmdt.h
-%{_includedir}/nss/nssckt.h
-%{_includedir}/nss/nss.h
-%{_includedir}/nss/nssilckt.h
-%{_includedir}/nss/nssilock.h
-%{_includedir}/nss/nsslocks.h
-%{_includedir}/nss/nsslowhash.h
-%{_includedir}/nss/nssrwlk.h
-%{_includedir}/nss/nssrwlkt.h
-%{_includedir}/nss/nssutil.h
-%{_includedir}/nss/ocsp.h
-%{_includedir}/nss/ocspt.h
-%{_includedir}/nss/p12.h
-%{_includedir}/nss/p12plcy.h
-%{_includedir}/nss/p12t.h
-%{_includedir}/nss/pk11func.h
-%{_includedir}/nss/pk11pqg.h
-%{_includedir}/nss/pk11priv.h
-%{_includedir}/nss/pk11pub.h
-%{_includedir}/nss/pk11sdr.h
-%{_includedir}/nss/pkcs11f.h
-%{_includedir}/nss/pkcs11.h
-%{_includedir}/nss/pkcs11n.h
-%{_includedir}/nss/pkcs11p.h
-%{_includedir}/nss/pkcs11t.h
-%{_includedir}/nss/pkcs11u.h
-%{_includedir}/nss/pkcs12.h
-%{_includedir}/nss/pkcs12t.h
-%{_includedir}/nss/pkcs1sig.h
-%{_includedir}/nss/pkcs7t.h
-%{_includedir}/nss/portreg.h
-%{_includedir}/nss/preenc.h
-%{_includedir}/nss/secasn1.h
-%{_includedir}/nss/secasn1t.h
-%{_includedir}/nss/seccomon.h
-%{_includedir}/nss/secder.h
-%{_includedir}/nss/secdert.h
-%{_includedir}/nss/secdig.h
-%{_includedir}/nss/secdigt.h
-%{_includedir}/nss/secerr.h
-%{_includedir}/nss/sechash.h
-%{_includedir}/nss/secitem.h
-%{_includedir}/nss/secmime.h
-%{_includedir}/nss/secmod.h
-%{_includedir}/nss/secmodt.h
-%{_includedir}/nss/secoid.h
-%{_includedir}/nss/secoidt.h
-%{_includedir}/nss/secpkcs5.h
-%{_includedir}/nss/secpkcs7.h
-%{_includedir}/nss/secport.h
-%{_includedir}/nss/shsign.h
-%{_includedir}/nss/smime.h
-%{_includedir}/nss/sslerr.h
-%{_includedir}/nss/ssl.h
-%{_includedir}/nss/sslproto.h
-%{_includedir}/nss/sslt.h
-%{_includedir}/nss/utilmodt.h
-%{_includedir}/nss/utilpars.h
-%{_includedir}/nss/utilparst.h
-%{_includedir}/nss/utilrename.h
+%{_includedir}/nss
 %{_libdir}/pkgconfig/nss.pc
 %{_libdir}/libsoftokn%{major}.chk
 %{_libdir}/libfreebl%{major}.chk
