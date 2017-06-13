@@ -21,8 +21,11 @@
 
 Summary:	Netscape Security Services
 Name:		nss
-Epoch:		2
-Version:	3.31
+Epoch:		3
+# WARNING
+# We've been on 3.31 before - it causes chromium to crash on startup
+# Please verify that this is fixed before updating.
+Version:	3.30.2
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
