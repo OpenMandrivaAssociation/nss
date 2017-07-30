@@ -9,7 +9,7 @@
 %define sdevname %mklibname -d -s %{name}
 %define _disable_lto 1
 
-%define	nspr_version 4.10
+%define	nspr_version 4.16
 
 # this seems fragile, so require the exact version or later (#58754)
 %define sqlite3_version %(pkg-config --modversion sqlite3 &>/dev/null && pkg-config --modversion sqlite3 2>/dev/null || echo 0)
@@ -25,7 +25,7 @@ Epoch:		3
 # WARNING
 # We've been on 3.31 before - it causes chromium to crash on startup
 # Please verify that this is fixed before updating.
-Version:	3.30.2
+Version:	3.32
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -164,7 +164,7 @@ export NSS_DISABLE_GTESTS=1
 # 1. mv /%{_lib}/libnssckbi.so /%{_lib}/libnssckbi.so.BAK
 # 2. mv /%{_lib}/libnssckbi_empty.so /%{_lib}/libnssckbi.so
 # 3. restart ff/tb
-# it has to be done manually for now, but at least we have a way for 
+# it has to be done manually for now, but at least we have a way for
 # users to quickly mitigate future problems, or whatever :-)
 
 pushd nss/lib/ckfw/builtins
@@ -241,7 +241,7 @@ pushd nss/lib/ckfw/builtins
 # So, for Mandriva we can add/remove certs easily in the rootcerts package. Please
 # checkout and examine the rootcerts package.
 # Once this has been done and the new rootcerts package has been installed this
-# package (nss) has to be rebuilt to pickup the changes made. The "recreate 
+# package (nss) has to be rebuilt to pickup the changes made. The "recreate
 # certificates" lines below generates a new certdata.c source containing the root
 # CA certs for mozilla.
 # *ALL* of the mozilla based softwares that support SSL has to link against
