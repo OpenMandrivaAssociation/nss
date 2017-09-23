@@ -9,7 +9,7 @@
 %define sdevname %mklibname -d -s %{name}
 %define _disable_lto 1
 
-%define	nspr_version 4.16
+%define	nspr_version 4.17
 
 # this seems fragile, so require the exact version or later (#58754)
 %define sqlite3_version %(pkg-config --modversion sqlite3 &>/dev/null && pkg-config --modversion sqlite3 2>/dev/null || echo 0)
@@ -25,7 +25,7 @@ Epoch:		3
 # WARNING
 # We've been on 3.31 before - it causes chromium to crash on startup
 # Please verify that this is fixed before updating.
-Version:	3.32
+Version:	3.33
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
