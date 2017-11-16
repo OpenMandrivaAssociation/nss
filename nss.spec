@@ -25,7 +25,7 @@ Epoch:		3
 # WARNING
 # We've been on 3.31 before - it causes chromium to crash on startup
 # Please verify that this is fixed before updating.
-Version:	3.33
+Version:	3.34
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -378,6 +378,7 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %attr(0755,root,root) %{_bindir}/atob
 %attr(0755,root,root) %{_bindir}/baddbdir
 %attr(0755,root,root) %{_bindir}/bltest
+%attr(0755,root,root) %{_bindir}/rsapoptst
 %attr(0755,root,root) %{_bindir}/btoa
 %attr(0755,root,root) %{_bindir}/certcgi
 %attr(0755,root,root) %{_bindir}/certutil
