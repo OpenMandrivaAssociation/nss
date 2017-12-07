@@ -1,8 +1,8 @@
-%bcond_without  lib
-%bcond_with	cross_compiling
+%bcond_without lib
+%bcond_with cross_compiling
 %define url_ver	%(echo %{version}| sed -e "s|\\.|_|g")
 
-%define major	3
+%define major 3
 %define libname	%mklibname %{name} %{major}
 %define libfreebl %mklibname freebl %{major}
 %define devname	%mklibname -d %{name}
@@ -21,7 +21,7 @@
 
 Summary:	Netscape Security Services
 Name:		nss
-Epoch:		3
+Epoch:		4
 # WARNING
 # We've been on 3.31 before - it causes chromium to crash on startup
 # Please verify that this is fixed before updating.
@@ -80,7 +80,7 @@ Conflicts:	%{name} < 2:3.13.1-2
 This package contains the binary shlibsign needed by libfreebl3
 and libsoftokn3.
 
-%if %with lib
+%if %{with lib}
 %package -n %{libname}
 Summary:	Network Security Services (NSS)
 Group:		System/Libraries
@@ -92,8 +92,8 @@ libnssutil3, libsmime3, and libssl3.
 %package -n %{libfreebl}
 Summary:	Network Security Services (NSS)
 Group:		System/Libraries
-Requires(posttrans): nss-shlibsign
-Requires(posttrans): rpm-helper
+Requires(post): rpm-helper
+Requires(post): nss-shlibsign
 Conflicts: %{_lib}nss3 < 2:3.13.1-5
 
 %description -n %{libfreebl}
@@ -261,7 +261,7 @@ pushd dist/$(uname -s)*
 mkdir -p %{buildroot}%{_bindir}
 cp -aL bin/* %{buildroot}%{_bindir}
 
-%if %with lib
+%if %{with lib}
 mkdir -p %{buildroot}%{_libdir}
 mkdir -p %{buildroot}/%{_lib}
 mkdir -p %{buildroot}%{_includedir}/nss
@@ -305,7 +305,7 @@ cat %{SOURCE2} | sed -e "s,%%libdir%%,%{_libdir},g" \
 
 popd
 
-%if %with lib
+%if %{with lib}
 export NSS_VMAJOR=`%{__cat} nss/lib/nss/nss.h | %{__grep} "#define.*NSS_VMAJOR" | %{__awk} '{print $3}'`
 export NSS_VMINOR=`%{__cat} nss/lib/nss/nss.h | %{__grep} "#define.*NSS_VMINOR" | %{__awk} '{print $3}'`
 export NSS_VPATCH=`echo %{version} | sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
@@ -364,12 +364,14 @@ install -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/pki/nssdb/secmod.db
 install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %endif
 
-%if %with lib
-%posttrans -n %{libfreebl}
+%if %{with lib}
+%post -n %{libfreebl}
 %create_ghostfile /%{_lib}/libsoftokn%{major}.chk root root 644
 %create_ghostfile /%{_lib}/libfreebl%{major}.chk root root 644
+%create_ghostfile /%{_lib}/libfreeblpriv%{major}.chk root root 644
 %{_bindir}/shlibsign -i /%{_lib}/libsoftokn%{major}.so >/dev/null 2>/dev/null
 %{_bindir}/shlibsign -i /%{_lib}/libfreebl%{major}.so >/dev/null 2>/dev/null
+%{_bindir}/shlibsign -i /%{_lib}/libfreeblpriv%{major}.so >/dev/null 2>/dev/null
 %endif
 
 %files
@@ -448,6 +450,7 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %defattr(0644,root,root,0755)
 %ghost /%{_lib}/libfreebl%{major}.chk
 %ghost /%{_lib}/libsoftokn%{major}.chk
+%ghost /%{_lib}/libfreeblpriv%{major}.chk
 
 %files -n %{libname}
 /%{_lib}/libnss%{major}.so
