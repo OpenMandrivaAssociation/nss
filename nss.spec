@@ -64,7 +64,7 @@ applications. Applications built with NSS can support SSL v2 and v3,
 TLS, PKCS #5, PKCS #7, PKCS #11, PKCS #12, S/MIME, X.509 v3 certificates, and
 other security standards. For detailed information on standards supported, see
 http://www.mozilla.org/projects/security/pki/nss/overview.html.
-%if %without lib
+%if %{without lib}
 
 Note: This package currently contains the NSS binaries only. The
 libraries have been not been included due to conflicts with the Mozilla
@@ -74,6 +74,9 @@ libraries.
 %package shlibsign
 Summary:	Netscape Security Services - shlibsign
 Group:		System/Libraries
+%if %{with lib}
+Requires:	%{libname}
+%endif
 Conflicts:	%{name} < 2:3.13.1-2
 
 %description shlibsign
