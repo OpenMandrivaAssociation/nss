@@ -26,7 +26,7 @@ Epoch:		4
 # We've been on 3.31 before - it causes chromium to crash on startup
 # Please verify that this is fixed before updating.
 Version:	3.34.1
-Release:	2
+Release:	3
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -95,7 +95,6 @@ libnssutil3, libsmime3, and libssl3.
 %package -n %{libfreebl}
 Summary:	Network Security Services (NSS)
 Group:		System/Libraries
-Requires(post): rpm-helper
 Requires(post): nss-shlibsign
 Conflicts: %{_lib}nss3 < 2:3.13.1-5
 
