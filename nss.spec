@@ -26,7 +26,7 @@ Epoch:		4
 # We've been on 3.31 before - it causes chromium to crash on startup
 # Please verify that this is fixed before updating.
 Version:	3.34.1
-Release:	3
+Release:	2
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -367,6 +367,7 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %endif
 
 %if %{with lib}
+%post -n %{libname} -p <lua>
 -- (tpg) execute only on install
 if arg[2] == "0" then
 -- make sure it meets %{major} from spec file
