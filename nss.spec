@@ -26,7 +26,7 @@ Epoch:		4
 # We've been on 3.31 before - it causes chromium to crash on startup
 # Please verify that this is fixed before updating.
 Version:	3.34.1
-Release:	1
+Release:	2
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -368,13 +368,31 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %endif
 
 %if %{with lib}
-%post -n %{libfreebl}
-%create_ghostfile /%{_lib}/libsoftokn%{major}.chk root root 644
-%create_ghostfile /%{_lib}/libfreebl%{major}.chk root root 644
-%create_ghostfile /%{_lib}/libfreeblpriv%{major}.chk root root 644
-%{_bindir}/shlibsign -i /%{_lib}/libsoftokn%{major}.so >/dev/null 2>/dev/null
-%{_bindir}/shlibsign -i /%{_lib}/libfreebl%{major}.so >/dev/null 2>/dev/null
-%{_bindir}/shlibsign -i /%{_lib}/libfreeblpriv%{major}.so >/dev/null 2>/dev/null
+-- (tpg) execute only on install
+if arg[2] == "0" then
+-- make sure it meets %{major} from spec file
+	local major = "3"
+	local f1 = "libsoftokn" .. major .. ".chk"
+	local f2 = "libfreebl .. major .. ".chk"
+	local f3 = "libfreeblpriv .. major .. ".chk"
+	
+-- check if we are 64bit
+	libcheck = posix.stat("/lib64")
+	if libcheck then
+		local libpath = "/lib64"
+	else
+		local libpath = "/lib"
+	end
+
+	for file in f1 f2 f3 do
+		local f = io.open(libpath .. "/" .. file, "w")
+		f:write("")
+		f:close()
+		posix.chown(libpath .. "/" .. file, "root", "root")
+		posix.chmod(libpath .. "/" .. file, "0644")
+		posix.exec(shlibsign, "-i", libpath .. "/" .. file)
+	end
+end
 %endif
 
 %files
