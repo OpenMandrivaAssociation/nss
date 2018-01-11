@@ -373,8 +373,8 @@ if arg[2] == "0" then
 -- make sure it meets %{major} from spec file
 	local major = "3"
 	local f1 = "libsoftokn" .. major .. ".chk"
-	local f2 = "libfreebl .. major .. ".chk"
-	local f3 = "libfreeblpriv .. major .. ".chk"
+	local f2 = "libfreebl" .. major .. ".chk"
+	local f3 = "libfreeblpriv" .. major .. ".chk"
 	
 -- check if we are 64bit
 	libcheck = posix.stat("/lib64")
