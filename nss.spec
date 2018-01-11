@@ -371,17 +371,17 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 -- (tpg) execute only on install
 if arg[2] == "0" then
 -- make sure it meets %{major} from spec file
-	local major = "3"
-	local f1 = "libsoftokn" .. major .. ".chk"
-	local f2 = "libfreebl" .. major .. ".chk"
-	local f3 = "libfreeblpriv" .. major .. ".chk"
+	major = 3
+	f1 = "libsoftokn" .. major .. ".chk"
+	f2 = "libfreebl" .. major .. ".chk"
+	f3 = "libfreeblpriv" .. major .. ".chk"
 	
 -- check if we are 64bit
 	libcheck = posix.stat("/lib64")
 	if libcheck then
-		local libpath = "/lib64"
+		libpath = "/lib64"
 	else
-		local libpath = "/lib"
+		libpath = "/lib"
 	end
 
 	for file in f1, f2, f3 do
