@@ -26,7 +26,7 @@ Epoch:		4
 # We've been on 3.31 before - it causes chromium to crash on startup
 # Please verify that this is fixed before updating.
 Version:	3.34.1
-Release:	2
+Release:	3
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -370,11 +370,12 @@ install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
 %post -n %{libname} -p <lua>
 -- (tpg) execute only on install
 if arg[2] == "0" then
+-- variable definitions
 -- make sure it meets %{major} from spec file
-	major = 3
-	f1 = "libsoftokn" .. major .. ".chk"
-	f2 = "libfreebl" .. major .. ".chk"
-	f3 = "libfreeblpriv" .. major .. ".chk"
+local major = 3
+local f1 = "libsoftokn" .. major .. ".chk"
+local f2 = "libfreebl" .. major .. ".chk"
+local f3 = "libfreeblpriv" .. major .. ".chk"
 	
 -- check if we are 64bit
 	libcheck = posix.stat("/lib64")
@@ -383,8 +384,12 @@ if arg[2] == "0" then
 	else
 		libpath = "/lib"
 	end
-
-	for file in f1, f2, f3 do
+	
+ -- list of files to iterate
+	files = { f1, f2, f3 }
+  
+ -- iterate through all the files
+	for file in list_iter(files) do
 		local f = io.open(libpath .. "/" .. file, "w")
 		f:write("")
 		f:close()
