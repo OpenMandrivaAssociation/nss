@@ -384,7 +384,7 @@ if arg[2] == "0" then
 		local libpath = "/lib"
 	end
 
-	for file in f1, f2, f3, do
+	for file in f1, f2, f3 do
 		local f = io.open(libpath .. "/" .. file, "w")
 		f:write("")
 		f:close()
