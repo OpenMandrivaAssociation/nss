@@ -25,8 +25,8 @@ Epoch:		4
 # WARNING
 # We've been on 3.31 before - it causes chromium to crash on startup
 # Please verify that this is fixed before updating.
-Version:	3.34.1
-Release:	3
+Version:	3.35
+Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
