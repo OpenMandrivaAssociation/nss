@@ -1,11 +1,12 @@
---- nss/nss/lib/ssl/sslsock.c.orig	2016-08-02 23:23:21.289292632 +0100
-+++ nss/nss/lib/ssl/sslsock.c	2016-08-02 23:23:26.457159609 +0100
-@@ -72,7 +72,7 @@
-     PR_FALSE,              /* noLocks            */
-     PR_FALSE,              /* enableSessionTickets */
-     PR_FALSE,              /* enableDeflate      */
--    2,                     /* enableRenegotiation (default: requires extension) */
-+    3,                     /* enableRenegotiation (default: requires extension) */
-     PR_FALSE,              /* requireSafeNegotiation */
-     PR_FALSE,              /* enableFalseStart   */
-     PR_TRUE,               /* cbcRandomIV        */
+diff -up nss/lib/ssl/sslsock.c.transitional nss/lib/ssl/sslsock.c
+--- nss/lib/ssl/sslsock.c.transitional	2018-03-09 13:57:50.615706802 +0100
++++ nss/lib/ssl/sslsock.c	2018-03-09 13:58:23.708974970 +0100
+@@ -67,7 +67,7 @@ static sslOptions ssl_defaults = {
+     .noLocks = PR_FALSE,
+     .enableSessionTickets = PR_FALSE,
+     .enableDeflate = PR_FALSE,
+-    .enableRenegotiation = SSL_RENEGOTIATE_REQUIRES_XTN,
++    .enableRenegotiation = SSL_RENEGOTIATE_TRANSITIONAL,
+     .requireSafeNegotiation = PR_FALSE,
+     .enableFalseStart = PR_FALSE,
+     .cbcRandomIV = PR_TRUE,

@@ -22,10 +22,7 @@
 Summary:	Netscape Security Services
 Name:		nss
 Epoch:		4
-# WARNING
-# We've been on 3.31 before - it causes chromium to crash on startup
-# Please verify that this is fixed before updating.
-Version:	3.35
+Version:	3.36
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -46,10 +43,17 @@ Source8:	verisign-class-3-secure-server-ca.der
 # Brasilian government certificate
 # verified in person with a government official
 Source9:	http://www.icpbrasil.gov.br/certificadoACRaiz.crt
-Patch0:		nss-no-rpath.patch
-Patch2:		renegotiate-transitional.patch
-# (tpg) be carefull with last nspr4-4.10 because prtypes.h was moved to include/nspr4/
-Patch4:		nss-3.15.1-correct-path-to-prtypes.h.patch
+# From Fedora
+Patch0:		https://src.fedoraproject.org/rpms/nss/raw/master/f/add-relro-linker-option.patch
+Patch1:		https://src.fedoraproject.org/rpms/nss/raw/master/f/renegotiate-transitional.patch
+Patch2:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-539183.patch
+Patch3:		https://src.fedoraproject.org/rpms/nss/raw/master/f/utilwrap-include-templates.patch
+Patch4:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-skip-bltest-and-fipstest.patch
+Patch5:		https://src.fedoraproject.org/rpms/nss/raw/master/f/iquote.patch
+Patch6:		https://src.fedoraproject.org/rpms/nss/raw/master/f/rhbz1185708-enable-ecc-3des-ciphers-by-default.patch
+Patch7:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-check-policy-file.patch
+Patch8:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-skip-util-gtest.patch
+# Our own
 
 BuildRequires:	rootcerts >= 1:20120218.00
 BuildRequires:	zip
@@ -126,8 +130,7 @@ Static libraries for doing development with Network Security Services.
 %endif
 
 %prep
-%setup -q
-%apply_patches
+%autosetup -p0
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
@@ -336,10 +339,6 @@ mkdir -p docs/bltest
 cp -a nss/cmd/bltest/tests/* docs/bltest/
 chmod -R a+r docs
 
-mkdir -p docs/certcgi
-cp -a nss/cmd/certcgi/*.html docs/certcgi/
-cp -a nss/cmd/certcgi/HOWTO.txt docs/certcgi/
-
 mkdir -p docs/modutil
 cp -a nss/cmd/modutil/*.html docs/modutil/
 
@@ -407,7 +406,6 @@ end
 %attr(0755,root,root) %{_bindir}/baddbdir
 %attr(0755,root,root) %{_bindir}/bltest
 %attr(0755,root,root) %{_bindir}/btoa
-%attr(0755,root,root) %{_bindir}/certcgi
 %attr(0755,root,root) %{_bindir}/certutil
 %attr(0755,root,root) %{_bindir}/chktest
 %attr(0755,root,root) %{_bindir}/cmsutil
