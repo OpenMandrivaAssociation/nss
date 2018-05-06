@@ -1,15 +1,19 @@
 %bcond_without lib
 %bcond_with cross_compiling
-%define url_ver	%(echo %{version}| sed -e "s|\\.|_|g")
+%define url_ver %(echo %{version}| sed -e "s|\\.|_|g")
 
+# (tpg) WARNING !!!
+# When you bump major, please make sure you bump "local major = 3" in %post section for lua script
 %define major 3
-%define libname	%mklibname %{name} %{major}
+%define libname %mklibname %{name} %{major}
 %define libfreebl %mklibname freebl %{major}
-%define devname	%mklibname -d %{name}
+%define devname %mklibname -d %{name}
 %define sdevname %mklibname -d -s %{name}
 %define _disable_lto 1
 
-%define	nspr_version 4.17
+%global optflags %{optflags} -Ofast
+
+%define nspr_version 4.17
 
 # this seems fragile, so require the exact version or later (#58754)
 %define sqlite3_version %(pkg-config --modversion sqlite3 &>/dev/null && pkg-config --modversion sqlite3 2>/dev/null || echo 0)
@@ -23,7 +27,7 @@ Summary:	Netscape Security Services
 Name:		nss
 Epoch:		4
 Version:	3.36.1
-Release:	1
+Release:	2
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -159,6 +163,9 @@ export NSPR_LIB_DIR=`%{_bindir}/pkg-config --libs-only-L nspr | sed 's/-L//'`
 export MOZILLA_CLIENT=1
 export NSS_USE_SYSTEM_SQLITE=1
 export NSS_ENABLE_ECC=1
+export MAKE_FLAGS="BUILD_OPT=1 NSS_ENABLE_ECC=1"
+export NSS_ENABLE_TLS_1_3=1
+export FREEBL_NO_DEPEND=1
 
 # external tests are causing build problems because they access ssl internal types
 # TODO: Investigate as there may be a better solution
@@ -228,7 +235,7 @@ cp -p nss/lib/ckfw/builtins/Linux*/libnssckbi.so libnssckbi_empty.so
 # http://qa.mandriva.com/show_bug.cgi?id=29612
 # use built addbuildin command to avoid having
 # a buildrequires for nss
-ADDBUILTIN=`%{_bindir}/find . -type f -name addbuiltin`
+ADDBUILTIN=$(%{_bindir}/find . -type f -name addbuiltin)
 if [ -z "$ADDBUILTIN" ]; then
     exit 1
 fi
@@ -277,7 +284,7 @@ cp -aL lib/libcrmf.a \
             lib/libnssb.a \
             lib/libnssckbi.so \
             lib/libnssckfw.a \
-	    lib/libnssutil.a \
+            lib/libnssutil.a \
             lib/libsmime.a \
             lib/libssl.a \
             %{buildroot}%{_libdir}
@@ -386,7 +393,7 @@ local f3 = "libfreeblpriv" .. major .. ".chk"
 	
  -- list of files to iterate
 	files = { f1, f2, f3 }
-  
+
  -- iterate through all the files
 	for file in list_iter(files) do
 		local f = io.open(libpath .. "/" .. file, "w")
