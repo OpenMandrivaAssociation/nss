@@ -165,7 +165,6 @@ export NSS_USE_SYSTEM_SQLITE=1
 export NSS_ENABLE_ECC=1
 export MAKE_FLAGS="BUILD_OPT=1 NSS_ENABLE_ECC=1"
 export NSS_ENABLE_TLS_1_3=1
-export FREEBL_NO_DEPEND=1
 
 # external tests are causing build problems because they access ssl internal types
 # TODO: Investigate as there may be a better solution
