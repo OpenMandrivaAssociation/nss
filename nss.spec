@@ -134,7 +134,15 @@ Static libraries for doing development with Network Security Services.
 %endif
 
 %prep
-%autosetup -p0
+%setup -q
+%patch1 -p0
+%patch2 -p0
+%patch3 -p0
+%patch4 -p0
+%patch5 -p0
+%patch6 -p0
+%patch7 -p0
+%patch8 -p0
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
