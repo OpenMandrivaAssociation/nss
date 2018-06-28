@@ -85,7 +85,6 @@ Group:		System/Libraries
 %if %{with lib}
 Requires:	%{libname}
 %endif
-Conflicts:	%{name} < 2:3.13.1-2
 
 %description shlibsign
 This package contains the binary shlibsign needed by libfreebl3
@@ -104,7 +103,6 @@ libnssutil3, libsmime3, and libssl3.
 Summary:	Network Security Services (NSS)
 Group:		System/Libraries
 Requires(post): nss-shlibsign
-Conflicts: %{_lib}nss3 < 2:3.13.1-5
 
 %description -n %{libfreebl}
 This package contains the shared libraries libfreebl3 and libsoftokn3.
