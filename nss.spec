@@ -25,8 +25,8 @@
 
 Summary:	Netscape Security Services
 Name:		nss
-Epoch:		4
-Version:	3.37.3
+Epoch:		1
+Version:	3.38
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
