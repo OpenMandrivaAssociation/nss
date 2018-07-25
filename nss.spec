@@ -27,7 +27,7 @@ Summary:	Netscape Security Services
 Name:		nss
 Epoch:		1
 Version:	3.38
-Release:	2
+Release:	3
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -207,7 +207,7 @@ export NATIVE_CC=%{_bindir}/clang
 export TARGETCC="%{__cc}"
 export TARGETCCC="%{__cxx}"
 export TARGETRANLIB="%{__ranlib}"
-%ifarch x86_64 ppc64 ia64 s390x aarch64
+%ifarch %{x86_64} ppc64 ia64 s390x %{aarch64}
 export USE_64=1
 %else
 unset USE_64 || :
