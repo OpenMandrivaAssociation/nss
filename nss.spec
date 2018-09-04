@@ -25,8 +25,8 @@
 
 Summary:	Netscape Security Services
 Name:		nss
-Epoch:		1
-Version:	3.38
+Epoch:		4
+Version:	3.39
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -55,7 +55,6 @@ Patch3:		https://src.fedoraproject.org/rpms/nss/raw/master/f/utilwrap-include-te
 Patch4:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-skip-bltest-and-fipstest.patch
 Patch5:		https://src.fedoraproject.org/rpms/nss/raw/master/f/iquote.patch
 Patch6:		https://src.fedoraproject.org/rpms/nss/raw/master/f/rhbz1185708-enable-ecc-3des-ciphers-by-default.patch
-Patch7:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-check-policy-file.patch
 Patch8:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-skip-util-gtest.patch
 # Our own
 
@@ -141,7 +140,6 @@ Static libraries for doing development with Network Security Services.
 %patch4 -p0
 %patch5 -p0
 %patch6 -p0
-%patch7 -p0
 %patch8 -p0
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
@@ -442,6 +440,7 @@ end
 %attr(0755,root,root) %{_bindir}/modutil
 %attr(0755,root,root) %{_bindir}/multinit
 %attr(0755,root,root) %{_bindir}/nonspr10
+%attr(0755,root,root) %{_bindir}/nss-policy-check
 %attr(0755,root,root) %{_bindir}/ocspclnt
 %attr(0755,root,root) %{_bindir}/ocspresp
 %attr(0755,root,root) %{_bindir}/oidcalc
