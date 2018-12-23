@@ -23,30 +23,41 @@
 %{?_with_empty:   %{expand: %%global build_empty 1}}
 %{?_without_empty:   %{expand: %%global build_empty 0}}
 
-Summary:	Netscape Security Services
+Summary:	Network Security Services
 Name:		nss
 Epoch:		1
-Version:	3.40.1
+Version:	3.41
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
 Source0:	http://ftp.mozilla.org/pub/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz
-#Source1:	http://ftp.mozilla.org/pub/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz.asc
-Source2:	nss.pc.in
-Source3:	nss-config.in
-Source4:	blank-cert8.db
-Source5:	blank-key3.db
-Source6:	blank-secmod.db
-Source7:	certdata_empty.txt
+# pkgconfig file templates and other extras from Fedora
+Source1:	https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-util.pc.in
+Source2:	https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-util-config.in
+Source3:	https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-softokn.pc.in
+Source4:	https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-softokn-config.in
+Source6:	https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-softokn-dracut-module-setup.sh
+Source7:	https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-softokn-dracut.conf
+Source8:	https://src.fedoraproject.org/rpms/nss/raw/master/f/nss.pc.in
+Source9:	https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-config.in
+Source10:	blank-cert8.db
+Source11:	blank-key3.db
+Source12:	blank-secmod.db
+Source15:	https://src.fedoraproject.org/rpms/nss/raw/master/f/system-pkcs11.txt
+Source16:	https://src.fedoraproject.org/rpms/nss/raw/master/f/setup-nsssysinit.sh
+Source20:	https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-config.xml
+Source21:	https://src.fedoraproject.org/rpms/nss/raw/master/f/setup-nsssysinit.xml
+Source22:	https://src.fedoraproject.org/rpms/nss/raw/master/f/pkcs11.txt.xml
+Source28:	https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-p11-kit.config
 # https://www.verisign.com/support/verisign-intermediate-ca/secure-site-intermediate/index.html
 # converted from PEM to DER format with openssl command:
 # openssl x509 -in cert.pem -inform PEM -outform DER -out cert.der
 # this way we can avoid a buildrequires for openssl
-Source8:	verisign-class-3-secure-server-ca.der
+Source100:	verisign-class-3-secure-server-ca.der
 # Brasilian government certificate
 # verified in person with a government official
-Source9:	http://www.icpbrasil.gov.br/certificadoACRaiz.crt
+Source101:	http://www.icpbrasil.gov.br/certificadoACRaiz.crt
 # From Fedora
 Patch0:		https://src.fedoraproject.org/rpms/nss/raw/master/f/add-relro-linker-option.patch
 Patch1:		https://src.fedoraproject.org/rpms/nss/raw/master/f/renegotiate-transitional.patch
@@ -79,7 +90,7 @@ libraries.
 %endif
 
 %package shlibsign
-Summary:	Netscape Security Services - shlibsign
+Summary:	Network Security Services - shlibsign
 Group:		System/Libraries
 %if %{with lib}
 Requires:	%{libname}
@@ -176,7 +187,7 @@ export NSS_DISABLE_GTESTS=1
 # users to quickly mitigate future problems, or whatever :-)
 
 pushd nss/lib/ckfw/builtins
-perl ./certdata.perl %{SOURCE7}
+perl ./certdata.perl %{SOURCE102}
 popd
 %endif
 
@@ -302,13 +313,31 @@ do
 done
 
 mkdir -p %{buildroot}%{_libdir}/pkgconfig
-cat %{SOURCE2} | sed -e "s,%%libdir%%,%{_libdir},g" \
+cat %{SOURCE1} | sed -e "s,%%libdir%%,%{_libdir},g" \
                           -e "s,%%prefix%%,%{_prefix},g" \
                           -e "s,%%exec_prefix%%,%{_prefix},g" \
-                          -e "s,%%includedir%%,%{_includedir}/nss,g" \
+                          -e "s,%%includedir%%,%{_includedir}/nss3,g" \
                           -e "s,%%NSPR_VERSION%%,%{nspr_version},g" \
-                          -e "s,%%NSS_VERSION%%,%{version},g" > \
+                          -e "s,%%NSSUTIL_VERSION%%,%{version},g" > \
+                          %{buildroot}%{_libdir}/pkgconfig/nss-util.pc
+cat %{SOURCE3} | sed -e "s,%%libdir%%,%{_libdir},g" \
+                          -e "s,%%prefix%%,%{_prefix},g" \
+                          -e "s,%%exec_prefix%%,%{_prefix},g" \
+                          -e "s,%%includedir%%,%{_includedir}/nss3,g" \
+                          -e "s,%%NSPR_VERSION%%,%{nspr_version},g" \
+                          -e "s,%%NSSUTIL_VERSION%%,%{nss_version},g" \
+                          -e "s,%%SOFTOKEN_VERSION%%,%{version},g" > \
+                          %{buildroot}%{_libdir}/pkgconfig/nss-softokn.pc
+cat %{SOURCE8} | sed -e "s,%%libdir%%,%{_libdir},g" \
+                          -e "s,%%prefix%%,%{_prefix},g" \
+                          -e "s,%%exec_prefix%%,%{_prefix},g" \
+                          -e "s,%%includedir%%,%{_includedir}/nss3,g" \
+                          -e "s,%%NSS_VERSION%%,%{version},g" \
+                          -e "s,%%NSPR_VERSION%%,%{nspr_version},g" \
+                          -e "s,%%NSSUTIL_VERSION%%,%{nss_version},g" \
+                          -e "s,%%SOFTOKEN_VERSION%%,%{nss_version},g" > \
                           %{buildroot}%{_libdir}/pkgconfig/nss.pc
+
 %endif
 
 popd
@@ -357,9 +386,9 @@ cp -a nss/cmd/ssltap/*.html docs/ssltap/
 
 # Install the empty NSS db files
 mkdir -p %{buildroot}%{_sysconfdir}/pki/nssdb
-install -m 644 %{SOURCE4} %{buildroot}%{_sysconfdir}/pki/nssdb/cert8.db
-install -m 644 %{SOURCE5} %{buildroot}%{_sysconfdir}/pki/nssdb/key3.db
-install -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/pki/nssdb/secmod.db
+install -m 644 %{SOURCE10} %{buildroot}%{_sysconfdir}/pki/nssdb/cert8.db
+install -m 644 %{SOURCE11} %{buildroot}%{_sysconfdir}/pki/nssdb/key3.db
+install -m 644 %{SOURCE12} %{buildroot}%{_sysconfdir}/pki/nssdb/secmod.db
 
 %{_bindir}/find docs -type f | %{_bindir}/xargs -t perl -pi -e 's/\r$//g'
 
@@ -496,6 +525,8 @@ end
 %_libdir/*.so
 %{_includedir}/nss
 %{_libdir}/pkgconfig/nss.pc
+%{_libdir}/pkgconfig/nss-softokn.pc
+%{_libdir}/pkgconfig/nss-util.pc
 %{_libdir}/libsoftokn%{major}.chk
 %{_libdir}/libfreebl%{major}.chk
 
