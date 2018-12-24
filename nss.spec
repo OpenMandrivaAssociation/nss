@@ -27,7 +27,7 @@ Summary:	Network Security Services
 Name:		nss
 Epoch:		1
 Version:	3.41
-Release:	1
+Release:	2
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -348,7 +348,7 @@ export NSS_VMINOR=`%{__cat} nss/lib/nss/nss.h | %{__grep} "#define.*NSS_VMINOR" 
 export NSS_VPATCH=`echo %{version} | sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
 
 mkdir -p %{buildroot}%{_bindir}
-cat %{SOURCE3} | sed -e "s,@libdir@,%{_libdir},g" \
+cat %{SOURCE9} | sed -e "s,@libdir@,%{_libdir},g" \
                                -e "s,@prefix@,%{_prefix},g" \
                                -e "s,@exec_prefix@,%{_prefix},g" \
                                -e "s,@includedir@,%{_includedir}/nss%{major},g" \
