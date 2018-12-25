@@ -14,7 +14,6 @@
 %global optflags %{optflags} -Ofast
 
 %define nspr_version 4.17
-%define nss_version %{version}.0
 
 # this seems fragile, so require the exact version or later (#58754)
 %define sqlite3_version %(pkg-config --modversion sqlite3 &>/dev/null && pkg-config --modversion sqlite3 2>/dev/null || echo 0)
@@ -326,7 +325,7 @@ cat %{SOURCE3} | sed -e "s,%%libdir%%,%{_libdir},g" \
                           -e "s,%%exec_prefix%%,%{_prefix},g" \
                           -e "s,%%includedir%%,%{_includedir}/nss,g" \
                           -e "s,%%NSPR_VERSION%%,%{nspr_version},g" \
-                          -e "s,%%NSSUTIL_VERSION%%,%{nss_version},g" \
+                          -e "s,%%NSSUTIL_VERSION%%,%{version},g" \
                           -e "s,%%SOFTOKEN_VERSION%%,%{version},g" > \
                           %{buildroot}%{_libdir}/pkgconfig/nss-softokn.pc
 cat %{SOURCE8} | sed -e "s,%%libdir%%,%{_libdir},g" \
@@ -335,8 +334,8 @@ cat %{SOURCE8} | sed -e "s,%%libdir%%,%{_libdir},g" \
                           -e "s,%%includedir%%,%{_includedir}/nss,g" \
                           -e "s,%%NSS_VERSION%%,%{version},g" \
                           -e "s,%%NSPR_VERSION%%,%{nspr_version},g" \
-                          -e "s,%%NSSUTIL_VERSION%%,%{nss_version},g" \
-                          -e "s,%%SOFTOKEN_VERSION%%,%{nss_version},g" > \
+                          -e "s,%%NSSUTIL_VERSION%%,%{version},g" \
+                          -e "s,%%SOFTOKEN_VERSION%%,%{version},g" > \
                           %{buildroot}%{_libdir}/pkgconfig/nss.pc
 
 %endif
