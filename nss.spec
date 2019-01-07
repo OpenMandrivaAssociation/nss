@@ -229,9 +229,9 @@ unset USE_64 || :
 #%else
 #buildflags="TARGETCC='$TARGETCC' TARGETCCC='$TARGETCCC' TARGETRANLIB='$TARGETRANLIB' AR='%__ar"
 #%endif
-%make -j1 -C ./nss/coreconf
-%make -j1 -C ./nss/lib/dbm
-%make -j1 -C ./nss
+%make_build -j1 -C ./nss/coreconf
+%make_build -j1 -C ./nss/lib/dbm
+%make_build -j1 -C ./nss
 
 %if %{build_empty}
 # tuck away the empty libnssckbi.so library
@@ -269,7 +269,7 @@ pushd nss/lib/ckfw/builtins
 perl ./certdata.perl /etc/pki/tls/mozilla/certdata.txt
 
 %make clean
-%make
+%make_build
 
 popd
 export LD_LIBRARY_PATH="$OLD"
