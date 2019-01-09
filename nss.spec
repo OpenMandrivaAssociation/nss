@@ -11,7 +11,7 @@
 %define sdevname %mklibname -d -s %{name}
 %define _disable_lto 1
 
-%global optflags %{optflags} -Ofast
+%global optflags %{optflags} -O3
 
 %define nspr_version 4.17
 
