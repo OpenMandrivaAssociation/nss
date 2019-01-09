@@ -27,7 +27,7 @@ Summary:	Network Security Services
 Name:		nss
 Epoch:		1
 Version:	3.41
-Release:	3
+Release:	4
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -284,7 +284,6 @@ cp -aL bin/* %{buildroot}%{_bindir}
 mkdir -p %{buildroot}%{_libdir}
 mkdir -p %{buildroot}/%{_lib}
 mkdir -p %{buildroot}%{_includedir}/nss
-cp -aL ../public/nss/* %{buildroot}%{_includedir}/nss
 
 cp -aL lib/libcrmf.a \
             lib/libnss.a \
@@ -302,6 +301,20 @@ for file in libsoftokn3.so libfreebl3.so libfreeblpriv3.so libnss3.so libnssutil
 do
   install -m 755 lib/$file %{buildroot}/%{_lib}
   ln -sf ../../%{_lib}/$file %{buildroot}%{_libdir}/$file
+done
+
+# Copy the include files we want
+cp -aL ../public/nss/* %{buildroot}%{_includedir}/nss
+
+# Copy some freebl include files we also want
+for file in blapi.h alghmac.h; do
+	pwd
+	install -p -m 644 ../private/nss/$file $RPM_BUILD_ROOT/%{_includedir}/nss
+done
+
+# Copy the static freebl library
+for file in libfreebl.a; do
+	install -p -m 644 ../*.OBJ/lib/$file $RPM_BUILD_ROOT/%{_libdir}
 done
 
 # These ghost files will be generated in the post step
@@ -538,5 +551,6 @@ end
 %{_libdir}/libnssckfw.a
 %{_libdir}/libsmime.a
 %{_libdir}/libssl.a
+%{_libdir}/libfreebl.a
 %endif
 
