@@ -26,7 +26,7 @@
 Summary:	Netscape Security Services
 Name:		nss
 Epoch:		4
-Version:	3.40.1
+Version:	3.42
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -54,7 +54,6 @@ Patch2:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-539183.patch
 Patch3:		https://src.fedoraproject.org/rpms/nss/raw/master/f/utilwrap-include-templates.patch
 Patch4:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-skip-bltest-and-fipstest.patch
 Patch5:		https://src.fedoraproject.org/rpms/nss/raw/master/f/iquote.patch
-Patch6:		https://src.fedoraproject.org/rpms/nss/raw/master/f/rhbz1185708-enable-ecc-3des-ciphers-by-default.patch
 Patch8:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-skip-util-gtest.patch
 # Our own
 
@@ -139,7 +138,6 @@ Static libraries for doing development with Network Security Services.
 %patch3 -p0
 %patch4 -p0
 %patch5 -p0
-%patch6 -p0
 %patch8 -p0
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
