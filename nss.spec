@@ -26,8 +26,8 @@
 Summary:	Network Security Services
 Name:		nss
 Epoch:		1
-Version:	3.41
-Release:	4
+Version:	3.42
+Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -65,7 +65,6 @@ Patch2:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-539183.patch
 Patch3:		https://src.fedoraproject.org/rpms/nss/raw/master/f/utilwrap-include-templates.patch
 Patch4:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-skip-bltest-and-fipstest.patch
 Patch5:		https://src.fedoraproject.org/rpms/nss/raw/master/f/iquote.patch
-Patch6:		https://src.fedoraproject.org/rpms/nss/raw/master/f/rhbz1185708-enable-ecc-3des-ciphers-by-default.patch
 Patch8:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-skip-util-gtest.patch
 # Our own
 
