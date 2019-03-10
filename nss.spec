@@ -13,8 +13,6 @@
 
 %global optflags %{optflags} -O3
 
-%define nspr_version 4.17
-
 # this seems fragile, so require the exact version or later (#58754)
 %define sqlite3_version %(pkg-config --modversion sqlite3 &>/dev/null && pkg-config --modversion sqlite3 2>/dev/null || echo 0)
 %define nspr_version %(pkg-config --modversion nspr &>/dev/null && pkg-config --modversion nspr 2>/dev/null || echo 0)
@@ -208,7 +206,7 @@ export NATIVE_CC=%{_bindir}/clang
 export TARGETCC="%{__cc}"
 export TARGETCCC="%{__cxx}"
 export TARGETRANLIB="%{__ranlib}"
-%ifarch %{x86_64} ppc64 ia64 s390x %{aarch64}
+%ifarch %{x86_64} ppc64 ia64 s390x %{aarch64} riscv64
 export USE_64=1
 %else
 unset USE_64 || :
