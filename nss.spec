@@ -202,7 +202,7 @@ popd
 	export CPU_ARCH
 %endif
 
-export NATIVE_CC=%{_bindir}/clang
+export NATIVE_CC=%{__cc}
 export TARGETCC="%{__cc}"
 export TARGETCCC="%{__cxx}"
 export TARGETRANLIB="%{__ranlib}"
