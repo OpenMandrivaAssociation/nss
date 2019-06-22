@@ -25,7 +25,7 @@ Summary:	Network Security Services
 Name:		nss
 Epoch:		1
 Version:	3.44
-Release:	1
+Release:	2
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -85,6 +85,16 @@ Note: This package currently contains the NSS binaries only. The
 libraries have been not been included due to conflicts with the Mozilla
 libraries.
 %endif
+
+%package examples
+Summary:	Network Security Services - Examples
+Group:		System/Libraries
+Requires:	%{name} = %{EVRD}
+Conflicts:	%{name} < 1:3.44-2
+
+%description examples
+This package contains the bltest, modutil, signtool, signver,
+and ssltap examples for ${name}.
 
 %package shlibsign
 Summary:	Network Security Services - shlibsign
@@ -442,7 +452,6 @@ end
 %endif
 
 %files
-%doc docs/*
 %attr(0755,root,root) %{_bindir}/addbuiltin
 %attr(0755,root,root) %{_bindir}/atob
 %attr(0755,root,root) %{_bindir}/baddbdir
@@ -506,6 +515,9 @@ end
 %config(noreplace) %{_sysconfdir}/pki/nssdb/cert8.db
 %config(noreplace) %{_sysconfdir}/pki/nssdb/key3.db
 %config(noreplace) %{_sysconfdir}/pki/nssdb/secmod.db
+
+%files examples
+%doc docs/%{name}/*
 
 %files shlibsign
 %attr(0755,root,root) %{_bindir}/shlibsign
