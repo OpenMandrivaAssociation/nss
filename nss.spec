@@ -86,6 +86,16 @@ libraries have been not been included due to conflicts with the Mozilla
 libraries.
 %endif
 
+%package unsupported-tools
+Summary:	Network Security Services - Examples
+Group:		System/Libraries
+Requires:	%{name} = %{EVRD}
+Conflicts:	%{name} < 1:3.44-2
+
+%description unsupported-tools
+This package contains additional unsupported tools
+for ${name}.
+
 %package examples
 Summary:	Network Security Services - Examples
 Group:		System/Libraries
@@ -455,69 +465,74 @@ end
 %endif
 
 %files
+%dir %{_sysconfdir}/pki/nssdb
+%config(noreplace) %{_sysconfdir}/pki/nssdb/cert8.db
+%config(noreplace) %{_sysconfdir}/pki/nssdb/key3.db
+%config(noreplace) %{_sysconfdir}/pki/nssdb/secmod.db
+#nss supported bins
+%attr(0755,root,root) %{_bindir}/certutil
+%attr(0755,root,root) %{_bindir}/cmsutil
+%attr(0755,root,root) %{_bindir}/crlutil
+%attr(0755,root,root) %{_bindir}/modutil
+%attr(0755,root,root) %{_bindir}/nss-policy-check
+%attr(0755,root,root) %{_bindir}/pk12util
+%attr(0755,root,root) %{_bindir}/signver
+%attr(0755,root,root) %{_bindir}/ssltap
+#debian-additional
 %attr(0755,root,root) %{_bindir}/addbuiltin
+%attr(0755,root,root) %{_bindir}/chktest
+%attr(0755,root,root) %{_bindir}/dbtest
+%attr(0755,root,root) %{_bindir}/derdump
+%attr(0755,root,root) %{_bindir}/httpserv
+%attr(0755,root,root) %{_bindir}/ocspclnt
+%attr(0755,root,root) %{_bindir}/p7content
+%attr(0755,root,root) %{_bindir}/p7env
+%attr(0755,root,root) %{_bindir}/p7sign
+%attr(0755,root,root) %{_bindir}/p7verify
+%attr(0755,root,root) %{_bindir}/pk1sign
+%attr(0755,root,root) %{_bindir}/pp
+%attr(0755,root,root) %{_bindir}/pwdecrypt
+%attr(0755,root,root) %{_bindir}/rsaperf
+%attr(0755,root,root) %{_bindir}/selfserv
+%attr(0755,root,root) %{_bindir}/signtool
+%attr(0755,root,root) %{_bindir}/strsclnt
+%attr(0755,root,root) %{_bindir}/symkeyutil
+%attr(0755,root,root) %{_bindir}/tstclnt
+%attr(0755,root,root) %{_bindir}/vfychain
+%attr(0755,root,root) %{_bindir}/vfyserv
+
+%files unsupported-tools
+#unsupported 
 %attr(0755,root,root) %{_bindir}/atob
 %attr(0755,root,root) %{_bindir}/baddbdir
 %attr(0755,root,root) %{_bindir}/bltest
 %attr(0755,root,root) %{_bindir}/btoa
-%attr(0755,root,root) %{_bindir}/certutil
-%attr(0755,root,root) %{_bindir}/chktest
-%attr(0755,root,root) %{_bindir}/cmsutil
 %attr(0755,root,root) %{_bindir}/conflict
-%attr(0755,root,root) %{_bindir}/crlutil
 %attr(0755,root,root) %{_bindir}/crmftest
-%attr(0755,root,root) %{_bindir}/dbtest
-%attr(0755,root,root) %{_bindir}/derdump
 %attr(0755,root,root) %{_bindir}/dertimetest
 %attr(0755,root,root) %{_bindir}/digest
 %attr(0755,root,root) %{_bindir}/ecperf
 %attr(0755,root,root) %{_bindir}/encodeinttest
 %attr(0755,root,root) %{_bindir}/fbectest
 %attr(0755,root,root) %{_bindir}/fipstest
-%attr(0755,root,root) %{_bindir}/httpserv
 %attr(0755,root,root) %{_bindir}/listsuites
 %attr(0755,root,root) %{_bindir}/lowhashtest
 %attr(0755,root,root) %{_bindir}/makepqg
 %attr(0755,root,root) %{_bindir}/mangle
-%attr(0755,root,root) %{_bindir}/modutil
 %attr(0755,root,root) %{_bindir}/multinit
 %attr(0755,root,root) %{_bindir}/nonspr10
-%attr(0755,root,root) %{_bindir}/nss-policy-check
-%attr(0755,root,root) %{_bindir}/ocspclnt
 %attr(0755,root,root) %{_bindir}/ocspresp
 %attr(0755,root,root) %{_bindir}/oidcalc
-%attr(0755,root,root) %{_bindir}/p7content
-%attr(0755,root,root) %{_bindir}/p7env
-%attr(0755,root,root) %{_bindir}/p7sign
-%attr(0755,root,root) %{_bindir}/p7verify
 %attr(0755,root,root) %{_bindir}/pk11ectest
 %attr(0755,root,root) %{_bindir}/pk11gcmtest
 %attr(0755,root,root) %{_bindir}/pk11importtest
 %attr(0755,root,root) %{_bindir}/pk11mode
-%attr(0755,root,root) %{_bindir}/pk12util
-%attr(0755,root,root) %{_bindir}/pk1sign
 %attr(0755,root,root) %{_bindir}/pkix-errcodes
-%attr(0755,root,root) %{_bindir}/pp
-%attr(0755,root,root) %{_bindir}/pwdecrypt
 %attr(0755,root,root) %{_bindir}/remtest
-%attr(0755,root,root) %{_bindir}/rsaperf
 %attr(0755,root,root) %{_bindir}/rsapoptst
 %attr(0755,root,root) %{_bindir}/sdrtest
 %attr(0755,root,root) %{_bindir}/secmodtest
-%attr(0755,root,root) %{_bindir}/selfserv
-%attr(0755,root,root) %{_bindir}/signtool
-%attr(0755,root,root) %{_bindir}/signver
 %attr(0755,root,root) %{_bindir}/smime
-%attr(0755,root,root) %{_bindir}/ssltap
-%attr(0755,root,root) %{_bindir}/strsclnt
-%attr(0755,root,root) %{_bindir}/symkeyutil
-%attr(0755,root,root) %{_bindir}/tstclnt
-%attr(0755,root,root) %{_bindir}/vfychain
-%attr(0755,root,root) %{_bindir}/vfyserv
-%dir %{_sysconfdir}/pki/nssdb
-%config(noreplace) %{_sysconfdir}/pki/nssdb/cert8.db
-%config(noreplace) %{_sysconfdir}/pki/nssdb/key3.db
-%config(noreplace) %{_sysconfdir}/pki/nssdb/secmod.db
 
 %files examples
 %{_datadir}/%{name}/*
