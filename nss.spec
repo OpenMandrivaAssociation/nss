@@ -383,7 +383,7 @@ install -m 0755 smime %{buildroot}%{_bindir}
 perl -pi -e 's|/usr/local/bin|%{_bindir}|g' %{buildroot}%{_bindir}/smime
 popd
 
-# add docs
+# add docs/examples
 mkdir -p docs/SSLsample
 #cp -a mozilla/security/nss/cmd/SSLsample/README docs/SSLsample/
 
@@ -403,6 +403,9 @@ cp -a nss/cmd/signver/examples/1/*.html docs/signver/
 
 mkdir -p docs/ssltap
 cp -a nss/cmd/ssltap/*.html docs/ssltap/
+
+install -d %{buildroot}%{_datadir}/%{name}/
+cp -pr docs/* %{buildroot}%{_datadir}/%{name}/
 
 # Install the empty NSS db files
 mkdir -p %{buildroot}%{_sysconfdir}/pki/nssdb
@@ -517,7 +520,7 @@ end
 %config(noreplace) %{_sysconfdir}/pki/nssdb/secmod.db
 
 %files examples
-%doc docs/%{name}/*
+%{_datadir}/%{name}/*
 
 %files shlibsign
 %attr(0755,root,root) %{_bindir}/shlibsign
