@@ -26,7 +26,7 @@
 Summary:	Netscape Security Services
 Name:		nss
 Epoch:		4
-Version:	3.42.1
+Version:	3.44.1
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -448,6 +448,7 @@ end
 %attr(0755,root,root) %{_bindir}/p7verify
 %attr(0755,root,root) %{_bindir}/pk11ectest
 %attr(0755,root,root) %{_bindir}/pk11gcmtest
+%attr(0755,root,root) %{_bindir}/pk11importtest
 %attr(0755,root,root) %{_bindir}/pk11mode
 %attr(0755,root,root) %{_bindir}/pk12util
 %attr(0755,root,root) %{_bindir}/pk1sign
