@@ -3,5 +3,5 @@ sources:
   blank-key3.db: 7f78b5bcecdb5005e7b803604b2ec9d1a9df2fb5
   blank-secmod.db: bd748cf6e1465a1bbe6e751b72ffc0076aff0b50
   certificadoACRaiz.crt: 8efdcabc93e61e925d4d1ded181a4320a467a139
-  nss-3.45.tar.gz: bfbb1b7b429c4dbe649ded90f73ec9dac6cd54b8
   verisign-class-3-secure-server-ca.der: 188590e94878478e33b6194e59fbbb28ff0888d5
+  nss-3.46.tar.gz: af1590286cf852702591e5db0ef1ba7b9c1e597c
