@@ -24,7 +24,7 @@
 Summary:	Network Security Services
 Name:		nss
 Epoch:		1
-Version:	3.46
+Version:	3.46.1
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -55,7 +55,7 @@ Source28:	https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-p11-kit.config
 Source100:	verisign-class-3-secure-server-ca.der
 # Brasilian government certificate
 # verified in person with a government official
-Source101:	http://www.icpbrasil.gov.br/certificadoACRaiz.crt
+Source101:	https://github.com/demoiselle/certificate/raw/master/impl/ca-icp-brasil/src/main/resources/trustedca/CertificadoACRaiz.crt
 # From Fedora
 Patch0:		https://src.fedoraproject.org/rpms/nss/raw/master/f/add-relro-linker-option.patch
 Patch1:		https://src.fedoraproject.org/rpms/nss/raw/master/f/renegotiate-transitional.patch
