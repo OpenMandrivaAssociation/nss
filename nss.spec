@@ -25,7 +25,7 @@ Summary:	Network Security Services
 Name:		nss
 Epoch:		1
 Version:	3.48
-Release:	1
+Release:	2
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -324,7 +324,7 @@ done
 cp -aL ../public/nss/* %{buildroot}%{_includedir}/nss
 
 # Copy some freebl include files we also want
-for file in blapi.h alghmac.h; do
+for file in blapi.h alghmac.h cmac.h; do
 	pwd
 	install -p -m 644 ../private/nss/$file $RPM_BUILD_ROOT/%{_includedir}/nss
 done
