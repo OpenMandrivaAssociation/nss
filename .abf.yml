@@ -1,7 +1,0 @@
-sources:
-  CertificadoACRaiz.crt: 8efdcabc93e61e925d4d1ded181a4320a467a139
-  blank-cert8.db: d272a7b58364862613d44261c5744f7a336bf177
-  blank-key3.db: 7f78b5bcecdb5005e7b803604b2ec9d1a9df2fb5
-  blank-secmod.db: bd748cf6e1465a1bbe6e751b72ffc0076aff0b50
-  nss-3.49.tar.gz: f25d673a8b19730837f073f3c1b776e74fdbf4a4
-  verisign-class-3-secure-server-ca.der: 188590e94878478e33b6194e59fbbb28ff0888d5
