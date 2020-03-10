@@ -25,7 +25,7 @@ Summary:	Network Security Services
 Name:		nss
 Epoch:		1
 Version:	3.51
-Release:	1
+Release:	2
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -169,6 +169,9 @@ find . -name '*.c' -executable -exec chmod -x {} \;
 
 # remove hardcoded gcc
 sed -i 's!gcc!%{__cc}!g' nss/coreconf/Linux.mk
+
+# make 100% sure we don't pull in the internal copy of sqlite
+rm nss/lib/sqlite/*.{c,h}
 
 %build
 %serverbuild
