@@ -25,7 +25,7 @@ Summary:	Network Security Services
 Name:		nss
 Epoch:		1
 Version:	3.54
-Release:	1
+Release:	2
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -121,6 +121,7 @@ and libsoftokn3.
 %package -n %{libname}
 Summary:	Network Security Services (NSS)
 Group:		System/Libraries
+Requires:	p11-kit-trust
 
 %description -n %{libname}
 This package contains the shared libraries libnss3, libnssdbm3,
@@ -335,6 +336,9 @@ for file in libfreebl.a; do
 	install -p -m 644 ../*.OBJ/lib/$file $RPM_BUILD_ROOT/%{_libdir}
 done
 
+
+ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_lib}/libnssckbi.so
+
 # These ghost files will be generated in the post step
 # Make sure chk files can be found in both places
 for file in libsoftokn3.chk libfreebl3.chk
@@ -465,6 +469,11 @@ local f3 = "libfreeblpriv" .. major .. ".chk"
 end
 %endif
 
+%pretrans -n %{libname}
+if [ -f %{_libdir}/libnssckbi.so -a ! -L %{_libdir}/libnssckbi.so ]; then
+  rm -f %{_libdir}/libnssckbi.so
+fi
+
 %files
 %dir %{_sysconfdir}/pki/nssdb
 %config(noreplace) %{_sysconfdir}/pki/nssdb/cert8.db
@@ -546,6 +555,8 @@ end
 /%{_lib}/libfreebl%{major}.so
 /%{_lib}/libfreeblpriv%{major}.so
 /%{_lib}/libsoftokn%{major}.so
+/%{_lib}/libnssckbi.so
+
 %defattr(0644,root,root,0755)
 %ghost /%{_lib}/libfreebl%{major}.chk
 %ghost /%{_lib}/libsoftokn%{major}.chk
