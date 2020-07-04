@@ -24,7 +24,7 @@
 Summary:	Network Security Services
 Name:		nss
 Epoch:		1
-Version:	3.52.1
+Version:	3.54
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -123,7 +123,7 @@ Summary:	Network Security Services (NSS)
 Group:		System/Libraries
 
 %description -n %{libname}
-This package contains the shared libraries libnss3, libnssckbi, libnssdbm3,
+This package contains the shared libraries libnss3, libnssdbm3,
 libnssutil3, libsmime3, and libssl3.
 
 %package -n %{libfreebl}
@@ -215,8 +215,8 @@ popd
 	# Compile tools used at build time (nsinstall) in native
 	# mode before setting up the environment for crosscompiling
 	export USE_64=1
-	make -j1 -C ./nss \
-		build_coreconf build_dbm all
+	make -j1 -C ./nss all 
+        make -j1 -C ./nss latest
 
 	CPU_ARCH="%_target_cpu"
 	if echo $CPU_ARCH |grep -qE '(i.86|pentium.|athlon)'; then
@@ -249,9 +249,8 @@ unset USE_64 || :
 #%else
 #buildflags="TARGETCC='$TARGETCC' TARGETCCC='$TARGETCCC' TARGETRANLIB='$TARGETRANLIB' AR='%__ar"
 #%endif
-%make_build -j1 -C ./nss/coreconf
-%make_build -j1 -C ./nss/lib/dbm
-%make_build -j1 -C ./nss
+%make_build -j1 -C ./nss all
+%make_build -j1 -C ./nss latest
 
 %if %{build_empty}
 # tuck away the empty libnssckbi.so library
@@ -308,7 +307,6 @@ mkdir -p %{buildroot}%{_includedir}/nss
 cp -aL lib/libcrmf.a \
             lib/libnss.a \
             lib/libnssb.a \
-            lib/libnssckbi.so \
             lib/libnssckfw.a \
             lib/libnssutil.a \
             lib/libsmime.a \
@@ -317,7 +315,7 @@ cp -aL lib/libcrmf.a \
 
 # Copy the binary libraries we want
 for file in libsoftokn3.so libfreebl3.so libfreeblpriv3.so libnss3.so libnssutil3.so \
-            libssl3.so libsmime3.so libnssckbi.so libnssdbm3.so
+            libssl3.so libsmime3.so libnssdbm3.so
 do
   install -m 755 lib/$file %{buildroot}/%{_lib}
   ln -sf ../../%{_lib}/$file %{buildroot}%{_libdir}/$file
@@ -555,7 +553,6 @@ end
 
 %files -n %{libname}
 /%{_lib}/libnss%{major}.so
-/%{_lib}/libnssckbi.so
 %if %{build_empty}
 /%{_lib}/libnssckbi_empty.so
 %endif
