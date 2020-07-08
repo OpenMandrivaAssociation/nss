@@ -25,7 +25,7 @@ Summary:	Network Security Services
 Name:		nss
 Epoch:		1
 Version:	3.54
-Release:	2
+Release:	3
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -469,11 +469,6 @@ local f3 = "libfreeblpriv" .. major .. ".chk"
 end
 %endif
 
-%pretrans -n %{libname}
-if [ -f %{_libdir}/libnssckbi.so -a ! -L %{_libdir}/libnssckbi.so ]; then
-  rm -f %{_libdir}/libnssckbi.so
-fi
-
 %files
 %dir %{_sysconfdir}/pki/nssdb
 %config(noreplace) %{_sysconfdir}/pki/nssdb/cert8.db
@@ -571,6 +566,7 @@ fi
 /%{_lib}/libnssdbm%{major}.so
 /%{_lib}/libsmime%{major}.so
 /%{_lib}/libssl%{major}.so
+/%{_lib}/p11-kit-trust.so
 
 %files -n %{devname}
 %attr(0755,root,root) %{_bindir}/nss-config
