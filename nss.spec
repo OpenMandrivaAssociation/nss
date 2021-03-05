@@ -176,7 +176,7 @@ rm nss/lib/sqlite/*.{c,h}
 
 %build
 %serverbuild
-%setup_compile_flags
+%set_build_flags
 export CC=%{__cc}
 export BUILD_OPT=1
 export OPTIMIZER="%{optflags}"
@@ -187,8 +187,8 @@ export USE_SYSTEM_ZLIB=1
 export ZLIB_LIBS="-lz"
 export PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
 export PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
-export NSPR_INCLUDE_DIR=`%{_bindir}/pkg-config --cflags-only-I nspr | sed 's/-I//'`
-export NSPR_LIB_DIR=`%{_bindir}/pkg-config --libs-only-L nspr | sed 's/-L//'`
+export NSPR_INCLUDE_DIR=$(%{_bindir}/pkg-config --cflags-only-I nspr | sed 's/-I//')
+export NSPR_LIB_DIR=$(%{_bindir}/pkg-config --libs-only-L nspr | sed 's/-L//')
 export MOZILLA_CLIENT=1
 export NSS_USE_SYSTEM_SQLITE=1
 export NSS_ENABLE_ECC=1
@@ -207,23 +207,23 @@ export NSS_DISABLE_GTESTS=1
 # it has to be done manually for now, but at least we have a way for
 # users to quickly mitigate future problems, or whatever :-)
 
-pushd nss/lib/ckfw/builtins
+cd nss/lib/ckfw/builtins
 perl ./certdata.perl %{SOURCE102}
-popd
+cd ..
 %endif
 
 %if %cross_compiling
-	# Compile tools used at build time (nsinstall) in native
-	# mode before setting up the environment for crosscompiling
-	export USE_64=1
-	make -j1 -C ./nss all 
-        make -j1 -C ./nss latest
+# Compile tools used at build time (nsinstall) in native
+# mode before setting up the environment for crosscompiling
+    export USE_64=1
+    make -j1 -C ./nss all
+    make -j1 -C ./nss latest
 
-	CPU_ARCH="%_target_cpu"
-	if echo $CPU_ARCH |grep -qE '(i.86|pentium.|athlon)'; then
-		CPU_ARCH=x86
-	fi
-	export CPU_ARCH
+    CPU_ARCH="%{_target_cpu}"
+    if echo $CPU_ARCH |grep -qE '(i.86|pentium.|athlon)'; then
+	CPU_ARCH=x86
+    fi
+    export CPU_ARCH
 %endif
 
 export NATIVE_CC=%{__cc}
@@ -268,7 +268,7 @@ if [ -z "$ADDBUILTIN" ]; then
 fi
 ADDBUILTIN="$PWD/$ADDBUILTIN"
 OLD="$LD_LIBRARY_PATH"
-libpath=`%{_bindir}/find ./dist/ -name "Linux*.*" -type d`
+libpath=$(%{_bindir}/find ./dist/ -name "Linux*.*" -type d)
 # to use the built libraries instead of requiring nss
 # again as buildrequires
 export LD_LIBRARY_PATH="$PWD/$libpath/lib"
@@ -378,9 +378,9 @@ cat %{SOURCE8} | sed -e "s,%%libdir%%,%{_libdir},g" \
 popd
 
 %if %{with lib}
-export NSS_VMAJOR=`%{__cat} nss/lib/nss/nss.h | %{__grep} "#define.*NSS_VMAJOR" | %{__awk} '{print $3}'`
-export NSS_VMINOR=`%{__cat} nss/lib/nss/nss.h | %{__grep} "#define.*NSS_VMINOR" | %{__awk} '{print $3}'`
-export NSS_VPATCH=`echo %{version} | sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
+export NSS_VMAJOR=$(%{__cat} nss/lib/nss/nss.h | %{__grep} "#define.*NSS_VMAJOR" | %{__awk} '{print $3}')
+export NSS_VMINOR=$(%{__cat} nss/lib/nss/nss.h | %{__grep} "#define.*NSS_VMINOR" | %{__awk} '{print $3}')
+export NSS_VPATCH=$(echo %{version} | sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/')
 
 mkdir -p %{buildroot}%{_bindir}
 cat %{SOURCE9} | sed -e "s,@libdir@,%{_libdir},g" \
