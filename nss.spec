@@ -24,7 +24,7 @@
 Summary:	Network Security Services
 Name:		nss
 Epoch:		1
-Version:	3.68
+Version:	3.69
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -536,6 +536,7 @@ end
 %attr(0755,root,root) %{_bindir}/remtest
 %attr(0755,root,root) %{_bindir}/rsapoptst
 %attr(0755,root,root) %{_bindir}/sdrtest
+%attr(0755,root,root) %{_bindir}/sdbthreadtst
 %attr(0755,root,root) %{_bindir}/secmodtest
 %attr(0755,root,root) %{_bindir}/smime
 
