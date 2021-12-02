@@ -24,7 +24,7 @@
 Summary:	Network Security Services
 Name:		nss
 Epoch:		1
-Version:	3.72
+Version:	3.73
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -445,7 +445,7 @@ local major = 3
 local f1 = "libsoftokn" .. major .. ".chk"
 local f2 = "libfreebl" .. major .. ".chk"
 local f3 = "libfreeblpriv" .. major .. ".chk"
-	
+
 -- check if we are 64bit
 	libcheck = posix.stat("/lib64")
 	if libcheck then
@@ -453,7 +453,7 @@ local f3 = "libfreeblpriv" .. major .. ".chk"
 	else
 		libpath = "/lib"
 	end
-	
+
  -- list of files to iterate
 	files = { f1, f2, f3 }
 
@@ -483,6 +483,7 @@ end
 %attr(0755,root,root) %{_bindir}/pk12util
 %attr(0755,root,root) %{_bindir}/signver
 %attr(0755,root,root) %{_bindir}/ssltap
+%attr(0755,root,root) %{_bindir}/validation
 #debian-additional
 %attr(0755,root,root) %{_bindir}/addbuiltin
 %attr(0755,root,root) %{_bindir}/chktest
@@ -507,7 +508,7 @@ end
 %attr(0755,root,root) %{_bindir}/vfyserv
 
 %files unsupported-tools
-#unsupported 
+#unsupported
 %attr(0755,root,root) %{_bindir}/atob
 %attr(0755,root,root) %{_bindir}/baddbdir
 %attr(0755,root,root) %{_bindir}/bltest
