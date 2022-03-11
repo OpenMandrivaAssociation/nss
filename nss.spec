@@ -24,7 +24,7 @@
 Summary:	Network Security Services
 Name:		nss
 Epoch:		1
-Version:	3.74
+Version:	3.76
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -568,7 +568,6 @@ end
 /%{_lib}/libnssdbm%{major}.so
 /%{_lib}/libsmime%{major}.so
 /%{_lib}/libssl%{major}.so
-/%{_lib}/p11-kit-trust.so
 
 %files -n %{devname}
 %attr(0755,root,root) %{_bindir}/nss-config
