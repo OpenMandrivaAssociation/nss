@@ -25,7 +25,7 @@ Summary:	Network Security Services
 Name:		nss
 Epoch:		1
 Version:	3.78
-Release:	1
+Release:	2
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -179,7 +179,7 @@ rm nss/lib/sqlite/*.{c,h}
 %set_build_flags
 export CC=%{__cc}
 export BUILD_OPT=1
-export OPTIMIZER="%{optflags}"
+export OPTIMIZER="%{optflags} -O3"
 export XCFLAGS="%{optflags} -Wno-error"
 export ARCHFLAG="$LDFLAGS"
 export LIBDIR=%{_libdir}
@@ -302,24 +302,13 @@ cp -aL bin/* %{buildroot}%{_bindir}
 
 %if %{with lib}
 mkdir -p %{buildroot}%{_libdir}
-mkdir -p %{buildroot}/%{_lib}
 mkdir -p %{buildroot}%{_includedir}/nss
 
-cp -aL lib/libcrmf.a \
-            lib/libnss.a \
-            lib/libnssb.a \
-            lib/libnssckfw.a \
-            lib/libnssutil.a \
-            lib/libsmime.a \
-            lib/libssl.a \
-            %{buildroot}%{_libdir}
+cp -aL lib/libcrmf.a lib/libnss.a lib/libnssb.a lib/libnssckfw.a lib/libnssutil.a lib/libsmime.a lib/libssl.a %{buildroot}%{_libdir}
 
 # Copy the binary libraries we want
-for file in libsoftokn3.so libfreebl3.so libfreeblpriv3.so libnss3.so libnssutil3.so \
-            libssl3.so libsmime3.so libnssdbm3.so
-do
-  install -m 755 lib/$file %{buildroot}/%{_lib}
-  ln -sf ../../%{_lib}/$file %{buildroot}%{_libdir}/$file
+for file in libsoftokn3.so libfreebl3.so libfreeblpriv3.so libnss3.so libnssutil3.so libssl3.so libsmime3.so libnssdbm3.so; do
+  install -m 755 lib/$file %{buildroot}%{_libdir}
 done
 
 # Copy the include files we want
@@ -327,24 +316,23 @@ cp -aL ../public/nss/* %{buildroot}%{_includedir}/nss
 
 # Copy some freebl include files we also want
 for file in blapi.h alghmac.h cmac.h; do
-	pwd
-	install -p -m 644 ../private/nss/$file $RPM_BUILD_ROOT/%{_includedir}/nss
+    pwd
+    install -p -m 644 ../private/nss/$file %{buildroot}%{_includedir}/nss
 done
 
 # Copy the static freebl library
 for file in libfreebl.a; do
-	install -p -m 644 ../*.OBJ/lib/$file $RPM_BUILD_ROOT/%{_libdir}
+    install -p -m 644 ../*.OBJ/lib/$file %{buildroot}%{_libdir}
 done
 
 
-ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_lib}/libnssckbi.so
+ln -s %{_libdir}/pkcs11/p11-kit-trust.so %{buildroot}/%{_libdir}/libnssckbi.so
 
 # These ghost files will be generated in the post step
 # Make sure chk files can be found in both places
 for file in libsoftokn3.chk libfreebl3.chk
 do
-  touch %{buildroot}/%{_lib}/$file
-  ln -s ../../%{_lib}/$file %{buildroot}%{_libdir}/$file
+  touch %{buildroot}/%{_libdir}/$file
 done
 
 mkdir -p %{buildroot}%{_libdir}/pkgconfig
@@ -432,7 +420,7 @@ install -m 644 %{SOURCE12} %{buildroot}%{_sysconfdir}/pki/nssdb/secmod.db
 
 %if %{build_empty}
 # install the empty libnssckbi.so library (use alternatives?)
-install -m0755 libnssckbi_empty.so %{buildroot}/%{_lib}/libnssckbi_empty.so
+install -m0755 libnssckbi_empty.so %{buildroot}/%{_libdir}/libnssckbi_empty.so
 %endif
 
 %if %{with lib}
@@ -447,11 +435,11 @@ local f2 = "libfreebl" .. major .. ".chk"
 local f3 = "libfreeblpriv" .. major .. ".chk"
 
 -- check if we are 64bit
-	libcheck = posix.stat("/lib64")
+	libcheck = posix.stat("/usr/lib64")
 	if libcheck then
-		libpath = "/lib64"
+		libpath = "/usr/lib64"
 	else
-		libpath = "/lib"
+		libpath = "/usr/lib"
 	end
 
  -- list of files to iterate
@@ -549,25 +537,25 @@ end
 
 %if %with lib
 %files -n %{libfreebl}
-/%{_lib}/libfreebl%{major}.so
-/%{_lib}/libfreeblpriv%{major}.so
-/%{_lib}/libsoftokn%{major}.so
-/%{_lib}/libnssckbi.so
+%{_libdir}/libfreebl%{major}.so
+%{_libdir}/libfreeblpriv%{major}.so
+%{_libdir}/libsoftokn%{major}.so
+%{_libdir}/libnssckbi.so
 
 %defattr(0644,root,root,0755)
-%ghost /%{_lib}/libfreebl%{major}.chk
-%ghost /%{_lib}/libsoftokn%{major}.chk
-%ghost /%{_lib}/libfreeblpriv%{major}.chk
+%ghost %{_libdir}/libfreebl%{major}.chk
+%ghost %{_libdir}/libsoftokn%{major}.chk
+%ghost %{_libdir}/libfreeblpriv%{major}.chk
 
 %files -n %{libname}
-/%{_lib}/libnss%{major}.so
+%{_libdir}/libnss%{major}.so
 %if %{build_empty}
-/%{_lib}/libnssckbi_empty.so
+%{_libdir}/libnssckbi_empty.so
 %endif
-/%{_lib}/libnssutil%{major}.so
-/%{_lib}/libnssdbm%{major}.so
-/%{_lib}/libsmime%{major}.so
-/%{_lib}/libssl%{major}.so
+%{_libdir}/libnssutil%{major}.so
+%{_libdir}/libnssdbm%{major}.so
+%{_libdir}/libsmime%{major}.so
+%{_libdir}/libssl%{major}.so
 
 %files -n %{devname}
 %attr(0755,root,root) %{_bindir}/nss-config
@@ -589,4 +577,3 @@ end
 %{_libdir}/libssl.a
 %{_libdir}/libfreebl.a
 %endif
-
