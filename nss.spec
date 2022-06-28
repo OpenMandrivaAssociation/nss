@@ -24,8 +24,8 @@
 Summary:	Network Security Services
 Name:		nss
 Epoch:		1
-Version:	3.78
-Release:	2
+Version:	3.80
+Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -59,7 +59,6 @@ Source101:	https://github.com/demoiselle/certificate/raw/master/impl/ca-icp-bras
 # From Fedora
 Patch0:		https://src.fedoraproject.org/rpms/nss/raw/master/f/add-relro-linker-option.patch
 Patch1:		https://src.fedoraproject.org/rpms/nss/raw/master/f/renegotiate-transitional.patch
-Patch2:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-539183.patch
 Patch3:		https://src.fedoraproject.org/rpms/nss/raw/master/f/utilwrap-include-templates.patch
 Patch4:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-skip-bltest-and-fipstest.patch
 Patch5:		https://src.fedoraproject.org/rpms/nss/raw/master/f/iquote.patch
@@ -68,7 +67,7 @@ Patch8:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-skip-util-gtest
 
 BuildRequires:	rootcerts >= 1:20120218.00
 BuildRequires:	zip
-BuildRequires:	pkgconfig(nspr)
+BuildRequires:	pkgconfig(nspr) >= 4.34.0
 BuildRequires:	pkgconfig(sqlite3)
 BuildRequires:	pkgconfig(zlib)
 
