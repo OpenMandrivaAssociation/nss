@@ -24,8 +24,8 @@
 Summary:	Network Security Services
 Name:		nss
 Epoch:		1
-Version:	3.89
-Release:	3
+Version:	3.90
+Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
