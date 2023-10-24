@@ -1,7 +1,7 @@
-diff -up ./nss/cmd/Makefile.skipthem ./nss/cmd/Makefile
---- ./nss/cmd/Makefile.skipthem	2017-01-06 13:17:27.477848351 +0100
-+++ ./nss/cmd/Makefile	2017-01-06 13:19:30.244586100 +0100
-@@ -19,7 +19,11 @@ BLTEST_SRCDIR =
+diff -up nss/cmd/Makefile.4~ nss/cmd/Makefile
+--- nss/cmd/Makefile.4~	2023-10-24 22:42:53.783525668 +0200
++++ nss/cmd/Makefile	2023-10-24 22:45:28.498845429 +0200
+@@ -20,7 +20,11 @@ DBTOOL_SRCDIR =
  ECPERF_SRCDIR =
  FREEBL_ECTEST_SRCDIR =
  FIPSTEST_SRCDIR =
@@ -12,4 +12,4 @@ diff -up ./nss/cmd/Makefile.skipthem ./nss/cmd/Makefile
 +endif
  else
  BLTEST_SRCDIR = bltest
- ECPERF_SRCDIR = ecperf
+ DBTOOL_SRCDIR = dbtool

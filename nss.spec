@@ -24,7 +24,7 @@
 Summary:	Network Security Services
 Name:		nss
 Epoch:		1
-Version:	3.93
+Version:	3.94
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -532,6 +532,7 @@ end
 %attr(0755,root,root) %{_bindir}/btoa
 %attr(0755,root,root) %{_bindir}/conflict
 %attr(0755,root,root) %{_bindir}/crmftest
+%attr(0755,root,root) %{_bindir}/dbtool
 %attr(0755,root,root) %{_bindir}/dertimetest
 %attr(0755,root,root) %{_bindir}/digest
 %attr(0755,root,root) %{_bindir}/ecperf
