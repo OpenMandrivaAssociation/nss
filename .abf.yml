@@ -4,4 +4,4 @@ sources:
   blank-key3.db: 7f78b5bcecdb5005e7b803604b2ec9d1a9df2fb5
   blank-secmod.db: bd748cf6e1465a1bbe6e751b72ffc0076aff0b50
   verisign-class-3-secure-server-ca.der: 188590e94878478e33b6194e59fbbb28ff0888d5
-  nss-3.94.tar.gz: 220fe0c69a7e3dc176855cbc0feb8e587d812e78
+  nss-3.95.tar.gz: 66f60eb4318d63605f8cdef8ab61478ff0c2c65b
