@@ -2,8 +2,6 @@
 %bcond_with cross_compiling
 %define url_ver %(echo %{version}| sed -e "s|\\.|_|g")
 
-# (tpg) WARNING !!!
-# When you bump major, please make sure you bump "local major = 3" in %post section for lua script
 %define major 3
 %define libname %mklibname %{name} %{major}
 %define libfreebl %mklibname freebl %{major}
@@ -25,7 +23,7 @@ Summary:	Network Security Services
 Name:		nss
 Epoch:		1
 Version:	3.98
-Release:	1
+Release:	2
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
@@ -121,6 +119,8 @@ and libsoftokn3.
 Summary:	Network Security Services (NSS)
 Group:		System/Libraries
 Requires:	p11-kit-trust
+# dlopened
+Requires:	%{libfreebl} = %{EVRD}
 
 %description -n %{libname}
 This package contains the shared libraries libnss3, libnssdbm3,
@@ -458,7 +458,7 @@ done
 if arg[2] == "0" then
 -- variable definitions
 -- make sure it meets %{major} from spec file
-local major = 3
+local major = %{major}
 local f1 = "libsoftokn" .. major .. ".chk"
 local f2 = "libfreebl" .. major .. ".chk"
 local f3 = "libfreeblpriv" .. major .. ".chk"
