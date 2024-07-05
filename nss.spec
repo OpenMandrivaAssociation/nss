@@ -22,7 +22,7 @@
 Summary:	Network Security Services
 Name:		nss
 Epoch:		1
-Version:	3.101
+Version:	3.102
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
