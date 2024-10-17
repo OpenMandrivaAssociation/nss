@@ -26,7 +26,7 @@ Version:	3.105
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
-Url:		http://www.mozilla.org/projects/security/pki/nss/index.html
+Url:		https://www.mozilla.org/projects/security/pki/nss/index.html
 Source0:	https://ftp.mozilla.org/pub/security/nss/releases/NSS_%{url_ver}_RTM/src/nss-%{version}.tar.gz
 # pkgconfig file templates and other extras from Fedora
 Source1:	https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-util.pc.in
