@@ -22,7 +22,7 @@
 Summary:	Network Security Services
 Name:		nss
 Epoch:		1
-Version:	3.109
+Version:	3.110
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -545,6 +545,7 @@ end
 %attr(0755,root,root) %{_bindir}/mangle
 %attr(0755,root,root) %{_bindir}/multinit
 %attr(0755,root,root) %{_bindir}/nonspr10
+%attr(0755,root,root) %{_bindir}/nssdefaults
 %attr(0755,root,root) %{_bindir}/ocspresp
 %attr(0755,root,root) %{_bindir}/oidcalc
 %attr(0755,root,root) %{_bindir}/pk11ectest
