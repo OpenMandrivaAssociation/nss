@@ -64,6 +64,7 @@ Patch8:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-skip-util-gtest
 # Our own
 
 BuildRequires:	rootcerts >= 1:20120218.00
+BuildRequires:	make
 BuildRequires:	zip
 BuildRequires:	pkgconfig(nspr) >= 4.34.0
 BuildRequires:	pkgconfig(sqlite3)
