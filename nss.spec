@@ -22,7 +22,7 @@
 Summary:	Network Security Services
 Name:		nss
 Epoch:		1
-Version:	3.123
+Version:	3.124
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -304,7 +304,7 @@ cp -aL bin/* %{buildroot}%{_bindir}
 mkdir -p %{buildroot}%{_libdir}
 mkdir -p %{buildroot}%{_includedir}/nss
 
-cp -aL lib/libcrmf.a lib/libnss.a lib/libnssb.a lib/libnssckfw.a lib/libnssutil.a lib/libsmime.a lib/libssl.a %{buildroot}%{_libdir}
+cp -aL lib/libnss.a lib/libnssb.a lib/libnssckfw.a lib/libnssutil.a lib/libsmime.a lib/libssl.a %{buildroot}%{_libdir}
 
 # Copy the binary libraries we want
 for file in libsoftokn3.so libfreebl3.so libfreeblpriv3.so libnss3.so libnssutil3.so libssl3.so libsmime3.so libnssdbm3.so; do
@@ -531,7 +531,6 @@ end
 %attr(0755,root,root) %{_bindir}/baddbdir
 %attr(0755,root,root) %{_bindir}/bltest
 %attr(0755,root,root) %{_bindir}/btoa
-%attr(0755,root,root) %{_bindir}/crmftest
 %attr(0755,root,root) %{_bindir}/dbtool
 %attr(0755,root,root) %{_bindir}/dertimetest
 %attr(0755,root,root) %{_bindir}/digest
@@ -599,7 +598,6 @@ end
 %{_libdir}/libfreebl%{major}.chk
 
 %files -n %{sdevname}
-%{_libdir}/libcrmf.a
 %{_libdir}/libnss.a
 %{_libdir}/libnssutil.a
 %{_libdir}/libnssb.a
