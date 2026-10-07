@@ -54,13 +54,13 @@ Source100:	verisign-class-3-secure-server-ca.der
 # Brasilian government certificate
 # verified in person with a government official
 Source101:	https://github.com/demoiselle/certificate/raw/master/impl/ca-icp-brasil/src/main/resources/trustedca/CertificadoACRaiz.crt
-# From Fedora
-Patch0:		https://src.fedoraproject.org/rpms/nss/raw/master/f/add-relro-linker-option.patch
-Patch1:		https://src.fedoraproject.org/rpms/nss/raw/master/f/renegotiate-transitional.patch
-Patch3:		https://src.fedoraproject.org/rpms/nss/raw/master/f/utilwrap-include-templates.patch
-Patch4:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-skip-bltest-and-fipstest.patch
-Patch5:		https://src.fedoraproject.org/rpms/nss/raw/master/f/iquote.patch
-Patch8:		https://src.fedoraproject.org/rpms/nss/raw/master/f/nss-skip-util-gtest.patch
+# Copies of the old Fedora patches. The master branch URLs no longer resolve.
+Patch0:		add-relro-linker-option.patch
+Patch1:		renegotiate-transitional.patch
+Patch3:		utilwrap-include-templates.patch
+Patch4:		nss-skip-bltest-and-fipstest.patch
+Patch5:		iquote.patch
+Patch8:		nss-skip-util-gtest.patch
 # Our own
 
 BuildRequires:	rootcerts >= 1:20120218.00

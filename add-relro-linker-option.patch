@@ -1,7 +1,7 @@
---- nss/coreconf/Linux.mk.relro	2026-08-28 14:10:11.344356174 +0200
-+++ nss/coreconf/Linux.mk	2026-08-28 14:10:11.362046897 +0200
-@@ -196,6 +196,12 @@ else
-     LITTLE_ENDIAN := 0
+--- nss/coreconf/Linux.mk.relro	2026-10-07 20:00:00.000000000 +0200
++++ nss/coreconf/Linux.mk	2026-10-07 20:00:00.000000000 +0200
+@@ -188,6 +188,12 @@ endif
+ endif
  endif
  
 +# harden DSOs/executables a bit against exploits
