@@ -105,7 +105,7 @@ Requires:	%{name} = %{EVRD}
 Conflicts:	%{name} < 1:3.44-2
 
 %description examples
-This package contains the bltest, modutil, signtool, signver,
+This package contains the bltest, modutil, signver,
 and ssltap examples for ${name}.
 
 %package shlibsign
@@ -407,9 +407,6 @@ chmod -R a+r docs
 mkdir -p docs/modutil
 cp -a nss/cmd/modutil/*.html docs/modutil/
 
-mkdir -p docs/signtool
-cp -a nss/cmd/signtool/README docs/signtool/
-
 mkdir -p docs/signver
 cp -a nss/cmd/signver/examples/1/*.pl docs/signver/
 cp -a nss/cmd/signver/examples/1/*.html docs/signver/
@@ -528,7 +525,6 @@ end
 %attr(0755,root,root) %{_bindir}/pwdecrypt
 %attr(0755,root,root) %{_bindir}/rsaperf
 %attr(0755,root,root) %{_bindir}/selfserv
-%attr(0755,root,root) %{_bindir}/signtool
 %attr(0755,root,root) %{_bindir}/strsclnt
 %attr(0755,root,root) %{_bindir}/symkeyutil
 %attr(0755,root,root) %{_bindir}/tstclnt
