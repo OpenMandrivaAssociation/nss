@@ -69,6 +69,10 @@ BuildRequires:	zip
 BuildRequires:	pkgconfig(nspr) >= 4.41
 BuildRequires:	pkgconfig(sqlite3)
 BuildRequires:	pkgconfig(zlib)
+# libssl links mozpkix with -lc++. The libc++.so linker script also
+# pulls libunwind, and neither symlink is in the default buildroot.
+BuildRequires:	lib64c++-devel
+BuildRequires:	lib64unwind-devel
 
 %description
 Network Security Services (NSS) is a set of libraries designed to
