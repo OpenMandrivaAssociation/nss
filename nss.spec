@@ -23,7 +23,7 @@ Summary:	Network Security Services
 Name:		nss
 Epoch:		1
 Version:	3.134
-Release:	1
+Release:	2
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
 Url:		https://www.mozilla.org/projects/security/pki/nss/index.html
@@ -69,10 +69,6 @@ BuildRequires:	zip
 BuildRequires:	pkgconfig(nspr) >= 4.41
 BuildRequires:	pkgconfig(sqlite3)
 BuildRequires:	pkgconfig(zlib)
-# libssl links mozpkix with -lc++. The libc++.so linker script also
-# pulls libunwind, and neither symlink is in the default buildroot.
-BuildRequires:	lib64c++-devel
-BuildRequires:	lib64unwind-devel
 
 %description
 Network Security Services (NSS) is a set of libraries designed to
@@ -177,8 +173,9 @@ sed -i 's!gcc!%{__cc}!g' nss/coreconf/Linux.mk
 # 3.134 builds mozpkix as C++ and feeds it the same CFLAGS as the C
 # code, including clang-only -Qunused-arguments. CCC defaults to g++.
 sed -i 's!g++!%{__cxx}!g' nss/coreconf/Linux.mk
-# libssl links that static archive with $(CC), which does not pull libc++.
-sed -i 's!mozpkix\.$(LIB_SUFFIX)!mozpkix.$(LIB_SUFFIX) -lc++!' nss/lib/ssl/config.mk
+# libssl links that static archive with $(CC). The C driver does not
+# pull a C++ runtime, and this build uses libstdc++.
+sed -i 's!mozpkix\.$(LIB_SUFFIX)!mozpkix.$(LIB_SUFFIX) -lstdc++!' nss/lib/ssl/config.mk
 
 # make 100% sure we don't pull in the internal copy of sqlite
 rm nss/lib/sqlite/*.{c,h}
@@ -188,6 +185,8 @@ rm nss/lib/sqlite/*.{c,h}
 %set_build_flags
 export CC=%{__cc}
 export CCC=%{__cxx}
+# Keep mozpkix on libstdc++ even where clang++ defaults to libc++.
+export CXXFLAGS="${CXXFLAGS} -stdlib=libstdc++"
 export BUILD_OPT=1
 export OPTIMIZER="%{optflags} -O3"
 export XCFLAGS="%{optflags} -Wno-error"
