@@ -22,7 +22,7 @@
 Summary:	Network Security Services
 Name:		nss
 Epoch:		1
-Version:	3.133
+Version:	3.134
 Release:	1
 Group:		System/Libraries
 License:	MPL or GPLv2+ or LGPLv2+
@@ -66,7 +66,7 @@ Patch8:		nss-skip-util-gtest.patch
 BuildRequires:	rootcerts >= 1:20120218.00
 BuildRequires:	make
 BuildRequires:	zip
-BuildRequires:	pkgconfig(nspr) >= 4.39.0
+BuildRequires:	pkgconfig(nspr) >= 4.41
 BuildRequires:	pkgconfig(sqlite3)
 BuildRequires:	pkgconfig(zlib)
 
