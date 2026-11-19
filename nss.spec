@@ -170,6 +170,11 @@ find . -name '*.c' -executable -exec chmod -x {} \;
 
 # remove hardcoded gcc
 sed -i 's!gcc!%{__cc}!g' nss/coreconf/Linux.mk
+# 3.134 builds mozpkix as C++ and feeds it the same CFLAGS as the C
+# code, including clang-only -Qunused-arguments. CCC defaults to g++.
+sed -i 's!g++!%{__cxx}!g' nss/coreconf/Linux.mk
+# libssl links that static archive with $(CC), which does not pull libc++.
+sed -i 's!mozpkix\.$(LIB_SUFFIX)!mozpkix.$(LIB_SUFFIX) -lc++!' nss/lib/ssl/config.mk
 
 # make 100% sure we don't pull in the internal copy of sqlite
 rm nss/lib/sqlite/*.{c,h}
@@ -178,6 +183,7 @@ rm nss/lib/sqlite/*.{c,h}
 %serverbuild
 %set_build_flags
 export CC=%{__cc}
+export CCC=%{__cxx}
 export BUILD_OPT=1
 export OPTIMIZER="%{optflags} -O3"
 export XCFLAGS="%{optflags} -Wno-error"
